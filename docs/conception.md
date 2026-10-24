@@ -23,7 +23,12 @@ Le joueur doit ressentir le plaisir de l'architecte d'armée : façonner des esc
 
 Un cycle va d'une ouverture du portail à la suivante : le héros explore pendant que le campement se prépare, puis tout se joue en bataille.
 
-&#91;embedded content: boucle d’un cycle · 6 étapes\]
+1. **Explorer** : le héros parcourt la carte ; butins, rencontres, recrues.
+2. **Préparer** : équiper, entraîner, bâtir ; tâches du campement.
+3. **Lire la menace** : la vague du portail est annoncée.
+4. **Déployer** (le portail s'ouvre) : placer les escouades et choisir leurs postures.
+5. **Combattre** : tours animés automatiques ; leviers si le héros est là.
+6. **Récolter** : expérience, butin, blessés à soigner. Puis cycle suivant.
 
 Pendant l'exploration, escouades et civils accomplissent les tâches fixées en début de cycle. Le héros peut être absent à l'ouverture : l'armée se bat alors sans ses leviers, et une alerte prévient avant la case de non-retour. C'est la tension centrale du jeu : jusqu'où pousser avant de rentrer commander.
 
