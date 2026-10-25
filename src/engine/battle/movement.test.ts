@@ -313,7 +313,7 @@ describe('fuite en déroute', () => {
     expect(events[0]).toMatchObject({ type: 'move', to: { col: 2, row: 3 }, why: { kind: 'flee' } });
   });
 
-  it('reste sur place si toutes les cases arrière sont prises', () => {
+  it('bloquée tout un tour (les trois cases arrière prises), elle se débande et quitte le terrain avec ses blessés', () => {
     const state = stateWith(data, [
       squad(data, 'epeistes', { col: 3, row: 2 }),
       squad(data, 'piquiers', { col: 2, row: 2 }),
@@ -321,7 +321,17 @@ describe('fuite en déroute', () => {
       squad(data, 'archers', { col: 2, row: 3 }, HOLD, 'archers-2'),
     ]);
     fleeing(state, 'epeistes');
-    expect(movementPhase(data, state)).toEqual([]);
+    findSquad(state, 'epeistes').wounded = 7;
+    expect(movementPhase(data, state)).toEqual([{ type: 'dispersed', squad: 'epeistes', cell: { col: 3, row: 2 } }]);
+    expect(findSquad(state, 'epeistes')).toMatchObject({ status: 'routed', wounded: 7 });
+  });
+
+  it('une escouade en fuite qui a bougé au moins une fois ne se débande pas', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 }), squad(data, 'piquiers', { col: 1, row: 2 })]);
+    fleeing(state, 'epeistes');
+    // Pas 1 : (3,2) → (2,2) ; pas 2 : (1,2) prise, diagonales (1,1)… libre.
+    const events = movementPhase(data, state);
+    expect(events.some((e) => e.type === 'dispersed')).toBe(false);
   });
 
   it('rompt le contact, et l’ennemi voisin n’est pas retenu par elle', () => {

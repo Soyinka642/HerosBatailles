@@ -59,6 +59,22 @@ describe('scénarios du lot 1.2d', () => {
     expect(has(result, 'fled')).toBe(true);
   });
 
+  it('une débandade : la fuite bloquée tout un tour', async () => {
+    const result = await play('fuite-debandade', {
+      wave: wave([
+        { turn: 1, enemy: 'brutes-du-portail', count: 1, row: 2 },
+        { turn: 2, enemy: 'brutes-du-portail', count: 1, row: 2 },
+      ]),
+      squads: [
+        squad(data, 'epeistes', { col: 3, row: 2 }),
+        squad(data, 'piquiers', { col: 2, row: 2 }),
+        squad(data, 'archers', { col: 2, row: 1 }),
+        squad(data, 'archers', { col: 2, row: 3 }, undefined, 'archers-2'),
+      ],
+    });
+    expect(result.events.some((e) => e.type === 'dispersed' && e.squad === 'epeistes')).toBe(true);
+  });
+
   it('une fuite ennemie vers le portail', async () => {
     const result = await play('fuite-ennemie-vers-le-portail', {
       wave: wave([

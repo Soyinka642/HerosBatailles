@@ -4,7 +4,8 @@
 // (réaction par défaut) et reprend sa posture au tour suivant.
 //
 // Une palissade debout barre le passage des deux camps ; la tour se traverse.
-// Une escouade en déroute fuit vers son camp, sans être retenue par le contact.
+// Une escouade en déroute fuit vers son camp, sans être retenue par le contact ; bloquée tout un
+// tour, elle se débande et quitte le terrain.
 
 import type { Area, Cell, GameData } from '../data/types';
 import type { BattleEvent, BlockReason, HaltReason, MoveWhy } from './events';
@@ -242,6 +243,21 @@ export function movementPhase(data: GameData, state: BattleState): BattleEvent[]
   const stopped: string[] = [];
   const events: BattleEvent[] = [];
   checkFled(data, state, events);
+  const fleeing = state.squads.filter((s) => s.status === 'fleeing');
   for (let step = 1; step <= steps; step++) events.push(...playStep(data, state, step, stopped));
+  events.push(...disperseStuck(fleeing, events));
   return events;
+}
+
+/**
+ * Débandade : une escouade en fuite qui n'a pas pu bouger de tout le tour quitte le terrain, comme
+ * si elle avait atteint son camp (les nôtres gardent les blessés qu'elles emmenaient).
+ */
+function disperseStuck(fleeing: readonly BattleSquad[], events: readonly BattleEvent[]): BattleEvent[] {
+  return fleeing
+    .filter((s) => s.status === 'fleeing' && !events.some((e) => e.type === 'move' && e.squad === s.id))
+    .map((s) => {
+      s.status = 'routed';
+      return { type: 'dispersed', squad: s.id, cell: { ...s.cell } };
+    });
 }

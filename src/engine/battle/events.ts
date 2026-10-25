@@ -94,5 +94,7 @@ export type BattleEvent =
   | { type: 'fallenDied'; squad: string; cell: Cell; count: number; atEnd?: boolean }
   /** Une escouade en fuite atteint son camp (cœur du campement ou portail) et quitte le terrain. */
   | { type: 'fled'; squad: string; cell: Cell }
+  /** Une escouade en fuite bloquée tout un tour se débande et quitte le terrain. */
+  | { type: 'dispersed'; squad: string; cell: Cell }
   | { type: 'turnEnd'; turn: number; squads: SquadSnapshot[]; fallen: FallenGroup[] }
   | { type: 'battleEnd'; turn: number; outcome: Outcome; breaches: number };

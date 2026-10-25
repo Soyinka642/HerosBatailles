@@ -244,6 +244,10 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
       return e.atEnd
         ? `La bataille est perdue : ${wounded(e.count)} ${des(names.name(e.squad))} restés en ${formatCell(e.cell)} meurent.`
         : `  ${capitalize(wounded(e.count))} ${des(names.name(e.squad))} meurent en ${formatCell(e.cell)} : l'ennemi a tenu la case ${data.config.fallen.turnsHeldBeforeDeath} tours.`;
+    case 'dispersed':
+      return `  ${N(e.squad)}, ${g(names.feminine(e.squad), 'bloqués', 'bloquées')} dans leur fuite en ${formatCell(e.cell)}, se débandent et quittent le terrain${
+        names.side(e.squad) === 'player' ? ` : ${pronoun(e.squad)} regagnent le campement avec leurs blessés` : ''
+      }.`;
     case 'fled':
       return `  ${N(e.squad)} atteignent ${names.side(e.squad) === 'player' ? 'le campement' : 'le portail'} en ${formatCell(e.cell)} et quittent le terrain.`;
     case 'turnEnd':
@@ -260,7 +264,7 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
 type Phase = 'Feu' | 'Mouvement' | 'Tir' | 'Mêlée' | 'Tombés';
 
 function phaseOf(e: BattleEvent): Phase | undefined {
-  if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach' || e.type === 'fled') return 'Mouvement';
+  if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach' || e.type === 'fled' || e.type === 'dispersed') return 'Mouvement';
   if (e.type === 'burn' || e.type === 'fortificationBurn') return 'Feu';
   if ((e.type === 'fallenHeld' || e.type === 'fallenRecovered' || e.type === 'fallenDied') && !('atEnd' in e && e.atEnd)) return 'Tombés';
   if (e.type === 'shot' || e.type === 'ignite') return 'Tir';

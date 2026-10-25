@@ -432,3 +432,27 @@ Tir de passage, flanc, recul, encerclement : leurs paramètres restent dans `con
 - La poursuite (F4 B) rendrait la fuite plus coûteuse ; à jouer en Phase 2.
 
 **Prochaine étape** : trancher l'embouteillage de fuite, fusionner le lot 1.2d, puis lot 1.3 (affichage de la bataille en tours animés).
+
+## 2026-10-25 — Lot 1.2d (suite) : débandade, conception
+
+### Ce qui a été fait
+
+- **Débandade** (décision de l'auteur, option A) : une escouade en fuite qui n'a pas pu bouger de tout un tour (phase de mouvement entière) quitte le terrain. Pour nos escouades, c'est comme si elle avait atteint le campement : elle garde les blessés qu'elle emmenait ; les tombés déjà abandonnés suivent leur propre règle. Événement `dispersed`, raconté « bloqués dans leur fuite, se débandent et quittent le terrain ».
+- Nouveau scénario `fuite-debandade` : nos Épéistes cèdent, leurs trois cases arrière sont tenues par nos propres escouades, et ils se débandent au tour suivant avec leurs blessés.
+- `docs/conception.md` : nouvelle puce « Déroute » (fuite, débandade) et règle complète « celui qui tient le terrain relève les siens ».
+- Scénarios regénérés ; `typecheck`, `test` et `build` passent.
+
+### Bilan final (déploiement sensé)
+
+| Bataille | Issue | Tours | Nos escouades à la fin | Volées (enflammées) | Morts | Tombés relevés (pendant + fin) | Débandades | Palissades N / CN / CS / S |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Vague 1 | victoire | 13 | Épéistes 16/20, Piquiers 20/20, Archers 20/20 | 9 (0) | 0 | 0 + 0 | 0 | 36 / 12 / 36 / 36 |
+| Vague 2 | victoire | 24 | Épéistes en déroute (13 blessés), Piquiers 13/20, Archers 20/20 | 13 (0) | 0 | 6 + 0 | 0 | 36 / 36 / 12 / 36 |
+| Vague 3 | victoire | 22 | Épéistes en déroute (13 blessés), Piquiers 13/20, Archers 20/20 | 18 (3) | 0 | 6 + 0 | 0 | 36 / 10 / 36 / 0 |
+| Vague 4 | victoire | 20 | Épéistes et Piquiers en déroute (13 blessés chacun), les deux Archers 20/20 | 26 (2) | 0 | 12 + 0 | 0 | 27 / 16 / 0 / 29 |
+| Finale | victoire (rituel) | 12 | Épéistes 3/20 (10 blessés), Piquiers 20/20, Archers 20/20, Archers en renfort 16/20 | 18 (0) | 0 | 0 + 0 | 1 | 31 / 15 / 6 / 36 |
+
+- Aucune issue ne change. Dans la finale, les Fantassins n°1 bloqués en (6,2) se débandent ; la rangée 2 se libère, et les Épéistes retrouvent l'état du lot 1.2c (3/20).
+- Le moteur de bataille du prototype est complet. La durée (20 à 24 tours pour les vagues 2 à 4) reste au-dessus de l'objectif de 10 à 15 tours.
+
+**Prochaine étape** : lot 1.3, affichage de la bataille en tours animés.
