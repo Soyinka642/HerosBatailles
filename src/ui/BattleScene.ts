@@ -58,7 +58,7 @@ export class BattleScene extends Phaser.Scene {
         this.tokens.set(view.id, token);
         this.tokenLayer!.add(token);
       }
-      Object.assign(token.view, view);
+      Object.assign(token.view, view, { cell: { ...view.cell } });
       const at = cellCenter(view.cell);
       token.setPosition(at.x, at.y);
       token.refresh();

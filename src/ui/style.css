@@ -32,10 +32,32 @@ button:hover { border-color: var(--accent); }
 .battle-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .field { width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
 .field canvas { display: block; }
-.journal { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; height: 70vh; overflow-y: auto; font-size: 13px; line-height: 1.4; }
+.journal { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; height: 78vh; font-size: 13px; line-height: 1.4; }
 
 /* Écran étroit (portable, tablette à la verticale) : tout s'empile. */
 @media (max-width: 900px) {
   .battle-body { grid-template-columns: 1fr; }
   .journal { height: 40vh; }
 }
+
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.control { padding: 6px 10px; min-height: 36px; }
+.control:disabled { opacity: 0.5; cursor: default; }
+.speed-label, .turn-label { color: var(--muted); padding: 0 6px; font-variant-numeric: tabular-nums; }
+.turn-label { margin-left: auto; color: var(--text); font-weight: 600; }
+.legend { font-size: 12px; margin: 0; }
+.journal { display: flex; flex-direction: column; }
+.journal-body { overflow-y: auto; flex: 1; }
+.journal .beat { padding: 2px 4px; border-left: 2px solid transparent; opacity: 0.75; }
+.journal .beat.current { border-left-color: var(--accent); opacity: 1; background: #1e2029; }
+.journal .turn { margin: 10px 0 2px; font-size: 13px; color: var(--accent); }
+.journal .phase { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+.journal .line { margin: 2px 0; }
+.journal .outcome-line { font-weight: 600; }
+.outcome { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+.outcome.victory { border-color: #5fbf5f; }
+.outcome.defeat { border-color: #e07a30; }
+.outcome h3 { color: var(--text); text-transform: none; font-size: 16px; letter-spacing: 0; }
+.losses { border-collapse: collapse; font-size: 13px; margin: 6px 0; }
+.losses th, .losses td { border-bottom: 1px solid var(--line); padding: 3px 10px 3px 0; text-align: left; }
+.losses td:not(:first-child), .losses th:not(:first-child) { text-align: right; }

@@ -30,13 +30,17 @@ export class Token extends Phaser.GameObjects.Container {
   private readonly glow: Phaser.GameObjects.Arc;
   private readonly fleeArrow: Phaser.GameObjects.Text;
 
+  /** Ce que montre le jeton : une copie, mise à jour par la scène (jamais l'objet de la copie affichée). */
+  readonly view: SquadView;
+
   constructor(
     scene: Phaser.Scene,
     private readonly data_: GameData,
-    readonly view: SquadView,
+    view: SquadView,
   ) {
     const at = cellCenter(view.cell);
     super(scene, at.x, at.y);
+    this.view = { ...view, cell: { ...view.cell } };
     const player = view.side === 'player';
     this.glow = scene.add.circle(0, -4, RADIUS + 5).setStrokeStyle(3, PALETTE.fire, 0.8).setVisible(false);
     const body = scene.add.circle(0, -4, RADIUS, player ? PALETTE.player : PALETTE.enemy).setStrokeStyle(2, player ? PALETTE.playerDark : PALETTE.enemyDark);

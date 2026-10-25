@@ -152,7 +152,8 @@ export interface BattleResult {
   losses: SquadLosses[];
 }
 
-function lossesOf(state: BattleState, events: readonly BattleEvent[]): SquadLosses[] {
+/** Pertes de chacune de nos escouades, d'après l'état final et les événements de la bataille. */
+export function lossesOf(state: BattleState, events: readonly BattleEvent[]): SquadLosses[] {
   const sum = (squad: string, type: 'fallenRecovered' | 'fallenDied', atEnd: boolean) =>
     events.reduce((total, e) => (e.type === type && e.squad === squad && (e.atEnd === true) === atEnd ? total + e.count : total), 0);
   return state.squads
