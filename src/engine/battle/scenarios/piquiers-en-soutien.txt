@@ -1,0 +1,74 @@
+Bataille « scenario » (vague).
+Fortifications ignorées (lot 1.2c).
+
+Nos escouades, dans l’ordre de déploiement :
+- Épéistes en (3,2), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
+- Piquiers en (2,2), Tenir : mêlée 5, tir 0, défense 1, vitesse 2, moral 20, 20 soldats ; Soutien.
+
+Ennemis annoncés, dans l’ordre d’arrivée :
+- Fantassins du portail n°1, tour 1, rangée 2 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
+
+== Tour 1 ==
+Fantassins du portail n°1 sortent du portail en (11,2).
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (11,2) → (10,2).
+  pas 2 : Fantassins du portail n°1 (10,2) → (9,2).
+Fin du tour :
+  Épéistes en (3,2), moral 20/20
+  Piquiers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (9,2), moral 16/16
+
+== Tour 2 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (9,2) → (8,2).
+  pas 2 : Fantassins du portail n°1 (8,2) → (7,2).
+Fin du tour :
+  Épéistes en (3,2), moral 20/20
+  Piquiers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (7,2), moral 16/16
+
+== Tour 3 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (7,2) → (6,2).
+  pas 2 : Fantassins du portail n°1 (6,2) → (5,2).
+Fin du tour :
+  Épéistes en (3,2), moral 20/20
+  Piquiers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (5,2), moral 16/16
+
+== Tour 4 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (5,2) → (4,2).
+  pas 2 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
+Mêlée :
+  Épéistes frappent Fantassins du portail n°1 : 6 + 2 (Soutien de Piquiers) − 2 = 6 dégâts ; moral 16 → 10 ; ils sont ébranlés.
+  Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 dégâts ; moral 20 → 17.
+Fin du tour :
+  Épéistes en (3,2), moral 17/20
+  Piquiers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (4,2), moral 10/16
+
+== Tour 5 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
+Mêlée :
+  Épéistes frappent Fantassins du portail n°1 : 6 + 2 (Soutien de Piquiers) − 2 = 6 dégâts ; moral 10 → 4, blessés 0 → 6 ; ils sont vacillants.
+  Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 × 0,9 (ébranlés) = 2,7 → 3 dégâts ; moral 17 → 14.
+Fin du tour :
+  Épéistes en (3,2), moral 14/20
+  Piquiers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (4,2), moral 4/16, 6 blessés
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
+Mêlée :
+  Épéistes frappent Fantassins du portail n°1 : 6 + 2 (Soutien de Piquiers) − 2 = 6 dégâts ; moral 4 → 0, blessés 6 → 10.
+  Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 1,68 → 2 dégâts ; moral 14 → 12, blessés 0 → 1 ; ils sont ébranlés.
+  Fantassins du portail n°1 sont en déroute et quittent le terrain.
+Fin du tour :
+  Épéistes en (3,2), moral 12/20, 1 blessé
+  Piquiers en (2,2), moral 20/20
+
+Victoire au tour 6 : plus aucun ennemi sur le terrain ni à venir.
+Incursions au cœur du campement : 0.

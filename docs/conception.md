@@ -49,6 +49,7 @@ Tout repose sur une règle : **tout est emplacement, et les emplacements se déb
 ### Dégâts
 
 - **Dégâts = Attaque − Défense, avec un minimum.** Les dégâts finaux, une fois appliqués tous les modificateurs (moral, blessés, bonus), sont arrondis au plus proche. La formule vit dans une seule fonction du code pour pouvoir passer au pourcentage si besoin.
+- Les multiplicateurs de moral et de blessés portent sur les dégâts nets, après la défense. Seule l'attaque subit les paliers. Perce-armure ne fait pas descendre la défense sous 0. Le malus d'une arme non maîtrisée porte sur l'attaque qu'elle améliore.
 - Mots-clés : *Perce-armure X* (ignore X de défense), *Feu* (perte de moral à l'impact, puis brûlure : des dégâts fixes qui ignorent la défense ; une escouade déjà en feu voit sa brûlure rafraîchie, sans cumul ; si la cible se tient sur une fortification, la fortification brûle aussi), *Charge* (bonus après une course suffisante).
 
 ### La bataille
@@ -79,6 +80,12 @@ Tout repose sur une règle : **tout est emplacement, et les emplacements se déb
 - Un tireur en *Avancer* s'arrête dès qu'une cible est à portée au début d'un pas, puis tire.
 - **Conflits de mouvement** : si deux escouades visent la même case, la plus rapide entre, puis la première déployée (nos escouades avant les ennemis ; entre ennemis, l'ordre d'arrivée), et l'autre reste sur place. Un échange de cases, ou une rotation, ne se fait pas : personne ne bouge. On peut entrer dans une case qui se libère au même pas ; si son occupant est bloqué, celui qui le suit l'est aussi.
 - **Le contact engage** : une escouade au contact d'un ennemi au début d'un pas ne bouge plus. On ne passe pas à côté d'un ennemi.
+- **Avancer** : tout droit tant qu'un ennemi est devant sur sa rangée, sinon vers l'ennemi le plus proche ; à chaque pas, la case de sa rangée d'abord, puis le nord, puis l'est. Un allié sur la case barre le chemin. Pendant un tour planifié, seul le contact interrompt le plan.
+- **Arrivées** : au début du tour, et l'ennemi agit aussitôt. Sans rangée imposée, les rangées sont prises dans l'ordre centre, nord, sud. Une case occupée passe à la suivante ; si le portail est plein, l'arrivée attend.
+- **Tir** : l'ennemi à portée le plus proche (départage nord, puis ouest). Un tireur au contact ne tire pas. On peut tirer sur un ennemi engagé avec un allié, sans ligne de vue.
+- **Mêlée** : une seule cible, l'ennemi juste devant, sinon un ordre fixe. Une escouade prise par deux ennemis reçoit deux coups et n'en rend qu'un.
+- **Déroute** : l'escouade quitte le terrain. Le moral ne remonte pas pendant la bataille.
+- **Fin de bataille** : un ennemi au cœur du campement quitte la bataille et l'incursion est comptée. Défaite quand toutes nos escouades sont en déroute, même si l'ennemi l'est aussi. Victoire quand il ne reste plus d'ennemi, ni sur le terrain ni à venir, ou quand le rituel est tenu. Issue indécise à la limite de tours.
 - **Tir de passage** : traverser la zone d'un tireur coûte des dégâts sans arrêter le mouvement. Les catapultes frappent une zone fixe choisie au déploiement.
 - **Mêlée simultanée** : les deux camps subissent leurs dégâts en même temps. Soutien d'une pique maîtrisée placée derrière (la pique aura plus tard un effet propre contre les cavaliers), recul en cas de gros dégâts.
 - **Flanc** : bonus d'attaque et perte de moral supplémentaire pour l'escouade prise de côté.
