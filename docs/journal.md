@@ -456,3 +456,39 @@ Tir de passage, flanc, recul, encerclement : leurs paramètres restent dans `con
 - Le moteur de bataille du prototype est complet. La durée (20 à 24 tours pour les vagues 2 à 4) reste au-dessus de l'objectif de 10 à 15 tours.
 
 **Prochaine étape** : lot 1.3, affichage de la bataille en tours animés.
+
+## 2026-10-25 — Lot 1.3 : la bataille dans le navigateur
+
+### Ce qui a été fait
+
+- **Moteur (M1, M2)** :
+  - `src/engine/battle/catalog.ts` rassemble les batailles déjà écrites : les vagues 1 à 4 et la finale avec le déploiement sensé, et huit scénarios parlants (palissade brisée, tour prise, Feu sur la tour, incursion, pâte épuisée, tombés repris, tombés perdus, débandade). Les tests de scénarios le lisent (`scenarios/catalog.test.ts`), et leurs journaux `.txt` sont inchangés.
+  - `namesOf` et `lossesOf` sont exportés, pour raconter les événements un à un et afficher les pertes.
+  - Aucune règle ajoutée ni modifiée.
+- **Affichage** (`src/ui/`), Phaser pour le terrain seulement, HTML autour (D1 A) :
+  - `app.ts` : menu des batailles, écran de bataille (terrain, commandes, légende, issue, journal), mise en page sur deux colonnes ou empilée sur écran étroit (le terrain y garde 720 px de large et défile du doigt) ;
+  - `BattleScene.ts` : hexagones « odd-r », cœur du campement, zone de déploiement, portail, palissades et tour avec leur structure, éboulis, flamme d'une fortification en feu ;
+  - `battle/token.ts` : jetons provisoires (V1 A) aux couleurs des camps (V2 A), abréviation, nom, barre de moral colorée selon le palier du moteur (V3 A), blessés, flamme et lueur du Feu (V5 A + B), jeton pâle avec flèche en fuite (V4 A) ;
+  - tombés en étiquette grise « 6 à terre · 1/2 » (V6 A) ; chiffres flottants et traits de tir (V7 A) ;
+  - `battle/record.ts` : la bataille est calculée en entier par `playTurn` avant d'être regardée ;
+  - `battle/mirror.ts` : la copie affichée, tenue à jour en recopiant les valeurs des événements, recalée sur la photo de fin de tour du moteur ;
+  - `battle/timeline.ts` : les temps d'animation (arrivées, Feu, chaque pas, tir, mêlée, tombés, fin de tour, issue) ;
+  - `battle/player.ts` : lecture, pause, tour suivant, ×0,5 à ×4, recommencer ;
+  - `battle/view.ts` : applique, anime et raconte chaque temps (texte de `narrateEvent`), puis l'issue et le tableau des pertes ;
+  - `battle/animate.ts` : déplacements pas à pas, coups, tirs, apparitions et sorties.
+- **Tests** : 281, dont la concordance entre la copie affichée et le moteur à chaque fin de tour pour tout le catalogue, le découpage en temps d'animation et le lecteur (sans Phaser). `typecheck`, `test` et `build` passent.
+- **Aucune dépendance ajoutée.** Les captures d'écran de vérification ont été faites avec le Chromium et le Playwright de l'environnement, hors du projet.
+- `TitleScene` est retirée ; le titre est dans l'en-tête HTML.
+
+### Décisions prises
+
+- D1 A, M1, M2, V1 A, V2 A, V3 A, V4 A, V5 A + B légère, V6 A, V7 A ; terrain et vitesses comme proposés (voir l'étape A du lot).
+- Les lignes du journal reprennent le texte du moteur ; seul le préfixe « pas N : » est retiré, l'intitulé du temps le portant déjà.
+
+### Questions apparues
+
+- Le texte du terrain est petit (9 à 15 px à taille réelle) : lisible sur ordinateur, juste sur téléphone. Les sprites (Phase 4) changeront de toute façon l'échelle.
+- Une bataille de 20 tours prend environ une minute à ×1 ; l'objectif de 10 à 15 tours compte aussi pour le confort de lecture.
+- Deux escouades portent le même nom (« Archers ») dans la débandade : l'écran de préparation (1.4) devra donner des noms distincts.
+
+**Prochaine étape** : vérifier la version en ligne après la fusion, puis lot 1.4 (écran de préparation).
