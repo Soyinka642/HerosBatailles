@@ -6,6 +6,7 @@ import type { Cell, GameData } from '../data/types';
 import type { BattleResult } from './battle';
 import type { DamageApplied, DamageBreakdown } from './damage';
 import type { BattleEvent, BlockReason, FireDecision, HaltReason, MoveWhy } from './events';
+import { defenseBonuses, effectiveRange, occupiedFortification } from './fortifications';
 import { formatCell } from './hex';
 import { type MoraleTier, moraleTier } from './morale';
 import type { BattleSquad, BattleState, Outcome, PendingArrival } from './state';
@@ -83,9 +84,11 @@ export function formatDamage(data: GameData, names: Names, d: DamageBreakdown, a
     const source = bonus.from ? ` ${des(names.name(bonus.from))}` : '';
     text += ` + ${bonus.amount} (${keywordName(data, bonus.keyword)}${source})`;
   }
+  const fortified = d.defense + d.defenseBonuses.reduce((sum, b) => sum + b.amount, 0);
   const details = [
     ...d.defenseBonuses.map((b) => `+${b.amount} ${names.site(b.site).replace(/^la /, '')}`),
-    ...d.ignoreDefense.map((p) => keywordName(data, p.keyword, p.amount)),
+    // Perce-armure n'est montré que s'il y a une défense à percer (pas contre une palissade).
+    ...(fortified > 0 ? d.ignoreDefense.map((p) => keywordName(data, p.keyword, p.amount)) : []),
   ];
   text += details.length > 0 ? ` − ${d.effectiveDefense} (défense ${d.defense}, ${details.join(', ')})` : ` − ${d.defense}`;
   if (data.config.damage.formula === 'percentage') text += ` (en pourcentage)`;
@@ -246,7 +249,7 @@ function formatStep(step: Cell | 'wait'): string {
   return step === 'wait' ? 'attendre' : formatCell(step);
 }
 
-function describeSquad(data: GameData, s: BattleSquad): string[] {
+function describeSquad(data: GameData, names: Names, state: BattleState, s: BattleSquad): string[] {
   const posture = data.postures.find((p) => p.id === s.posture)?.name ?? s.posture;
   const st = s.stats;
   const lines = [
@@ -258,6 +261,11 @@ function describeSquad(data: GameData, s: BattleSquad): string[] {
     const item = data.items.find((i) => i.id === u.item)?.name ?? u.item;
     const lost = u.lostKeywords.length > 0 ? `, sans ${u.lostKeywords.map((k) => keywordName(data, k)).join(', ')}` : '';
     lines.push(`  ${item} non maîtrisée : −${u.penalty} en attaque${lost}.`);
+  }
+  const fort = occupiedFortification(data, state, s);
+  if (fort) {
+    const defense = s.stats.defense + defenseBonuses(data, state, s, false).reduce((sum, b) => sum + b.amount, 0);
+    lines.push(`  Dans ${names.site(fort.site)} : portée ${effectiveRange(data, state, s)}, défense ${defense}.`);
   }
   for (const [id, amount] of Object.entries(s.carried).sort(([a], [b]) => a.localeCompare(b))) {
     lines.push(`  Porte ${amount} ${consumableName(data, id).toLowerCase()}.`);
@@ -296,8 +304,8 @@ function header(data: GameData, names: Names, initial: BattleState): string[] {
     ...describeFortifications(names, initial),
     '',
     'Nos escouades, dans l’ordre de déploiement :',
-    ...initial.squads.filter((s) => s.side === 'player').flatMap((s) => describeSquad(data, s)),
-    ...(enemies.length > 0 ? ['', 'Ennemis déjà sur le terrain :', ...enemies.flatMap((s) => describeSquad(data, s))] : []),
+    ...initial.squads.filter((s) => s.side === 'player').flatMap((s) => describeSquad(data, names, initial, s)),
+    ...(enemies.length > 0 ? ['', 'Ennemis déjà sur le terrain :', ...enemies.flatMap((s) => describeSquad(data, names, initial, s))] : []),
     '',
     'Ennemis annoncés, dans l’ordre d’arrivée :',
     ...(initial.pending.length > 0 ? initial.pending.map((p) => describeArrival(data, p)) : ['- aucun.']),

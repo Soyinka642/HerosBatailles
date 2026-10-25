@@ -9,6 +9,7 @@ Fortifications :
 
 Nos escouades, dans l’ordre de déploiement :
 - Archers en (2,2), Tenir : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.
+  Dans la tour (2,2) : portée 4, défense 3.
 - Épéistes en (3,0), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
 
 Ennemis annoncés, dans l’ordre d’arrivée :

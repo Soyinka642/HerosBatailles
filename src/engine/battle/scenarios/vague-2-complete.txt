@@ -13,6 +13,7 @@ Nos escouades, dans l’ordre de déploiement :
 - Piquiers en (3,1), Tenir : mêlée 5, tir 0, défense 1, vitesse 2, moral 20, 20 soldats ; Soutien.
   Tour 1 planifié : (3,2).
 - Archers en (2,2), Tenir : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.
+  Dans la tour (2,2) : portée 4, défense 3.
 
 Ennemis annoncés, dans l’ordre d’arrivée :
 - Fantassins du portail n°1, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
