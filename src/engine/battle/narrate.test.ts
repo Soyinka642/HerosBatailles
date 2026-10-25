@@ -7,7 +7,7 @@ import { fromTemplate } from './setup';
 import { ADVANCE, HOLD } from './test-helpers';
 
 const data = loadGameData();
-const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers', fantassins: 'Fantassins' })[id] ?? id, maxMorale: () => 16, site: (id: string) => `la palissade ${id}`, feminine: () => false };
+const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers', fantassins: 'Fantassins' })[id] ?? id, maxMorale: () => 16, site: (id: string) => `la palissade ${id}`, feminine: () => false, side: (id: string) => (id === 'fantassins' ? 'enemy' : 'player') as 'player' | 'enemy' };
 
 function damage(input: Partial<Parameters<typeof computeDamage>[0]>): DamageBreakdown {
   return computeDamage(

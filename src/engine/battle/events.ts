@@ -27,6 +27,8 @@ export type HaltReason =
 export type MoveWhy =
   | { kind: 'planned' }
   | { kind: 'straight' }
+  /** En déroute : vers son camp. */
+  | { kind: 'flee' }
   /** Avancer : aucun ennemi devant sur sa rangée, l'escouade dévie vers le plus proche. */
   | { kind: 'deviate'; toward: string };
 
@@ -43,6 +45,7 @@ export interface SquadSnapshot {
   morale: number;
   maxMorale: number;
   wounded: number;
+  fleeing?: boolean;
 }
 
 export type BattleEvent =
@@ -81,5 +84,7 @@ export type BattleEvent =
   | { type: 'fortificationHit'; attacker: string; site: string; damage: DamageBreakdown; before: number; after: number }
   | { type: 'fortificationDestroyed'; site: string }
   | { type: 'rout'; squad: string }
+  /** Une escouade en fuite atteint son camp (cœur du campement ou portail) et quitte le terrain. */
+  | { type: 'fled'; squad: string; cell: Cell }
   | { type: 'turnEnd'; turn: number; squads: SquadSnapshot[] }
   | { type: 'battleEnd'; turn: number; outcome: Outcome; breaches: number };

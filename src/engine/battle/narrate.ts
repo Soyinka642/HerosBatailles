@@ -30,6 +30,8 @@ interface Names {
   site(id: string): string;
   /** Le nom de l'escouade est féminin (« les Brutes »). */
   feminine(id: string): boolean;
+  /** Le camp de l'escouade (les ennemis annoncés sont du côté ennemi). */
+  side(id: string): 'player' | 'enemy';
 }
 
 /** Nombre à la française : virgule décimale, au plus deux décimales. */
@@ -47,6 +49,10 @@ function namesOf(data: GameData, state: BattleState): Names {
       return site ? `la ${name.toLowerCase()} ${formatCell(site.cell)}` : id;
     },
     name: (id) => find(id)?.name ?? id,
+    side: (id) => {
+      const s = find(id);
+      return s && 'side' in s ? s.side : 'enemy';
+    },
     feminine: (id) => {
       const s = find(id);
       if (!s) return false;
@@ -141,6 +147,7 @@ function formatHalt(names: Names, squad: string, reason: HaltReason): string {
 function formatWhy(names: Names, why: MoveWhy): string {
   if (why.kind === 'planned') return ' (tour planifié)';
   if (why.kind === 'deviate') return `, en déviant vers ${les(names.name(why.toward))}`;
+  if (why.kind === 'flee') return ' (en fuite)';
   return '';
 }
 
@@ -224,11 +231,13 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
     case 'fortificationDestroyed':
       return `  ${capitalize(names.site(e.site))} est détruite : la case est libre.`;
     case 'rout':
-      return `  ${N(e.squad)} sont en déroute et quittent le terrain.`;
+      return `  ${N(e.squad)} sont en déroute : ${pronoun(e.squad)} fuient vers ${names.side(e.squad) === 'player' ? 'le campement' : 'le portail'}.`;
+    case 'fled':
+      return `  ${N(e.squad)} atteignent ${names.side(e.squad) === 'player' ? 'le campement' : 'le portail'} en ${formatCell(e.cell)} et quittent le terrain.`;
     case 'turnEnd':
       return [
         'Fin du tour :',
-        ...e.squads.map((s) => `  ${names.name(s.id)} en ${formatCell(s.cell)}, moral ${s.morale}/${s.maxMorale}${s.wounded > 0 ? `, ${wounded(s.wounded)}` : ''}`),
+        ...e.squads.map((s) => `  ${names.name(s.id)} en ${formatCell(s.cell)}, moral ${s.morale}/${s.maxMorale}${s.wounded > 0 ? `, ${wounded(s.wounded)}` : ''}${s.fleeing ? ', en fuite' : ''}`),
       ].join('\n');
     case 'battleEnd':
       return `\n${formatOutcome(e.outcome, e.turn, e.breaches)}`;
@@ -238,7 +247,7 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
 type Phase = 'Feu' | 'Mouvement' | 'Tir' | 'Mêlée';
 
 function phaseOf(e: BattleEvent): Phase | undefined {
-  if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach') return 'Mouvement';
+  if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach' || e.type === 'fled') return 'Mouvement';
   if (e.type === 'burn' || e.type === 'fortificationBurn') return 'Feu';
   if (e.type === 'shot' || e.type === 'ignite') return 'Tir';
   if (e.type === 'strike' || e.type === 'fortificationHit') return 'Mêlée';

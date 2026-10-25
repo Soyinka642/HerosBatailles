@@ -454,7 +454,7 @@ function parseConfig(ctx: Ctx, value: unknown, path: string): BattleConfig {
     wounded: readSection(ctx, o, 'wounded', path, { attackFloor: FRACTION }),
     mastery: readSection(ctx, o, 'mastery', path, { unmasteredAttackPenalty: NATURAL }),
     fireArrows: readSection(ctx, o, 'fireArrows', path, { minTargetDefense: NATURAL }),
-    fallen: readSection(ctx, o, 'fallen', path, { turnsHeldBeforeDeath: POSITIVE }),
+    fallen: readSection(ctx, o, 'fallen', path, { turnsHeldBeforeDeath: POSITIVE, abandonedShare: FRACTION }),
     field: readSection(ctx, o, 'field', path, { maxPlayerSquads: POSITIVE }),
     flank: readSection(ctx, o, 'flank', path, { attackBonus: NATURAL, extraMoraleLoss: NATURAL }),
     pushback: readSection(ctx, o, 'pushback', path, { damageThreshold: POSITIVE }),

@@ -87,10 +87,11 @@ Fin du tour :
 == Tour 7 ==
 Feu :
   Les Brutes du portail n°1 brûlent : 2 dégâts qui ignorent la défense ; moral 2 → 0, blessés 11 → 13. Encore 1 tour.
-  Les Brutes du portail n°1 sont en déroute et quittent le terrain.
+  Les Brutes du portail n°1 sont en déroute : elles fuient vers le portail.
 Fin du tour :
   Épéistes en (3,2), moral 6/20, 7 blessés
   Archers en (1,2), moral 20/20
+  Brutes du portail n°1 en (4,2), moral 0/24, 13 blessés, en fuite
 
 Victoire au tour 7 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 0.

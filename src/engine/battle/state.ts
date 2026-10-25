@@ -25,7 +25,11 @@ export interface UnmasteredWeapon {
   lostKeywords: Id[];
 }
 
-export type SquadStatus = 'active' | 'routed' | 'breached';
+/**
+ * active : se bat ; fleeing : en déroute, fuit vers son camp (encore sur le terrain, mais ni
+ * cible ni menace) ; routed : en déroute et sortie du terrain ; breached : ennemi entré au cœur du campement.
+ */
+export type SquadStatus = 'active' | 'fleeing' | 'routed' | 'breached';
 
 export interface BattleSquad {
   /** Unique dans la bataille : id choisi par le joueur, ou « fantassins-du-portail#1 ». */
@@ -103,6 +107,11 @@ export interface BattleState {
   outcome?: Outcome;
 }
 
+/** Encore sur le terrain : au combat, ou en fuite. Une escouade en fuite occupe toujours sa case. */
+export function isOnField(squad: BattleSquad): boolean {
+  return squad.status === 'active' || squad.status === 'fleeing';
+}
+
 export function activeSquads(state: BattleState): BattleSquad[] {
   return state.squads.filter((squad) => squad.status === 'active');
 }
@@ -112,7 +121,7 @@ export function activeEnemiesOf(state: BattleState, squad: BattleSquad): BattleS
 }
 
 export function squadAt(state: BattleState, cell: Cell): BattleSquad | undefined {
-  return state.squads.find((squad) => squad.status === 'active' && squad.cell.col === cell.col && squad.cell.row === cell.row);
+  return state.squads.find((squad) => isOnField(squad) && squad.cell.col === cell.col && squad.cell.row === cell.row);
 }
 
 export function findSquad(state: BattleState, id: string): BattleSquad {

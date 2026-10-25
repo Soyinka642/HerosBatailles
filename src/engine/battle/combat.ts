@@ -138,12 +138,12 @@ export function destroyedSince(standing: readonly FortificationState[]): BattleE
   return standing.filter((f) => !isStanding(f)).map((f) => ({ type: 'fortificationDestroyed', site: f.site }));
 }
 
-/** Les escouades dont le moral est tombé à zéro partent en déroute et quittent le terrain. */
+/** Les escouades dont le moral est tombé à zéro partent en déroute : elles fuiront vers leur camp. */
 export function routBroken(state: BattleState): BattleEvent[] {
   const events: BattleEvent[] = [];
   for (const squad of state.squads) {
     if (squad.status !== 'active' || !isBroken(squad)) continue;
-    squad.status = 'routed';
+    squad.status = 'fleeing';
     events.push({ type: 'rout', squad: squad.id });
   }
   return events;

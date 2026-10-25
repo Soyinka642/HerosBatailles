@@ -95,10 +95,11 @@ Mouvement :
   pas 1 : les Brutes du portail n°1 sont au contact des Épéistes : elles ne bougent plus.
 Tir :
   Les Archers tirent sur les Brutes du portail n°1 à 2 cases, volée normale (la cible brûle déjà) : 5 − 3 = 2 dégâts ; moral 2 → 0, blessés 11 → 13.
-  Les Brutes du portail n°1 sont en déroute et quittent le terrain.
+  Les Brutes du portail n°1 sont en déroute : elles fuient vers le portail.
 Fin du tour :
   Épéistes en (1,2), moral 11/20, 2 blessés
   Archers en (1,0), moral 20/20
+  Brutes du portail n°1 en (2,2), moral 0/24, 13 blessés, en fuite
 
 Victoire au tour 7 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 0.

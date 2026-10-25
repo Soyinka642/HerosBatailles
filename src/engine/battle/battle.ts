@@ -10,7 +10,7 @@ import { firePhase } from './fire';
 import { meleePhase } from './melee';
 import { movementPhase } from './movement';
 import { type BattleSetup, createBattle, enemySquad } from './setup';
-import { type BattleState, type Outcome, squadAt } from './state';
+import { type BattleState, type Outcome, isOnField, squadAt } from './state';
 import type { Carried } from './types';
 
 /** Rangées du portail dans l'ordre d'apparition : le centre, puis en alternant nord et sud. */
@@ -77,8 +77,15 @@ function turnEnd(state: BattleState): BattleEvent {
     type: 'turnEnd',
     turn: state.turn,
     squads: state.squads
-      .filter((s) => s.status === 'active')
-      .map((s) => ({ id: s.id, cell: { ...s.cell }, morale: s.morale, maxMorale: s.stats.maxMorale, wounded: s.wounded })),
+      .filter(isOnField)
+      .map((s) => ({
+        id: s.id,
+        cell: { ...s.cell },
+        morale: s.morale,
+        maxMorale: s.stats.maxMorale,
+        wounded: s.wounded,
+        ...(s.status === 'fleeing' ? { fleeing: true } : {}),
+      })),
   };
 }
 

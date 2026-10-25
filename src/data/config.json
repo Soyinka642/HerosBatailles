@@ -10,7 +10,7 @@
   "wounded": { "attackFloor": 0.5 },
   "mastery": { "unmasteredAttackPenalty": 2 },
   "fireArrows": { "minTargetDefense": 3 },
-  "fallen": { "turnsHeldBeforeDeath": 2 },
+  "fallen": { "turnsHeldBeforeDeath": 2, "abandonedShare": 0.5 },
   "field": { "maxPlayerSquads": 4 },
   "flank": { "attackBonus": 2, "extraMoraleLoss": 2 },
   "pushback": { "damageThreshold": 6 },

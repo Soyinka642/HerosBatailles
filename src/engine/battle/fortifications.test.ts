@@ -155,9 +155,11 @@ describe('tour', () => {
     const state = stateWith(data, [squad(data, 'archers', { col: 2, row: 2 }, HOLD)], [{ enemy: BRUTES, cell: { col: 3, row: 2 } }], 1, ALL_FORTIFICATIONS);
     findSquad(state, 'archers').morale = 1;
     meleePhase(data, state);
-    expect(findSquad(state, 'archers').status).toBe('routed');
+    expect(findSquad(state, 'archers').status).toBe('fleeing');
     state.turn = 2;
     movementPhase(data, state);
+    // Les Archers fuient (1,2) puis (0,2) et quittent le terrain ; la Brute entre dans la tour puis les suit.
+    expect(findSquad(state, 'archers').status).toBe('routed');
     expect(findSquad(state, 'brutes-du-portail#1').cell).toEqual({ col: 1, row: 2 });
   });
 });
