@@ -39,14 +39,16 @@ Tout repose sur une règle : **tout est emplacement, et les emplacements se déb
 ### Les escouades
 
 - L'escouade est le personnage : nom, niveau, équipement commun, soldats anonymes.
-- Deux jauges : le **moral**, qui baisse en premier, avec des paliers d'efficacité (ferme, ébranlé, vacillant) et la déroute à zéro ; les **effectifs**, en valides, blessés et morts (rares).
-- La perte d'effectifs affaiblit modérément, sans effondrer.
+- Deux jauges : le **moral**, avec des paliers d'efficacité (ferme, ébranlé, vacillant) et la déroute à zéro ; les **effectifs**, en valides, blessés et morts (rares).
+- **Le moral encaisse d'abord** : tant que l'escouade est ferme, les dégâts ne retirent que du moral. Une fois l'escouade ébranlée, chaque point de dégâts retire 1 de moral et fait 1 blessé.
+- **Les blessés réduisent l'attaque** en proportion des soldats valides, sans descendre sous un plancher : la perte d'effectifs affaiblit modérément, sans effondrer.
+- Le **moral maximum** est une base commune, que l'histoire de l'escouade fera évoluer (étendard, sergent, nom, épreuves vécues…).
 - Un **sergent** émerge avec l'expérience. Les héros sont des unités spéciales à part.
 - **Pas de type d'escouade figé** : épéistes, archers et piquiers sont des compositions de départ, c'est-à-dire un équipement et des maîtrises. Une escouade peut changer d'arme et apprendre de nouvelles maîtrises par l'entraînement au campement. Elle peut porter une arme qu'elle ne maîtrise pas, mais sans les capacités spéciales de l'arme (le soutien de la pique, par exemple) et avec un malus d'attaque. Cavaliers et catapultes viendront plus tard ; leurs chiffres sont à calibrer.
 
 ### Dégâts
 
-- **Dégâts = Attaque − Défense, avec un minimum.** La formule vit dans une seule fonction du code pour pouvoir passer au pourcentage si besoin.
+- **Dégâts = Attaque − Défense, avec un minimum.** Les dégâts finaux, une fois appliqués tous les modificateurs (moral, blessés, bonus), sont arrondis au plus proche. La formule vit dans une seule fonction du code pour pouvoir passer au pourcentage si besoin.
 - Mots-clés : *Perce-armure X* (ignore X de défense), *Feu* (perte de moral à l'impact, puis brûlure : des dégâts fixes qui ignorent la défense ; une escouade déjà en feu voit sa brûlure rafraîchie, sans cumul ; si la cible se tient sur une fortification, la fortification brûle aussi), *Charge* (bonus après une course suffisante).
 
 ### La bataille
@@ -69,9 +71,14 @@ Tout repose sur une règle : **tout est emplacement, et les emplacements se déb
 - **Quand le plan se heurte à la réalité** (chemin barré, aucune cible à
   portée), l'escouade applique une **réaction par défaut**, connue d'avance.
   Le dépliage permet de la modifier.
+- **Réaction par défaut** : l'escouade dont le plan est contrarié s'arrête sur sa case pour le reste du tour, combat ce qu'elle a au contact ou à portée, frappe l'obstacle hostile s'il est destructible (l'ennemi frappe la palissade), puis reprend sa posture au tour suivant.
 - **Mouvements simultanés** : toutes les escouades exécutent leur tour en même
   temps, et des règles fixes tranchent les conflits (même case visée, trajets
   qui se croisent). La bataille reste entièrement déterministe.
+- **Résolution par pas** : au premier pas, toutes les escouades qui bougent avancent d'une case en même temps ; au deuxième pas, celles de vitesse 2 ou plus, et ainsi de suite. Chacune choisit sa case d'après les positions au début du pas.
+- Un tireur en *Avancer* s'arrête dès qu'une cible est à portée au début d'un pas, puis tire.
+- **Conflits de mouvement** : si deux escouades visent la même case, la plus rapide entre, puis la première déployée (nos escouades avant les ennemis ; entre ennemis, l'ordre d'arrivée), et l'autre reste sur place. Un échange de cases, ou une rotation, ne se fait pas : personne ne bouge. On peut entrer dans une case qui se libère au même pas ; si son occupant est bloqué, celui qui le suit l'est aussi.
+- **Le contact engage** : une escouade au contact d'un ennemi au début d'un pas ne bouge plus. On ne passe pas à côté d'un ennemi.
 - **Tir de passage** : traverser la zone d'un tireur coûte des dégâts sans arrêter le mouvement. Les catapultes frappent une zone fixe choisie au déploiement.
 - **Mêlée simultanée** : les deux camps subissent leurs dégâts en même temps. Soutien d'une pique maîtrisée placée derrière (la pique aura plus tard un effet propre contre les cavaliers), recul en cas de gros dégâts.
 - **Flanc** : bonus d'attaque et perte de moral supplémentaire pour l'escouade prise de côté.
@@ -83,6 +90,7 @@ Tout repose sur une règle : **tout est emplacement, et les emplacements se déb
   escouades capables de s'en servir. Avant chaque bataille, on peut changer
   cette répartition, qui est ensuite conservée. Ce qui n'est pas utilisé reste
   à l'escouade. Si l'escouade est détruite, sa part est perdue.
+- **Usage des consommables** : chaque usage coûte une unité ; sans unité, l'escouade agit sans l'effet (une volée sans pâte part normale). Le reste d'une répartition inégale reste au campement, et une escouade en déroute garde sa part. Par défaut, les archers n'enflamment que les cibles assez cuirassées (seuil réglable) qui ne brûlent pas déjà.
 - **Celui qui tient le terrain relève les siens** : les soldats tombés restent sur leur case ; repris à temps, ils reviennent blessés ; si l'ennemi tient la case plusieurs tours, ils meurent. L'encerclement aggrave les pertes.
 
 ### Équipement et développement
@@ -206,7 +214,7 @@ Le plus grand risque est le dépliage sans fin : il y aura toujours une couche d
 
 - [ ] Les chiffres de base des escouades, recalibrés pour le jeu vidéo.
 - [ ] Soustraction avec plancher ou réduction en pourcentage pour les dégâts.
-- [ ] Combien de soldats par escouade, et comment les blessés réduisent sa puissance sans l'effondrer.
+- [ ] Combien de soldats par escouade, et le niveau du plancher de puissance des blessés.
 - [ ] Combien de tours l'ennemi doit tenir une case pour que les soldats tombés meurent.
 - [ ] La durée d'un cycle entre deux portails, et la vitesse de guérison qui va avec.
 - [ ] La taille du champ de bataille de départ et le nombre d'escouades par camp.
