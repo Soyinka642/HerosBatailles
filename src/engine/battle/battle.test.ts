@@ -37,7 +37,7 @@ describe('arrivées par le portail', () => {
       { type: 'arrival', squad: 'fantassins-du-portail#1', cell: { col: 11, row: 2 } },
       { type: 'arrival', squad: 'fantassins-du-portail#2', cell: { col: 11, row: 1 } },
     ]);
-    expect(findSquad(after, 'fantassins-du-portail#1').cell).toEqual({ col: 9, row: 2 });
+    expect(findSquad(after, 'fantassins-du-portail#1').cell).toEqual({ col: 10, row: 2 });
   });
 
   it('la rangée imposée passe d’abord', () => {

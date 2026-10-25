@@ -185,7 +185,7 @@ export interface Enemy {
 
 // --- Postures et ordres ---
 
-export const MOVEMENTS = ['hold', 'advance'] as const;
+export const MOVEMENTS = ['hold', 'advance', 'assault'] as const;
 export type Movement = (typeof MOVEMENTS)[number];
 
 /** Posture : la donnée choisit un comportement dans la liste fermée MOVEMENTS. */
@@ -194,6 +194,8 @@ export interface Posture extends Lockable {
   name: string;
   description: string;
   movement: Movement;
+  /** Réservée aux ennemis : nos escouades ne peuvent pas la prendre. */
+  enemyOnly?: boolean;
 }
 
 /** Profondeur des ordres : un ordre compte au plus autant de tours planifiés que d'emplacements débloqués. */

@@ -165,7 +165,9 @@ function checkPlayerSquads(data: GameData, setup: BattleSetup): string[] {
     }
     const first = setup.squads.findIndex((s) => sameCell(s.cell, squad.cell));
     if (first !== index) issues.push(`${squad.id} : même case que ${setup.squads[first]?.id}`);
-    if (!data.postures.some((p) => p.id === squad.order.posture)) issues.push(`${squad.id} : posture inconnue « ${squad.order.posture} »`);
+    const posture = data.postures.find((p) => p.id === squad.order.posture);
+    if (!posture) issues.push(`${squad.id} : posture inconnue « ${squad.order.posture} »`);
+    else if (posture.enemyOnly) issues.push(`${squad.id} : la posture « ${posture.id} » est réservée aux ennemis`);
     checkEquipment(data, squad, issues);
     checkPlannedTurns(data, setup, squad, issues);
   });

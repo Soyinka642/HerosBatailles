@@ -6,8 +6,8 @@ Nos escouades, dans l’ordre de déploiement :
 - Épéistes en plates en (3,0), Avancer : mêlée 6, tir 0, défense 4, vitesse 1, moral 20, 20 soldats.
 
 Ennemis annoncés, dans l’ordre d’arrivée :
-- Fantassins du portail n°1, tour 1, rangée 2 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
-- Fantassins du portail n°2, tour 1, rangée 0 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
+- Fantassins du portail n°1, tour 1, rangée 2 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°2, tour 1, rangée 0 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
 
 == Tour 1 ==
 Fantassins du portail n°1 sortent du portail en (11,2).
@@ -18,51 +18,59 @@ Mouvement :
   pas 1 : Fantassins du portail n°1 (11,2) → (10,2).
   pas 1 : Fantassins du portail n°2 (11,0) → (10,0).
   pas 2 : Épéistes (4,2) → (5,2).
-  pas 2 : Fantassins du portail n°1 (10,2) → (9,2).
-  pas 2 : Fantassins du portail n°2 (10,0) → (9,0).
 Fin du tour :
   Épéistes en (5,2), moral 20/20
   Épéistes en plates en (4,0), moral 20/20
-  Fantassins du portail n°1 en (9,2), moral 16/16
-  Fantassins du portail n°2 en (9,0), moral 16/16
+  Fantassins du portail n°1 en (10,2), moral 16/16
+  Fantassins du portail n°2 en (10,0), moral 16/16
 
 == Tour 2 ==
 Mouvement :
   pas 1 : Épéistes (5,2) → (6,2).
   pas 1 : Épéistes en plates (4,0) → (5,0).
-  pas 1 : Fantassins du portail n°1 (9,2) → (8,2).
-  pas 1 : Fantassins du portail n°2 (9,0) → (8,0).
+  pas 1 : Fantassins du portail n°1 (10,2) → (9,2).
+  pas 1 : Fantassins du portail n°2 (10,0) → (9,0).
   pas 2 : Épéistes (6,2) → (7,2).
-  pas 2 : Fantassins du portail n°1 ne peuvent pas entrer en (7,2) : Épéistes y entrent avant eux (déployés avant). Ils s'arrêtent pour ce tour.
-  pas 2 : Fantassins du portail n°2 (8,0) → (7,0).
+Fin du tour :
+  Épéistes en (7,2), moral 20/20
+  Épéistes en plates en (5,0), moral 20/20
+  Fantassins du portail n°1 en (9,2), moral 16/16
+  Fantassins du portail n°2 en (9,0), moral 16/16
+
+== Tour 3 ==
+Mouvement :
+  pas 1 : Épéistes (7,2) → (8,2).
+  pas 1 : Épéistes en plates (5,0) → (6,0).
+  pas 1 : Fantassins du portail n°1 ne peuvent pas entrer en (8,2) : Épéistes y entrent avant eux (plus rapides). Ils s'arrêtent pour ce tour.
+  pas 1 : Fantassins du portail n°2 (9,0) → (8,0).
+  pas 2 : Épéistes sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
 Mêlée :
   Épéistes frappent Fantassins du portail n°1 : 6 − 2 = 4 dégâts ; moral 16 → 12.
   Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 dégâts ; moral 20 → 17.
 Fin du tour :
-  Épéistes en (7,2), moral 17/20
-  Épéistes en plates en (5,0), moral 20/20
-  Fantassins du portail n°1 en (8,2), moral 12/16
-  Fantassins du portail n°2 en (7,0), moral 16/16
+  Épéistes en (8,2), moral 17/20
+  Épéistes en plates en (6,0), moral 20/20
+  Fantassins du portail n°1 en (9,2), moral 12/16
+  Fantassins du portail n°2 en (8,0), moral 16/16
 
-== Tour 3 ==
+== Tour 4 ==
 Mouvement :
   pas 1 : Épéistes sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
-  pas 1 : Épéistes en plates ne peuvent pas entrer en (6,0) : Fantassins du portail n°2 y entrent avant eux (plus rapides). Ils s'arrêtent pour ce tour.
+  pas 1 : Épéistes en plates (6,0) → (7,0).
   pas 1 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°2 (7,0) → (6,0).
-  pas 2 : Fantassins du portail n°2 sont au contact d'Épéistes en plates : ils ne bougent plus.
+  pas 1 : Fantassins du portail n°2 ne peuvent pas entrer en (7,0) : Épéistes en plates y entrent avant eux (déployés avant). Ils s'arrêtent pour ce tour.
 Mêlée :
   Épéistes frappent Fantassins du portail n°1 : 6 − 2 = 4 dégâts ; moral 12 → 8, blessés 0 → 2 ; ils sont ébranlés.
   Épéistes en plates frappent Fantassins du portail n°2 : 6 − 2 = 4 dégâts ; moral 16 → 12.
   Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 dégâts ; moral 17 → 14.
   Fantassins du portail n°2 frappent Épéistes en plates : 5 − 4 = 1 dégât ; moral 20 → 19.
 Fin du tour :
-  Épéistes en (7,2), moral 14/20
-  Épéistes en plates en (5,0), moral 19/20
-  Fantassins du portail n°1 en (8,2), moral 8/16, 2 blessés
-  Fantassins du portail n°2 en (6,0), moral 12/16
+  Épéistes en (8,2), moral 14/20
+  Épéistes en plates en (7,0), moral 19/20
+  Fantassins du portail n°1 en (9,2), moral 8/16, 2 blessés
+  Fantassins du portail n°2 en (8,0), moral 12/16
 
-== Tour 4 ==
+== Tour 5 ==
 Mouvement :
   pas 1 : Épéistes sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
   pas 1 : Épéistes en plates sont au contact de Fantassins du portail n°2 : ils ne bougent plus.
@@ -74,12 +82,12 @@ Mêlée :
   Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 2,43 → 2 dégâts ; moral 14 → 12, blessés 0 → 1 ; ils sont ébranlés.
   Fantassins du portail n°2 frappent Épéistes en plates : 5 − 4 = 1 dégât ; moral 19 → 18.
 Fin du tour :
-  Épéistes en (7,2), moral 12/20, 1 blessé
-  Épéistes en plates en (5,0), moral 18/20
-  Fantassins du portail n°1 en (8,2), moral 4/16, 6 blessés
-  Fantassins du portail n°2 en (6,0), moral 8/16, 2 blessés
+  Épéistes en (8,2), moral 12/20, 1 blessé
+  Épéistes en plates en (7,0), moral 18/20
+  Fantassins du portail n°1 en (9,2), moral 4/16, 6 blessés
+  Fantassins du portail n°2 en (8,0), moral 8/16, 2 blessés
 
-== Tour 5 ==
+== Tour 6 ==
 Mouvement :
   pas 1 : Épéistes sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
   pas 1 : Épéistes en plates sont au contact de Fantassins du portail n°2 : ils ne bougent plus.
@@ -91,12 +99,12 @@ Mêlée :
   Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 1,68 → 2 dégâts ; moral 12 → 10, blessés 1 → 3.
   Fantassins du portail n°2 frappent Épéistes en plates : 5 − 4 = 1 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 0,81 → 1 dégât ; moral 18 → 17.
 Fin du tour :
-  Épéistes en (7,2), moral 10/20, 3 blessés
-  Épéistes en plates en (5,0), moral 17/20
-  Fantassins du portail n°1 en (8,2), moral 1/16, 9 blessés
-  Fantassins du portail n°2 en (6,0), moral 4/16, 6 blessés
+  Épéistes en (8,2), moral 10/20, 3 blessés
+  Épéistes en plates en (7,0), moral 17/20
+  Fantassins du portail n°1 en (9,2), moral 1/16, 9 blessés
+  Fantassins du portail n°2 en (8,0), moral 4/16, 6 blessés
 
-== Tour 6 ==
+== Tour 7 ==
 Mouvement :
   pas 1 : Épéistes sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
   pas 1 : Épéistes en plates sont au contact de Fantassins du portail n°2 : ils ne bougent plus.
@@ -110,8 +118,8 @@ Mêlée :
   Fantassins du portail n°1 sont en déroute et quittent le terrain.
   Fantassins du portail n°2 sont en déroute et quittent le terrain.
 Fin du tour :
-  Épéistes en (7,2), moral 9/20, 4 blessés
-  Épéistes en plates en (5,0), moral 16/20
+  Épéistes en (8,2), moral 9/20, 4 blessés
+  Épéistes en plates en (7,0), moral 16/20
 
-Victoire au tour 6 : plus aucun ennemi sur le terrain ni à venir.
+Victoire au tour 7 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 0.

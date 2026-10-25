@@ -329,7 +329,7 @@ function parseEnemy(ctx: Ctx, value: unknown, path: string): Enemy | undefined {
 }
 
 function parsePosture(ctx: Ctx, value: unknown, path: string): Posture | undefined {
-  const o = readObject(ctx, value, path, ['id', 'name', 'description', 'movement', 'unlockedBy']);
+  const o = readObject(ctx, value, path, ['id', 'name', 'description', 'movement', 'unlockedBy', 'enemyOnly']);
   if (!o) return undefined;
   const posture: Posture = {
     id: readString(ctx, o, 'id', path),
@@ -337,6 +337,8 @@ function parsePosture(ctx: Ctx, value: unknown, path: string): Posture | undefin
     description: readString(ctx, o, 'description', path),
     movement: readEnum(ctx, o, 'movement', path, MOVEMENTS),
   };
+  const enemyOnly = readOptionalBoolean(ctx, o, 'enemyOnly', path);
+  if (enemyOnly !== undefined) posture.enemyOnly = enemyOnly;
   setUnlockedBy(ctx, o, path, posture);
   return posture;
 }

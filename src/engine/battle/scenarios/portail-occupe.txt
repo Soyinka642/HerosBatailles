@@ -8,13 +8,13 @@ Nos escouades, dans l’ordre de déploiement :
 - Épéistes de la garde en (3,3), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
 
 Ennemis annoncés, dans l’ordre d’arrivée :
-- Fantassins du portail n°1, tour 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
-- Fantassins du portail n°2, tour 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
-- Fantassins du portail n°3, tour 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
-- Fantassins du portail n°4, tour 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
-- Fantassins du portail n°5, tour 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
-- Fantassins du portail n°6, tour 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
-- Fantassins du portail n°7, tour 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
+- Fantassins du portail n°1, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°2, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°3, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°4, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°5, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°6, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°7, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
 
 == Tour 1 ==
 Fantassins du portail n°1 sortent du portail en (11,2).
@@ -28,13 +28,30 @@ Mouvement :
   pas 1 : Fantassins du portail n°1 (11,2) → (10,2).
   pas 1 : Fantassins du portail n°2 (11,1) → (10,1).
   pas 1 : Fantassins du portail n°3 (11,3) → (10,3).
-  pas 1 : Fantassins du portail n°4 (11,0) → (10,0), en déviant vers Épéistes.
-  pas 1 : Fantassins du portail n°5 (11,4) → (10,4), en déviant vers Épéistes de la garde.
-  pas 2 : Fantassins du portail n°1 (10,2) → (9,2).
-  pas 2 : Fantassins du portail n°2 (10,1) → (9,1).
-  pas 2 : Fantassins du portail n°3 (10,3) → (9,3).
-  pas 2 : Fantassins du portail n°4 (10,0) → (9,0), en déviant vers Épéistes.
-  pas 2 : Fantassins du portail n°5 (10,4) → (9,4), en déviant vers Épéistes de la garde.
+  pas 1 : Fantassins du portail n°4 (11,0) → (10,0).
+  pas 1 : Fantassins du portail n°5 (11,4) → (10,4).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,2), moral 20/20
+  Épéistes de la garde en (3,3), moral 20/20
+  Fantassins du portail n°1 en (10,2), moral 16/16
+  Fantassins du portail n°2 en (10,1), moral 16/16
+  Fantassins du portail n°3 en (10,3), moral 16/16
+  Fantassins du portail n°4 en (10,0), moral 16/16
+  Fantassins du portail n°5 en (10,4), moral 16/16
+
+== Tour 2 ==
+Fantassins du portail n°6 sortent du portail en (11,2).
+Fantassins du portail n°7 sortent du portail en (11,1).
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (10,2) → (9,2).
+  pas 1 : Fantassins du portail n°2 (10,1) → (9,1).
+  pas 1 : Fantassins du portail n°3 (10,3) → (9,3).
+  pas 1 : Fantassins du portail n°4 (10,0) → (9,0).
+  pas 1 : Fantassins du portail n°5 (10,4) → (9,4).
+  pas 1 : Fantassins du portail n°6 (11,2) → (10,2).
+  pas 1 : Fantassins du portail n°7 (11,1) → (10,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
@@ -45,25 +62,40 @@ Fin du tour :
   Fantassins du portail n°3 en (9,3), moral 16/16
   Fantassins du portail n°4 en (9,0), moral 16/16
   Fantassins du portail n°5 en (9,4), moral 16/16
+  Fantassins du portail n°6 en (10,2), moral 16/16
+  Fantassins du portail n°7 en (10,1), moral 16/16
 
-== Tour 2 ==
-Fantassins du portail n°6 sortent du portail en (11,2).
-Fantassins du portail n°7 sortent du portail en (11,1).
+== Tour 3 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 (9,2) → (8,2).
   pas 1 : Fantassins du portail n°2 (9,1) → (8,1).
   pas 1 : Fantassins du portail n°3 (9,3) → (8,3).
-  pas 1 : Fantassins du portail n°4 (9,0) → (8,0), en déviant vers Épéistes.
-  pas 1 : Fantassins du portail n°5 (9,4) → (8,4), en déviant vers Épéistes de la garde.
-  pas 1 : Fantassins du portail n°6 (11,2) → (10,2).
-  pas 1 : Fantassins du portail n°7 (11,1) → (10,1).
-  pas 2 : Fantassins du portail n°1 (8,2) → (7,2).
-  pas 2 : Fantassins du portail n°2 (8,1) → (7,1).
-  pas 2 : Fantassins du portail n°3 (8,3) → (7,3).
-  pas 2 : Fantassins du portail n°4 (8,0) → (7,0), en déviant vers Épéistes.
-  pas 2 : Fantassins du portail n°5 (8,4) → (7,4), en déviant vers Épéistes de la garde.
-  pas 2 : Fantassins du portail n°6 (10,2) → (9,2).
-  pas 2 : Fantassins du portail n°7 (10,1) → (9,1).
+  pas 1 : Fantassins du portail n°4 (9,0) → (8,0).
+  pas 1 : Fantassins du portail n°5 (9,4) → (8,4).
+  pas 1 : Fantassins du portail n°6 (10,2) → (9,2).
+  pas 1 : Fantassins du portail n°7 (10,1) → (9,1).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,2), moral 20/20
+  Épéistes de la garde en (3,3), moral 20/20
+  Fantassins du portail n°1 en (8,2), moral 16/16
+  Fantassins du portail n°2 en (8,1), moral 16/16
+  Fantassins du portail n°3 en (8,3), moral 16/16
+  Fantassins du portail n°4 en (8,0), moral 16/16
+  Fantassins du portail n°5 en (8,4), moral 16/16
+  Fantassins du portail n°6 en (9,2), moral 16/16
+  Fantassins du portail n°7 en (9,1), moral 16/16
+
+== Tour 4 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (8,2) → (7,2).
+  pas 1 : Fantassins du portail n°2 (8,1) → (7,1).
+  pas 1 : Fantassins du portail n°3 (8,3) → (7,3).
+  pas 1 : Fantassins du portail n°4 (8,0) → (7,0).
+  pas 1 : Fantassins du portail n°5 (8,4) → (7,4).
+  pas 1 : Fantassins du portail n°6 (9,2) → (8,2).
+  pas 1 : Fantassins du portail n°7 (9,1) → (8,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
@@ -74,25 +106,40 @@ Fin du tour :
   Fantassins du portail n°3 en (7,3), moral 16/16
   Fantassins du portail n°4 en (7,0), moral 16/16
   Fantassins du portail n°5 en (7,4), moral 16/16
-  Fantassins du portail n°6 en (9,2), moral 16/16
-  Fantassins du portail n°7 en (9,1), moral 16/16
+  Fantassins du portail n°6 en (8,2), moral 16/16
+  Fantassins du portail n°7 en (8,1), moral 16/16
 
-== Tour 3 ==
+== Tour 5 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 (7,2) → (6,2).
   pas 1 : Fantassins du portail n°2 (7,1) → (6,1).
   pas 1 : Fantassins du portail n°3 (7,3) → (6,3).
-  pas 1 : Fantassins du portail n°4 (7,0) → (6,0), en déviant vers Épéistes.
-  pas 1 : Fantassins du portail n°5 (7,4) → (6,4), en déviant vers Épéistes de la garde.
-  pas 1 : Fantassins du portail n°6 (9,2) → (8,2).
-  pas 1 : Fantassins du portail n°7 (9,1) → (8,1).
-  pas 2 : Fantassins du portail n°1 (6,2) → (5,2).
-  pas 2 : Fantassins du portail n°2 (6,1) → (5,1).
-  pas 2 : Fantassins du portail n°3 (6,3) → (5,3).
-  pas 2 : Fantassins du portail n°4 (6,0) → (5,0), en déviant vers Épéistes.
-  pas 2 : Fantassins du portail n°5 (6,4) → (5,4), en déviant vers Épéistes de la garde.
-  pas 2 : Fantassins du portail n°6 (8,2) → (7,2).
-  pas 2 : Fantassins du portail n°7 (8,1) → (7,1).
+  pas 1 : Fantassins du portail n°4 (7,0) → (6,0).
+  pas 1 : Fantassins du portail n°5 (7,4) → (6,4).
+  pas 1 : Fantassins du portail n°6 (8,2) → (7,2).
+  pas 1 : Fantassins du portail n°7 (8,1) → (7,1).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,2), moral 20/20
+  Épéistes de la garde en (3,3), moral 20/20
+  Fantassins du portail n°1 en (6,2), moral 16/16
+  Fantassins du portail n°2 en (6,1), moral 16/16
+  Fantassins du portail n°3 en (6,3), moral 16/16
+  Fantassins du portail n°4 en (6,0), moral 16/16
+  Fantassins du portail n°5 en (6,4), moral 16/16
+  Fantassins du portail n°6 en (7,2), moral 16/16
+  Fantassins du portail n°7 en (7,1), moral 16/16
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (6,2) → (5,2).
+  pas 1 : Fantassins du portail n°2 (6,1) → (5,1).
+  pas 1 : Fantassins du portail n°3 (6,3) → (5,3).
+  pas 1 : Fantassins du portail n°4 (6,0) → (5,0).
+  pas 1 : Fantassins du portail n°5 (6,4) → (5,4).
+  pas 1 : Fantassins du portail n°6 (7,2) → (6,2).
+  pas 1 : Fantassins du portail n°7 (7,1) → (6,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
@@ -103,25 +150,18 @@ Fin du tour :
   Fantassins du portail n°3 en (5,3), moral 16/16
   Fantassins du portail n°4 en (5,0), moral 16/16
   Fantassins du portail n°5 en (5,4), moral 16/16
-  Fantassins du portail n°6 en (7,2), moral 16/16
-  Fantassins du portail n°7 en (7,1), moral 16/16
+  Fantassins du portail n°6 en (6,2), moral 16/16
+  Fantassins du portail n°7 en (6,1), moral 16/16
 
-== Tour 4 ==
+== Tour 7 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 (5,2) → (4,2).
   pas 1 : Fantassins du portail n°2 (5,1) → (4,1).
   pas 1 : Fantassins du portail n°3 (5,3) → (4,3).
-  pas 1 : Fantassins du portail n°4 (5,0) → (4,0), en déviant vers Épéistes.
-  pas 1 : Fantassins du portail n°5 (5,4) → (4,4), en déviant vers Épéistes de la garde.
-  pas 1 : Fantassins du portail n°6 (7,2) → (6,2).
-  pas 1 : Fantassins du portail n°7 (7,1) → (6,1).
-  pas 2 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°2 sont au contact d'Épéistes : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°3 sont au contact d'Épéistes de la garde : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°4 sont au contact d'Épéistes : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°5 sont au contact d'Épéistes de la garde : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°6 (6,2) → (5,2).
-  pas 2 : Fantassins du portail n°7 (6,1) → (5,1).
+  pas 1 : Fantassins du portail n°4 (5,0) → (4,0).
+  pas 1 : Fantassins du portail n°5 (5,4) → (4,4).
+  pas 1 : Fantassins du portail n°6 (6,2) → (5,2).
+  pas 1 : Fantassins du portail n°7 (6,1) → (5,1).
 Tir :
   Archers tirent sur Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
 Mêlée :
@@ -145,7 +185,7 @@ Fin du tour :
   Fantassins du portail n°6 en (5,2), moral 16/16
   Fantassins du portail n°7 en (5,1), moral 16/16
 
-== Tour 5 ==
+== Tour 8 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
   pas 1 : Fantassins du portail n°2 sont au contact d'Épéistes : ils ne bougent plus.
@@ -177,7 +217,7 @@ Fin du tour :
   Fantassins du portail n°6 en (5,2), moral 16/16
   Fantassins du portail n°7 en (5,1), moral 16/16
 
-== Tour 6 ==
+== Tour 9 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
   pas 1 : Fantassins du portail n°2 sont au contact d'Épéistes : ils ne bougent plus.
@@ -209,18 +249,15 @@ Fin du tour :
   Fantassins du portail n°6 en (5,2), moral 16/16
   Fantassins du portail n°7 en (5,1), moral 16/16
 
-== Tour 7 ==
+== Tour 10 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 sont au contact d'Épéistes de la garde : ils ne bougent plus.
   pas 1 : Fantassins du portail n°2 (4,1) → (3,1).
   pas 1 : Fantassins du portail n°3 sont au contact d'Épéistes de la garde : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°4 (4,0) → (3,0), en déviant vers Piquiers.
+  pas 1 : Fantassins du portail n°4 (4,0) → (3,0).
   pas 1 : Fantassins du portail n°5 sont au contact d'Épéistes de la garde : ils ne bougent plus.
   pas 1 : Fantassins du portail n°6 ne peuvent pas entrer en (4,2) : la case est tenue par Fantassins du portail n°1. Ils s'arrêtent pour ce tour.
   pas 1 : Fantassins du portail n°7 (5,1) → (4,1).
-  pas 2 : Fantassins du portail n°2 sont au contact de Piquiers : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°4 sont au contact de Piquiers : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°7 ne peuvent pas entrer en (3,1) : la case est tenue par Fantassins du portail n°2. Ils s'arrêtent pour ce tour.
 Tir :
   Archers tirent sur Fantassins du portail n°4 à 3 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
 Mêlée :
@@ -243,18 +280,14 @@ Fin du tour :
   Fantassins du portail n°6 en (5,2), moral 16/16
   Fantassins du portail n°7 en (4,1), moral 16/16
 
-== Tour 8 ==
+== Tour 11 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 (4,2) → (3,2).
-  pas 1 : Fantassins du portail n°3 (4,3) → (3,3), en déviant vers Piquiers.
+  pas 1 : Fantassins du portail n°3 (4,3) → (3,3).
   pas 1 : Fantassins du portail n°4 sont au contact de Piquiers : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°5 ne peuvent pas entrer en (3,3) : Fantassins du portail n°3 y entrent avant eux (déployés avant). Ils s'arrêtent pour ce tour.
+  pas 1 : Fantassins du portail n°5 (4,4) → (3,4).
   pas 1 : Fantassins du portail n°6 (5,2) → (4,2).
   pas 1 : Fantassins du portail n°7 (4,1) → (3,1).
-  pas 2 : Fantassins du portail n°1 sont au contact de Piquiers : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°3 ne peuvent pas entrer en (3,2) : la case est tenue par Fantassins du portail n°1. Ils s'arrêtent pour ce tour.
-  pas 2 : Fantassins du portail n°6 ne peuvent pas entrer en (3,2) : la case est tenue par Fantassins du portail n°1. Ils s'arrêtent pour ce tour.
-  pas 2 : Fantassins du portail n°7 sont au contact de Piquiers : ils ne bougent plus.
 Tir :
   Archers tirent sur Fantassins du portail n°1 à 2 cases : 5 − 2 = 3 dégâts ; moral 7 → 4, blessés 3 → 6 ; ils sont vacillants.
 Mêlée :
@@ -268,16 +301,16 @@ Fin du tour :
   Fantassins du portail n°1 en (3,2), moral 4/16, 6 blessés
   Fantassins du portail n°3 en (3,3), moral 3/16, 7 blessés
   Fantassins du portail n°4 en (3,0), moral 13/16
-  Fantassins du portail n°5 en (4,4), moral 16/16
+  Fantassins du portail n°5 en (3,4), moral 16/16
   Fantassins du portail n°6 en (4,2), moral 16/16
   Fantassins du portail n°7 en (3,1), moral 13/16
 
-== Tour 9 ==
+== Tour 12 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 sont au contact de Piquiers : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°3 ne peuvent pas entrer en (3,2) : la case est tenue par Fantassins du portail n°1. Ils s'arrêtent pour ce tour.
+  pas 1 : Fantassins du portail n°3 (3,3) → (2,3).
   pas 1 : Fantassins du portail n°4 sont au contact de Piquiers : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°5 ne peuvent pas entrer en (3,3) : Fantassins du portail n°3, qui devaient libérer la case, sont bloqués. Ils s'arrêtent pour ce tour.
+  pas 1 : Fantassins du portail n°5 (3,4) → (2,4).
   pas 1 : Fantassins du portail n°6 ne peuvent pas entrer en (3,2) : la case est tenue par Fantassins du portail n°1. Ils s'arrêtent pour ce tour.
   pas 1 : Fantassins du portail n°7 sont au contact de Piquiers : ils ne bougent plus.
 Tir :
@@ -291,80 +324,70 @@ Mêlée :
 Fin du tour :
   Archers en (1,2), moral 20/20
   Fantassins du portail n°1 en (3,2), moral 1/16, 9 blessés
-  Fantassins du portail n°3 en (3,3), moral 3/16, 7 blessés
+  Fantassins du portail n°3 en (2,3), moral 3/16, 7 blessés
   Fantassins du portail n°4 en (3,0), moral 13/16
-  Fantassins du portail n°5 en (4,4), moral 16/16
+  Fantassins du portail n°5 en (2,4), moral 16/16
   Fantassins du portail n°6 en (4,2), moral 16/16
   Fantassins du portail n°7 en (3,1), moral 12/16
 
-== Tour 10 ==
+== Tour 13 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 (3,2) → (2,2).
-  pas 1 : Fantassins du portail n°3 (3,3) → (2,3), en déviant vers Archers.
-  pas 1 : Fantassins du portail n°4 (3,0) → (2,0), en déviant vers Archers.
-  pas 1 : Fantassins du portail n°5 (4,4) → (3,4), en déviant vers Archers.
+  pas 1 : Fantassins du portail n°3 (2,3) → (1,3).
+  pas 1 : Fantassins du portail n°4 (3,0) → (2,0).
+  pas 1 : Fantassins du portail n°5 (2,4) → (1,4).
   pas 1 : Fantassins du portail n°6 (4,2) → (3,2).
-  pas 1 : Fantassins du portail n°7 (3,1) → (2,1), en déviant vers Archers.
-  pas 2 : Fantassins du portail n°1 sont au contact d'Archers : ils ne bougent plus.
-  pas 2 : Fantassins du portail n°3 (2,3) → (1,3), en déviant vers Archers.
-  pas 2 : Fantassins du portail n°4 (2,0) → (1,1), en déviant vers Archers.
-  pas 2 : Fantassins du portail n°5 (3,4) → (2,4), en déviant vers Archers.
-  pas 2 : Fantassins du portail n°6 ne peuvent pas entrer en (2,2) : la case est tenue par Fantassins du portail n°1. Ils s'arrêtent pour ce tour.
-  pas 2 : Fantassins du portail n°7 ne peuvent pas entrer en (1,1) : Fantassins du portail n°4 y entrent avant eux (déployés avant). Ils s'arrêtent pour ce tour.
+  pas 1 : Fantassins du portail n°7 (3,1) → (2,1).
 Mêlée :
   Archers frappent Fantassins du portail n°1 : 2 − 2 = 0 → minimum 1 dégât ; moral 1 → 0, blessés 9 → 10.
   Fantassins du portail n°1 frappent Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 1,76 → 2 dégâts ; moral 20 → 18.
   Fantassins du portail n°3 frappent Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,65 (7 blessés sur 20) = 2,08 → 2 dégâts ; moral 18 → 16.
-  Fantassins du portail n°4 frappent Archers : 5 − 1 = 4 dégâts ; moral 16 → 12, blessés 0 → 1 ; ils sont ébranlés.
   Fantassins du portail n°1 sont en déroute et quittent le terrain.
 Fin du tour :
-  Archers en (1,2), moral 12/20, 1 blessé
+  Archers en (1,2), moral 16/20
   Fantassins du portail n°3 en (1,3), moral 3/16, 7 blessés
-  Fantassins du portail n°4 en (1,1), moral 13/16
-  Fantassins du portail n°5 en (2,4), moral 16/16
+  Fantassins du portail n°4 en (2,0), moral 13/16
+  Fantassins du portail n°5 en (1,4), moral 16/16
   Fantassins du portail n°6 en (3,2), moral 16/16
   Fantassins du portail n°7 en (2,1), moral 12/16
 
-== Tour 11 ==
+== Tour 14 ==
 Mouvement :
   pas 1 : Fantassins du portail n°3 sont au contact d'Archers : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°4 sont au contact d'Archers : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°5 ne peuvent pas entrer en (1,3) : la case est tenue par Fantassins du portail n°3. Ils s'arrêtent pour ce tour.
+  pas 1 : Fantassins du portail n°4 (2,0) → (1,0).
+  pas 1 : Fantassins du portail n°5 (1,4) → (0,4).
   pas 1 : Fantassins du portail n°6 (3,2) → (2,2).
-  pas 1 : Fantassins du portail n°7 ne peuvent pas entrer en (1,1) : la case est tenue par Fantassins du portail n°4. Ils s'arrêtent pour ce tour.
-  pas 2 : Fantassins du portail n°6 sont au contact d'Archers : ils ne bougent plus.
+  pas 1 : Fantassins du portail n°7 (2,1) → (1,1).
+  Fantassins du portail n°5 atteignent le cœur du campement en (0,4) : incursion n°1. Ils quittent la bataille.
 Mêlée :
-  Archers frappent Fantassins du portail n°6 : 2 − 2 = 0 × 0,9 (ébranlés) × 0,95 (1 blessé sur 20) = 0 → minimum 1 dégât ; moral 16 → 15.
-  Fantassins du portail n°3 frappent Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,65 (7 blessés sur 20) = 2,08 → 2 dégâts ; moral 12 → 10, blessés 1 → 3.
-  Fantassins du portail n°4 frappent Archers : 5 − 1 = 4 dégâts ; moral 10 → 6, blessés 3 → 7 ; ils sont vacillants.
-  Fantassins du portail n°6 frappent Archers : 5 − 1 = 4 dégâts ; moral 6 → 2, blessés 7 → 11.
+  Archers frappent Fantassins du portail n°6 : 2 − 2 = 0 → minimum 1 dégât ; moral 16 → 15.
+  Fantassins du portail n°3 frappent Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,65 (7 blessés sur 20) = 2,08 → 2 dégâts ; moral 16 → 14.
+  Fantassins du portail n°6 frappent Archers : 5 − 1 = 4 dégâts ; moral 14 → 10, blessés 0 → 3 ; ils sont ébranlés.
+  Fantassins du portail n°7 frappent Archers : 5 − 1 = 4 dégâts ; moral 10 → 6, blessés 3 → 7 ; ils sont vacillants.
 Fin du tour :
-  Archers en (1,2), moral 2/20, 11 blessés
+  Archers en (1,2), moral 6/20, 7 blessés
   Fantassins du portail n°3 en (1,3), moral 3/16, 7 blessés
-  Fantassins du portail n°4 en (1,1), moral 13/16
-  Fantassins du portail n°5 en (2,4), moral 16/16
+  Fantassins du portail n°4 en (1,0), moral 13/16
   Fantassins du portail n°6 en (2,2), moral 15/16
-  Fantassins du portail n°7 en (2,1), moral 12/16
+  Fantassins du portail n°7 en (1,1), moral 12/16
 
-== Tour 12 ==
+== Tour 15 ==
 Mouvement :
   pas 1 : Fantassins du portail n°3 sont au contact d'Archers : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°4 sont au contact d'Archers : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°5 ne peuvent pas entrer en (1,3) : la case est tenue par Fantassins du portail n°3. Ils s'arrêtent pour ce tour.
+  pas 1 : Fantassins du portail n°4 (1,0) → (0,0).
   pas 1 : Fantassins du portail n°6 sont au contact d'Archers : ils ne bougent plus.
-  pas 1 : Fantassins du portail n°7 ne peuvent pas entrer en (1,1) : la case est tenue par Fantassins du portail n°4. Ils s'arrêtent pour ce tour.
+  pas 1 : Fantassins du portail n°7 sont au contact d'Archers : ils ne bougent plus.
+  Fantassins du portail n°4 atteignent le cœur du campement en (0,0) : incursion n°2. Ils quittent la bataille.
 Mêlée :
-  Archers frappent Fantassins du portail n°6 : 2 − 2 = 0 × 0,8 (vacillants) × 0,5 (11 blessés sur 20) = 0 → minimum 1 dégât ; moral 15 → 14.
-  Fantassins du portail n°3 frappent Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,65 (7 blessés sur 20) = 2,08 → 2 dégâts ; moral 2 → 0, blessés 11 → 13.
-  Fantassins du portail n°4 frappent Archers : 5 − 1 = 4 dégâts ; moral 0 → 0.
-  Fantassins du portail n°6 frappent Archers : 5 − 1 = 4 dégâts ; moral 0 → 0.
+  Archers frappent Fantassins du portail n°6 : 2 − 2 = 0 × 0,8 (vacillants) × 0,65 (7 blessés sur 20) = 0 → minimum 1 dégât ; moral 15 → 14.
+  Fantassins du portail n°3 frappent Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,65 (7 blessés sur 20) = 2,08 → 2 dégâts ; moral 6 → 4, blessés 7 → 9.
+  Fantassins du portail n°6 frappent Archers : 5 − 1 = 4 dégâts ; moral 4 → 0, blessés 9 → 13.
+  Fantassins du portail n°7 frappent Archers : 5 − 1 = 4 dégâts ; moral 0 → 0.
   Archers sont en déroute et quittent le terrain.
 Fin du tour :
   Fantassins du portail n°3 en (1,3), moral 3/16, 7 blessés
-  Fantassins du portail n°4 en (1,1), moral 13/16
-  Fantassins du portail n°5 en (2,4), moral 16/16
   Fantassins du portail n°6 en (2,2), moral 14/16
-  Fantassins du portail n°7 en (2,1), moral 12/16
+  Fantassins du portail n°7 en (1,1), moral 12/16
 
-Défaite au tour 12 : toutes nos escouades sont en déroute.
-Incursions au cœur du campement : 0.
+Défaite au tour 15 : toutes nos escouades sont en déroute.
+Incursions au cœur du campement : 2.

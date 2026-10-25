@@ -10,7 +10,7 @@ Nos escouades, dans l’ordre de déploiement :
   Tour 1 planifié : (2,1).
 
 Ennemis annoncés, dans l’ordre d’arrivée :
-- Fantassins du portail n°1, tour 3, rangée 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
+- Fantassins du portail n°1, tour 3, rangée 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
 
 == Tour 1 ==
 Mouvement :
@@ -32,37 +32,60 @@ Fin du tour :
 Fantassins du portail n°1 sortent du portail en (11,1).
 Mouvement :
   pas 1 : Fantassins du portail n°1 (11,1) → (10,1).
-  pas 2 : Fantassins du portail n°1 (10,1) → (9,1).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,1), moral 20/20
+  Fantassins du portail n°1 en (10,1), moral 16/16
+
+== Tour 4 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (10,1) → (9,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
   Fantassins du portail n°1 en (9,1), moral 16/16
 
-== Tour 4 ==
+== Tour 5 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 (9,1) → (8,1).
-  pas 2 : Fantassins du portail n°1 (8,1) → (7,1).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,1), moral 20/20
+  Fantassins du portail n°1 en (8,1), moral 16/16
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (8,1) → (7,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
   Fantassins du portail n°1 en (7,1), moral 16/16
 
-== Tour 5 ==
+== Tour 7 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 (7,1) → (6,1).
-  pas 2 : Fantassins du portail n°1 (6,1) → (5,1).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,1), moral 20/20
+  Fantassins du portail n°1 en (6,1), moral 16/16
+
+== Tour 8 ==
+Mouvement :
+  pas 1 : Fantassins du portail n°1 (6,1) → (5,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
   Fantassins du portail n°1 en (5,1), moral 16/16
 
-== Tour 6 ==
+== Tour 9 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 (5,1) → (4,1).
-  pas 2 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
 Tir :
   Archers tirent sur Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
 Mêlée :
@@ -74,7 +97,7 @@ Fin du tour :
   Archers en (1,1), moral 20/20
   Fantassins du portail n°1 en (4,1), moral 7/16, 3 blessés
 
-== Tour 7 ==
+== Tour 10 ==
 Mouvement :
   pas 1 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
 Tir :
@@ -88,5 +111,5 @@ Fin du tour :
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
 
-Victoire au tour 7 : plus aucun ennemi sur le terrain ni à venir.
+Victoire au tour 10 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 0.

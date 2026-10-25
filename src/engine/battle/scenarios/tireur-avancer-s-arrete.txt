@@ -5,7 +5,7 @@ Nos escouades, dans l’ordre de déploiement :
 - Archers en (1,2), Avancer : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.
 
 Ennemis annoncés, dans l’ordre d’arrivée :
-- Fantassins du portail n°1, tour 1, rangée 2 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
+- Fantassins du portail n°1, tour 1, rangée 2 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
 
 == Tour 1 ==
 Fantassins du portail n°1 sortent du portail en (11,2).
@@ -13,36 +13,42 @@ Mouvement :
   pas 1 : Archers (1,2) → (2,2).
   pas 1 : Fantassins du portail n°1 (11,2) → (10,2).
   pas 2 : Archers (2,2) → (3,2).
-  pas 2 : Fantassins du portail n°1 (10,2) → (9,2).
 Fin du tour :
   Archers en (3,2), moral 20/20
-  Fantassins du portail n°1 en (9,2), moral 16/16
+  Fantassins du portail n°1 en (10,2), moral 16/16
 
 == Tour 2 ==
 Mouvement :
   pas 1 : Archers (3,2) → (4,2).
-  pas 1 : Fantassins du portail n°1 (9,2) → (8,2).
+  pas 1 : Fantassins du portail n°1 (10,2) → (9,2).
   pas 2 : Archers (4,2) → (5,2).
-  pas 2 : Fantassins du portail n°1 (8,2) → (7,2).
-Tir :
-  Archers tirent sur Fantassins du portail n°1 à 2 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
 Fin du tour :
   Archers en (5,2), moral 20/20
-  Fantassins du portail n°1 en (7,2), moral 13/16
+  Fantassins du portail n°1 en (9,2), moral 16/16
 
 == Tour 3 ==
 Mouvement :
+  pas 1 : Archers (5,2) → (6,2).
+  pas 1 : Fantassins du portail n°1 (9,2) → (8,2).
+  pas 2 : Archers s'arrêtent : Fantassins du portail n°1 sont à portée.
+Tir :
+  Archers tirent sur Fantassins du portail n°1 à 2 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
+Fin du tour :
+  Archers en (6,2), moral 20/20
+  Fantassins du portail n°1 en (8,2), moral 13/16
+
+== Tour 4 ==
+Mouvement :
   pas 1 : Archers s'arrêtent : Fantassins du portail n°1 sont à portée.
-  pas 1 : Fantassins du portail n°1 (7,2) → (6,2).
-  pas 2 : Fantassins du portail n°1 sont au contact d'Archers : ils ne bougent plus.
+  pas 1 : Fantassins du portail n°1 (8,2) → (7,2).
 Mêlée :
   Archers frappent Fantassins du portail n°1 : 2 − 2 = 0 → minimum 1 dégât ; moral 13 → 12.
   Fantassins du portail n°1 frappent Archers : 5 − 1 = 4 dégâts ; moral 20 → 16.
 Fin du tour :
-  Archers en (5,2), moral 16/20
-  Fantassins du portail n°1 en (6,2), moral 12/16
+  Archers en (6,2), moral 16/20
+  Fantassins du portail n°1 en (7,2), moral 12/16
 
-== Tour 4 ==
+== Tour 5 ==
 Mouvement :
   pas 1 : Archers sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
   pas 1 : Fantassins du portail n°1 sont au contact d'Archers : ils ne bougent plus.
@@ -50,10 +56,10 @@ Mêlée :
   Archers frappent Fantassins du portail n°1 : 2 − 2 = 0 → minimum 1 dégât ; moral 12 → 11.
   Fantassins du portail n°1 frappent Archers : 5 − 1 = 4 dégâts ; moral 16 → 12, blessés 0 → 1 ; ils sont ébranlés.
 Fin du tour :
-  Archers en (5,2), moral 12/20, 1 blessé
-  Fantassins du portail n°1 en (6,2), moral 11/16
+  Archers en (6,2), moral 12/20, 1 blessé
+  Fantassins du portail n°1 en (7,2), moral 11/16
 
-== Tour 5 ==
+== Tour 6 ==
 Mouvement :
   pas 1 : Archers sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
   pas 1 : Fantassins du portail n°1 sont au contact d'Archers : ils ne bougent plus.
@@ -61,10 +67,10 @@ Mêlée :
   Archers frappent Fantassins du portail n°1 : 2 − 2 = 0 × 0,9 (ébranlés) × 0,95 (1 blessé sur 20) = 0 → minimum 1 dégât ; moral 11 → 10 ; ils sont ébranlés.
   Fantassins du portail n°1 frappent Archers : 5 − 1 = 4 dégâts ; moral 12 → 8, blessés 1 → 5.
 Fin du tour :
-  Archers en (5,2), moral 8/20, 5 blessés
-  Fantassins du portail n°1 en (6,2), moral 10/16
+  Archers en (6,2), moral 8/20, 5 blessés
+  Fantassins du portail n°1 en (7,2), moral 10/16
 
-== Tour 6 ==
+== Tour 7 ==
 Mouvement :
   pas 1 : Archers sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
   pas 1 : Fantassins du portail n°1 sont au contact d'Archers : ils ne bougent plus.
@@ -72,10 +78,10 @@ Mêlée :
   Archers frappent Fantassins du portail n°1 : 2 − 2 = 0 × 0,9 (ébranlés) × 0,75 (5 blessés sur 20) = 0 → minimum 1 dégât ; moral 10 → 9, blessés 0 → 1.
   Fantassins du portail n°1 frappent Archers : 5 − 1 = 4 × 0,9 (ébranlés) = 3,6 → 4 dégâts ; moral 8 → 4, blessés 5 → 9 ; ils sont vacillants.
 Fin du tour :
-  Archers en (5,2), moral 4/20, 9 blessés
-  Fantassins du portail n°1 en (6,2), moral 9/16, 1 blessé
+  Archers en (6,2), moral 4/20, 9 blessés
+  Fantassins du portail n°1 en (7,2), moral 9/16, 1 blessé
 
-== Tour 7 ==
+== Tour 8 ==
 Mouvement :
   pas 1 : Archers sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
   pas 1 : Fantassins du portail n°1 sont au contact d'Archers : ils ne bougent plus.
@@ -83,10 +89,10 @@ Mêlée :
   Archers frappent Fantassins du portail n°1 : 2 − 2 = 0 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 0 → minimum 1 dégât ; moral 9 → 8, blessés 1 → 2.
   Fantassins du portail n°1 frappent Archers : 5 − 1 = 4 × 0,9 (ébranlés) × 0,95 (1 blessé sur 20) = 3,42 → 3 dégâts ; moral 4 → 1, blessés 9 → 12.
 Fin du tour :
-  Archers en (5,2), moral 1/20, 12 blessés
-  Fantassins du portail n°1 en (6,2), moral 8/16, 2 blessés
+  Archers en (6,2), moral 1/20, 12 blessés
+  Fantassins du portail n°1 en (7,2), moral 8/16, 2 blessés
 
-== Tour 8 ==
+== Tour 9 ==
 Mouvement :
   pas 1 : Archers sont au contact de Fantassins du portail n°1 : ils ne bougent plus.
   pas 1 : Fantassins du portail n°1 sont au contact d'Archers : ils ne bougent plus.
@@ -95,7 +101,7 @@ Mêlée :
   Fantassins du portail n°1 frappent Archers : 5 − 1 = 4 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 3,24 → 3 dégâts ; moral 1 → 0, blessés 12 → 13.
   Archers sont en déroute et quittent le terrain.
 Fin du tour :
-  Fantassins du portail n°1 en (6,2), moral 7/16, 3 blessés
+  Fantassins du portail n°1 en (7,2), moral 7/16, 3 blessés
 
-Défaite au tour 8 : toutes nos escouades sont en déroute.
+Défaite au tour 9 : toutes nos escouades sont en déroute.
 Incursions au cœur du campement : 0.

@@ -3,9 +3,9 @@
     "id": "fantassins-du-portail",
     "name": "Fantassins du portail",
     "provisional": true,
-    "stats": { "meleeAttack": 5, "rangedAttack": 0, "range": 0, "defense": 2, "speed": 2, "morale": 16, "soldiers": 20 },
+    "stats": { "meleeAttack": 5, "rangedAttack": 0, "range": 0, "defense": 2, "speed": 1, "morale": 16, "soldiers": 20 },
     "keywords": [],
-    "posture": "avancer"
+    "posture": "assaut"
   },
   {
     "id": "tireurs-du-portail",
@@ -13,7 +13,7 @@
     "provisional": true,
     "stats": { "meleeAttack": 2, "rangedAttack": 4, "range": 3, "defense": 1, "speed": 2, "morale": 14, "soldiers": 20 },
     "keywords": [],
-    "posture": "avancer"
+    "posture": "assaut"
   },
   {
     "id": "brutes-du-portail",
@@ -21,6 +21,6 @@
     "provisional": true,
     "stats": { "meleeAttack": 6, "rangedAttack": 0, "range": 0, "defense": 3, "speed": 2, "morale": 24, "soldiers": 20 },
     "keywords": [{ "id": "perce-armure", "x": 2 }],
-    "posture": "avancer"
+    "posture": "assaut"
   }
 ]

@@ -34,20 +34,32 @@ function plannedIntent(state: BattleState, squad: BattleSquad, step: number): In
   return planned === 'wait' ? { kind: 'wait' } : { kind: 'move', to: planned, why: { kind: 'planned' } };
 }
 
-/** Avancer : tout droit tant qu'un ennemi est devant sur sa rangée (ou qu'il n'y a aucun ennemi), sinon vers le plus proche. */
-function advanceIntent(data: GameData, state: BattleState, squad: BattleSquad): Intent {
+/** Arrêts communs à Avancer et Assaut : au contact d'un ennemi, ou tireur avec une cible à portée. */
+function postureHalt(state: BattleState, squad: BattleSquad): Intent | undefined {
   const halt = engagedHalt(state, squad);
   if (halt) return halt;
-  if (isShooter(squad)) {
-    const target = rangedTarget(state, squad);
-    if (target) return { kind: 'halt', reason: { kind: 'targetInRange', target: target.id } };
-  }
+  if (!isShooter(squad)) return undefined;
+  const target = rangedTarget(state, squad);
+  return target ? { kind: 'halt', reason: { kind: 'targetInRange', target: target.id } } : undefined;
+}
+
+function straightIntent(data: GameData, squad: BattleSquad): Intent {
+  const to = ahead(squad.cell, squad.side);
+  return isOnField(data.battlefield, to) ? { kind: 'move', to, why: { kind: 'straight' } } : { kind: 'none' };
+}
+
+/** Avancer : tout droit tant qu'un ennemi est devant sur sa rangée (ou qu'il n'y a aucun ennemi), sinon vers le plus proche. */
+function advanceIntent(data: GameData, state: BattleState, squad: BattleSquad): Intent {
+  const halt = postureHalt(state, squad);
+  if (halt) return halt;
   const nearest = nearestEnemy(state, squad);
-  if (!nearest || enemyAheadOnRow(state, squad)) {
-    const to = ahead(squad.cell, squad.side);
-    return isOnField(data.battlefield, to) ? { kind: 'move', to, why: { kind: 'straight' } } : { kind: 'none' };
-  }
+  if (!nearest || enemyAheadOnRow(state, squad)) return straightIntent(data, squad);
   return { kind: 'move', to: stepToward(data.battlefield, squad.cell, nearest.cell), why: { kind: 'deviate', toward: nearest.id } };
+}
+
+/** Assaut : tout droit sur sa rangée vers le camp adverse, sans jamais dévier. */
+function assaultIntent(data: GameData, state: BattleState, squad: BattleSquad): Intent {
+  return postureHalt(state, squad) ?? straightIntent(data, squad);
 }
 
 /** Ce que veut faire une escouade au pas `step`, d'après les positions du début du pas. */
@@ -55,7 +67,14 @@ export function intentFor(data: GameData, state: BattleState, squad: BattleSquad
   if (squad.stats.speed < step) return { kind: 'none' };
   const planned = plannedIntent(state, squad, step);
   if (planned) return planned;
-  return squad.movement === 'advance' ? advanceIntent(data, state, squad) : { kind: 'none' };
+  switch (squad.movement) {
+    case 'advance':
+      return advanceIntent(data, state, squad);
+    case 'assault':
+      return assaultIntent(data, state, squad);
+    case 'hold':
+      return { kind: 'none' };
+  }
 }
 
 export interface MoveRequest {
