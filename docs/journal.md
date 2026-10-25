@@ -207,3 +207,58 @@ Tous marqués `"provisional": true`, acceptés comme point de départ et à retr
 - Aucune nouvelle règle : ce lot recopie dans la conception des décisions déjà prises (voir l'entrée précédente). Les chiffres restent dans la config, la conception ne nomme que les règles.
 
 **Prochaine étape** : 1.2, moteur de bataille sans affichage, avec des tests de scénarios.
+
+## 2026-10-25 — Lot 1.2b : cœur du moteur de bataille
+
+### Ce qui a été fait
+
+- Moteur de bataille sans affichage dans `src/engine/battle/`, en TypeScript pur, codé dans l'ordre du périmètre, chaque étape avec ses tests :
+  1. `hex.ts` : grille « odd-r », coordonnées cubiques (seul module à les connaître), distance, voisins dans un ordre fixe (E, NE, NW, W, SW, SE), devant/derrière relatifs au camp, appartenance au terrain ;
+  2. `state.ts` et `setup.ts` : état de bataille sérialisable (tableau d'escouades trié par `rank`, ni Map ni Set) ; stats réelles (base + équipement, malus et capacités perdues d'une arme non maîtrisée, moral maximum = base + modificateurs) ; vérification du déploiement (`BattleSetupError` qui liste tous les problèmes) ; file des ennemis annoncés, numérotés par type (« Fantassins du portail n°2 ») ; `fromTemplate` pour partir d'un modèle ;
+  3. `damage.ts` : la formule unique `computeDamage`, qui rend le détail du calcul pour le journal ; `applyDamage`, point par point ; `morale.ts` : paliers et déroute ;
+  4. `movement.ts` et `targeting.ts` : pas simultanés, intentions (tour planifié, Tenir, Avancer avec déviation, tireur qui s'arrête à portée), puis résolution : case tenue par une escouade immobile, cycles, conflits, chaînes ; contact qui engage ; réaction par défaut ; incursions au cœur du campement ;
+  5. `fire.ts` : tir simultané, cible par défaut ;
+  6. `melee.ts` : mêlée simultanée, cible par priorité fixe, Soutien ; `combat.ts` : ce que partagent tir et mêlée (effets des mots-clés, calcul et application des coups, déroute) ;
+  7. déroute à zéro de moral, vérifiée à la fin de chaque phase ;
+  8. `battle.ts` : `playTurn` (sur une copie de l'état, pour l'affichage tour par tour du lot 1.3) et `runBattle` ; arrivées par le portail, conditions de fin ;
+  9. `events.ts` (événements structurés) et `narrate.ts` (journal en français, chaque calcul de dégâts écrit en entier).
+- **Fortifications ignorées** : en 1.2b, le moteur ne lit pas `battlefield.fortificationSites` (commentaires dans `setup.ts`, `movement.ts`, `battle.ts`, `combat.ts`) et chaque journal commence par « Fortifications ignorées (lot 1.2c) ». Feu, consommables, Charge, tir de passage, flanc, recul, soldats tombés et encerclement sont aussi hors du lot : les effets à condition et les effets `onHit` sont ignorés.
+- Scénarios lisibles dans `src/engine/battle/scenarios/` : douze journaux `.txt` versionnés (`toMatchFileSnapshot`), dont « épéistes contre fantassins », « piquiers en soutien », « archers qui tirent puis subissent la mêlée », « deux escouades visent la même case », « échange de cases et chaîne bloquée », « premier tour planifié », « la vague 1 complète ».
+- Déterminisme : aucun `Math.random` ; toute itération suit le tableau trié des escouades ; un test joue deux fois la vague 4 et compare événements et journaux.
+- Tests : 172 en tout (120 nouveaux). `typecheck`, `test` (y compris avec `CI=true`, qui compare les journaux sans les réécrire) et `build` passent ; le jeu se lance (l'interface n'utilise pas encore le moteur).
+- `docs/conception.md` reprend les règles tranchées dans ce lot (Avancer, arrivées, tir, mêlée, déroute, fin de bataille, ordre des modificateurs de dégâts), avec l'accord de l'auteur.
+
+### Décisions de règle de ce lot
+
+1. Avancer : tout droit tant qu'un ennemi est devant sur sa rangée (ou qu'il n'y a aucun ennemi) ; sinon, déviation vers l'ennemi le plus proche.
+2. Pas de déviation : parmi les voisines qui rapprochent le plus, sa propre rangée, puis le nord, puis l'est, sans tenir compte des alliés présents (une case prise = chemin barré). Les cases hors du terrain sont écartées.
+3. Pendant un tour planifié, le plan prime : seul le contact l'interrompt (pas l'arrêt du tireur à portée).
+4. « Devant » est relatif au camp ; le départage des cibles reste « le plus proche, puis le nord, puis l'ouest » pour tous.
+5. Rangée d'apparition non précisée : centre d'abord, puis en alternant nord et sud (2, 1, 3, 0, 4).
+6. Case du portail occupée (par n'importe quelle escouade) : case libre suivante dans cet ordre (la rangée imposée passe d'abord) ; portail plein : l'arrivée attend le tour suivant et garde son rang.
+7. Les ennemis sortent au début du tour et agissent aussitôt.
+8. Arme non maîtrisée : le malus porte sur les attaques que l'arme améliore, jamais sous 0.
+9. Dégâts = (attaque + bonus − défense) × efficacité du moral × part des valides, puis arrondi au plus proche (0,5 vers le haut), puis minimum. Les multiplicateurs portent sur les dégâts nets. Perce-armure ne descend pas la défense sous 0.
+10. Application point par point : un point encaissé par une escouade encore ferme ne fait pas de blessé. Le moral s'arrête à 0, les blessés à l'effectif, l'excédent est perdu.
+11. Les paliers de moral ne touchent que l'attaque.
+12. Tir : l'ennemi à portée le plus proche ; un tireur au contact ne tire pas ; on peut tirer sur un ennemi engagé avec un allié ; pas de ligne de vue ; tir simultané.
+13. Mêlée : une cible, l'ennemi juste devant, sinon E, NE, SE, NW, SW, W ; tous les coups simultanés ; le Soutien vaut aussi pour un coup en diagonale.
+14. Déroute : l'escouade quitte le terrain aussitôt. Pas de remontée du moral, pas de contagion.
+15. Un ennemi qui entre dans le cœur du campement quitte la bataille ; l'incursion est comptée et la bataille continue.
+16. Fin de bataille, vérifiée à la fin de chaque phase : défaite si toutes nos escouades sont en déroute (y compris si l'ennemi l'est aussi) ; victoire s'il ne reste aucun ennemi sur le terrain ni à venir. À la fin du tour : victoire de la bataille finale quand le rituel est tenu (victoire anticipée possible) ; issue « indécise » à `maxTurns`.
+
+### Questions apparues
+
+- **Les incursions sont presque impossibles** : avec la règle d'Avancer, un ennemi poursuit toujours notre escouade la plus proche et s'engage au contact avant la colonne 0. Le scénario « incursion au cœur » n'a pas pu être écrit avec un déploiement légal (le mécanisme est testé à part). La palissade (1.2c) ou un comportement ennemi « vers le campement » changera la donne : à décider.
+- **Un tireur en Avancer s'arrête souvent trop tard** : l'arrêt se décide au début du pas, et l'ennemi avance en même temps ; dans le scénario, les archers tirent une volée puis se font rejoindre. À rejouer.
+- **Des piquiers en Avancer sur la même rangée que des épéistes finissent souvent au contact en diagonale**, donc sans soutenir (vague 1). La formation « piquiers derrière » se tient mieux en Tenir.
+- Des archers en Tenir trop en arrière (colonne 1 ou 2) ne tirent jamais : la portée 3 est courte sur un terrain de 12 colonnes.
+- Une incursion du dernier ennemi donne une victoire (« plus aucun ennemi ») avec des incursions comptées : le lot 1.7 dira ce qu'elles coûtent.
+
+### Idées notées pour plus tard (non codées)
+
+- Futur dépliage : un choix de comportement permettra par exemple à des épéistes de contourner un allié pour attaquer de flanc au lieu de rester derrière.
+- Futur dépliage : la priorité de cible (tir, et sans doute mêlée) pourra être changée.
+- La fuite des escouades en déroute sera revue en 1.2c, avec les soldats tombés.
+
+**Prochaine étape** : lot 1.2c (fortifications, Feu et consommables, tir de passage, flanc, recul, soldats tombés, encerclement, Charge), ou d'abord trancher la question des incursions.
