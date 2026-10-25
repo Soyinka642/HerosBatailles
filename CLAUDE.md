@@ -96,8 +96,14 @@ Ne jamais commencer une phase avant que la précédente soit jouable.
    questions apparues, prochaine étape.
 6. Si une règle de jeu a changé, propose la modification de
    `docs/conception.md` et attends l'accord.
-7. Propose un message de commit clair, en français. Ne commite pas et ne
-   pousse pas sans accord.
+7. Propose un message de commit clair, en français.
+
+## Git
+- Travaille toujours sur une branche, jamais directement sur `main`.
+- Tu peux commiter et pousser sur ta branche de travail sans demander :
+  le conteneur est temporaire, et un travail poussé ne peut plus être perdu.
+- Fusionner dans `main` (pull request comprise) exige toujours mon accord :
+  c'est `main` que Vercel déploie.
 
 ## Conventions
 - Code et noms techniques en anglais, commentaires et documentation en français.
