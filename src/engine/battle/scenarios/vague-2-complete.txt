@@ -1,0 +1,273 @@
+Bataille « vague-2 » (vague).
+
+Fortifications :
+- La tour (2,2) : structure 30/30.
+- La palissade (4,0) : structure 24/24.
+- La palissade (4,1) : structure 24/24.
+- La palissade (4,3) : structure 24/24.
+- La palissade (4,4) : structure 24/24.
+
+Nos escouades, dans l’ordre de déploiement :
+- Épéistes en (3,2), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
+  Tour 1 planifié : (4,2).
+- Piquiers en (3,1), Tenir : mêlée 5, tir 0, défense 1, vitesse 2, moral 20, 20 soldats ; Soutien.
+  Tour 1 planifié : (3,2).
+- Archers en (2,2), Tenir : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.
+
+Ennemis annoncés, dans l’ordre d’arrivée :
+- Fantassins du portail n°1, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°2, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Tireurs du portail n°1, tour 3 : mêlée 2, tir 4 (portée 3), défense 1, vitesse 2, moral 14.
+
+== Tour 1 ==
+Les Fantassins du portail n°1 sortent du portail en (11,2).
+Les Fantassins du portail n°2 sortent du portail en (11,1).
+Mouvement :
+  pas 1 : les Épéistes (3,2) → (4,2) (tour planifié).
+  pas 1 : les Piquiers (3,1) → (3,2) (tour planifié).
+  pas 1 : les Fantassins du portail n°1 (11,2) → (10,2).
+  pas 1 : les Fantassins du portail n°2 (11,1) → (10,1).
+Fin du tour :
+  Épéistes en (4,2), moral 20/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (10,2), moral 16/16
+  Fantassins du portail n°2 en (10,1), moral 16/16
+
+== Tour 2 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (10,2) → (9,2).
+  pas 1 : les Fantassins du portail n°2 (10,1) → (9,1).
+Fin du tour :
+  Épéistes en (4,2), moral 20/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (9,2), moral 16/16
+  Fantassins du portail n°2 en (9,1), moral 16/16
+
+== Tour 3 ==
+Les Tireurs du portail n°1 sortent du portail en (11,2).
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (9,2) → (8,2).
+  pas 1 : les Fantassins du portail n°2 (9,1) → (8,1).
+  pas 1 : les Tireurs du portail n°1 (11,2) → (10,2).
+  pas 2 : les Tireurs du portail n°1 (10,2) → (9,2).
+Fin du tour :
+  Épéistes en (4,2), moral 20/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (8,2), moral 16/16
+  Fantassins du portail n°2 en (8,1), moral 16/16
+  Tireurs du portail n°1 en (9,2), moral 14/14
+
+== Tour 4 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (8,2) → (7,2).
+  pas 1 : les Fantassins du portail n°2 (8,1) → (7,1).
+  pas 1 : les Tireurs du portail n°1 (9,2) → (8,2).
+  pas 2 : les Tireurs du portail n°1 ne peuvent pas entrer en (7,2) : la case est tenue par les Fantassins du portail n°1. Ils s'arrêtent pour ce tour.
+Fin du tour :
+  Épéistes en (4,2), moral 20/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (7,2), moral 16/16
+  Fantassins du portail n°2 en (7,1), moral 16/16
+  Tireurs du portail n°1 en (8,2), moral 14/14
+
+== Tour 5 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (7,2) → (6,2).
+  pas 1 : les Fantassins du portail n°2 (7,1) → (6,1).
+  pas 1 : les Tireurs du portail n°1 (8,2) → (7,2).
+  pas 2 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°1 à 4 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 4 − 2 = 2 dégâts ; moral 20 → 18.
+Fin du tour :
+  Épéistes en (4,2), moral 18/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (6,2), moral 13/16
+  Fantassins du portail n°2 en (6,1), moral 16/16
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (6,2) → (5,2).
+  pas 1 : les Fantassins du portail n°2 (6,1) → (5,1).
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 13 → 10 ; les Fantassins du portail n°1 sont ébranlés.
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 4 − 2 = 2 dégâts ; moral 18 → 16.
+Mêlée :
+  Les Épéistes frappent les Fantassins du portail n°1 : 6 + 2 (Soutien des Piquiers) − 2 = 6 dégâts ; moral 10 → 4, blessés 0 → 6 ; les Fantassins du portail n°1 sont vacillants.
+  Les Fantassins du portail n°1 frappent les Épéistes : 5 − 2 = 3 × 0,9 (ébranlés) = 2,7 → 3 dégâts ; moral 16 → 13 ; les Épéistes sont ébranlés.
+Fin du tour :
+  Épéistes en (4,2), moral 13/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°1 en (5,2), moral 4/16, 6 blessés
+  Fantassins du portail n°2 en (5,1), moral 16/16
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 7 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 sont au contact des Épéistes : ils ne bougent plus.
+  pas 1 : les Fantassins du portail n°2 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Ils s'arrêtent pour ce tour.
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 4 → 1, blessés 6 → 9.
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 4 − 2 = 2 dégâts ; moral 13 → 11, blessés 0 → 2.
+Mêlée :
+  Les Épéistes frappent les Fantassins du portail n°1 : 6 + 2 (Soutien des Piquiers) − 2 = 6 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 4,86 → 5 dégâts ; moral 1 → 0, blessés 9 → 10.
+  Les Fantassins du portail n°1 frappent les Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 1,32 → 1 dégât ; moral 11 → 10, blessés 2 → 3.
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 dégâts ; structure 24 → 19.
+  Les Fantassins du portail n°1 sont en déroute et quittent le terrain.
+Fin du tour :
+  Épéistes en (4,2), moral 10/20, 3 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°2 en (5,1), moral 16/16
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 8 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°2 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Ils s'arrêtent pour ce tour.
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 4 − 2 = 2 dégâts ; moral 10 → 8, blessés 3 → 5.
+Mêlée :
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 dégâts ; structure 19 → 14.
+Fin du tour :
+  Épéistes en (4,2), moral 8/20, 5 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°2 en (5,1), moral 13/16
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 9 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°2 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Ils s'arrêtent pour ce tour.
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 13 → 10 ; les Fantassins du portail n°2 sont ébranlés.
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 4 − 2 = 2 dégâts ; moral 8 → 6, blessés 5 → 7 ; les Épéistes sont vacillants.
+Mêlée :
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,9 (ébranlés) = 4,5 → 5 dégâts ; structure 14 → 9.
+Fin du tour :
+  Épéistes en (4,2), moral 6/20, 7 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°2 en (5,1), moral 10/16
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 10 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°2 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Ils s'arrêtent pour ce tour.
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 10 → 7, blessés 0 → 3.
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 4 − 2 = 2 dégâts ; moral 6 → 4, blessés 7 → 9.
+Mêlée :
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 3,83 → 4 dégâts ; structure 9 → 5.
+Fin du tour :
+  Épéistes en (4,2), moral 4/20, 9 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°2 en (5,1), moral 7/16, 3 blessés
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 11 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°2 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Ils s'arrêtent pour ce tour.
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 7 → 4, blessés 3 → 6 ; les Fantassins du portail n°2 sont vacillants.
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 4 − 2 = 2 dégâts ; moral 4 → 2, blessés 9 → 11.
+Mêlée :
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 2,8 → 3 dégâts ; structure 5 → 2.
+Fin du tour :
+  Épéistes en (4,2), moral 2/20, 11 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°2 en (5,1), moral 4/16, 6 blessés
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 12 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°2 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Ils s'arrêtent pour ce tour.
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 4 → 1, blessés 6 → 9.
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 4 − 2 = 2 dégâts ; moral 2 → 0, blessés 11 → 13.
+  Les Épéistes sont en déroute et quittent le terrain.
+Mêlée :
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 2,2 → 2 dégâts ; structure 2 → 0.
+  La palissade (4,1) est détruite : la case est libre.
+Fin du tour :
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Fantassins du portail n°2 en (5,1), moral 1/16, 9 blessés
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 13 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°2 (5,1) → (4,1).
+  pas 1 : les Tireurs du portail n°1 (7,2) → (6,2).
+  pas 2 : les Tireurs du portail n°1 s'arrêtent : les Piquiers sont à portée.
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°2 à 3 cases : 5 − 2 = 3 dégâts ; moral 1 → 0, blessés 9 → 10.
+  Les Tireurs du portail n°1 tirent sur les Piquiers à 3 cases : 4 − 1 = 3 dégâts ; moral 20 → 17.
+  Les Fantassins du portail n°2 sont en déroute et quittent le terrain.
+Fin du tour :
+  Piquiers en (3,2), moral 17/20
+  Archers en (2,2), moral 20/20
+  Tireurs du portail n°1 en (6,2), moral 14/14
+
+== Tour 14 ==
+Mouvement :
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Piquiers sont à portée.
+Tir :
+  Les Archers tirent sur les Tireurs du portail n°1 à 4 cases : 5 − 1 = 4 dégâts ; moral 14 → 10.
+  Les Tireurs du portail n°1 tirent sur les Piquiers à 3 cases : 4 − 1 = 3 dégâts ; moral 17 → 14.
+Fin du tour :
+  Piquiers en (3,2), moral 14/20
+  Archers en (2,2), moral 20/20
+  Tireurs du portail n°1 en (6,2), moral 10/14
+
+== Tour 15 ==
+Mouvement :
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Piquiers sont à portée.
+Tir :
+  Les Archers tirent sur les Tireurs du portail n°1 à 4 cases : 5 − 1 = 4 dégâts ; moral 10 → 6, blessés 0 → 3 ; les Tireurs du portail n°1 sont ébranlés.
+  Les Tireurs du portail n°1 tirent sur les Piquiers à 3 cases : 4 − 1 = 3 dégâts ; moral 14 → 11, blessés 0 → 2 ; les Piquiers sont ébranlés.
+Fin du tour :
+  Piquiers en (3,2), moral 11/20, 2 blessés
+  Archers en (2,2), moral 20/20
+  Tireurs du portail n°1 en (6,2), moral 6/14, 3 blessés
+
+== Tour 16 ==
+Mouvement :
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Piquiers sont à portée.
+Tir :
+  Les Archers tirent sur les Tireurs du portail n°1 à 4 cases : 5 − 1 = 4 dégâts ; moral 6 → 2, blessés 3 → 7 ; les Tireurs du portail n°1 sont vacillants.
+  Les Tireurs du portail n°1 tirent sur les Piquiers à 3 cases : 4 − 1 = 3 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 2,3 → 2 dégâts ; moral 11 → 9, blessés 2 → 4.
+Fin du tour :
+  Piquiers en (3,2), moral 9/20, 4 blessés
+  Archers en (2,2), moral 20/20
+  Tireurs du portail n°1 en (6,2), moral 2/14, 7 blessés
+
+== Tour 17 ==
+Mouvement :
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Piquiers sont à portée.
+Tir :
+  Les Archers tirent sur les Tireurs du portail n°1 à 4 cases : 5 − 1 = 4 dégâts ; moral 2 → 0, blessés 7 → 9.
+  Les Tireurs du portail n°1 tirent sur les Piquiers à 3 cases : 4 − 1 = 3 × 0,8 (vacillants) × 0,65 (7 blessés sur 20) = 1,56 → 2 dégâts ; moral 9 → 7, blessés 4 → 6.
+  Les Tireurs du portail n°1 sont en déroute et quittent le terrain.
+Fin du tour :
+  Piquiers en (3,2), moral 7/20, 6 blessés
+  Archers en (2,2), moral 20/20
+
+Victoire au tour 17 : plus aucun ennemi sur le terrain ni à venir.
+Incursions au cœur du campement : 0.

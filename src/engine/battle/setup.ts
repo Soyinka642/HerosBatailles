@@ -305,6 +305,7 @@ export function enemySquad(data: GameData, arrival: PendingArrival, cell: Cell):
   return {
     id: arrival.id,
     name: arrival.name,
+    ...(enemy.feminine ? { feminine: true } : {}),
     side: 'enemy',
     rank: arrival.rank,
     cell: { ...cell },

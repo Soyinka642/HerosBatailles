@@ -315,7 +315,7 @@ function parseTemplate(ctx: Ctx, value: unknown, path: string): SquadTemplate | 
 }
 
 function parseEnemy(ctx: Ctx, value: unknown, path: string): Enemy | undefined {
-  const o = readObject(ctx, value, path, ['id', 'name', 'provisional', 'stats', 'keywords', 'posture']);
+  const o = readObject(ctx, value, path, ['id', 'name', 'provisional', 'stats', 'keywords', 'feminine', 'posture']);
   if (!o) return undefined;
   const enemy: Enemy = {
     id: readString(ctx, o, 'id', path),
@@ -324,6 +324,8 @@ function parseEnemy(ctx: Ctx, value: unknown, path: string): Enemy | undefined {
     keywords: readArray(ctx, o, 'keywords', path, (v, p) => parseKeywordRef(ctx, v, p)),
     posture: readString(ctx, o, 'posture', path),
   };
+  const feminine = readOptionalBoolean(ctx, o, 'feminine', path);
+  if (feminine !== undefined) enemy.feminine = feminine;
   setProvisional(ctx, o, path, enemy);
   return enemy;
 }

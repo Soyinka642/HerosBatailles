@@ -21,6 +21,7 @@
     "provisional": true,
     "stats": { "meleeAttack": 6, "rangedAttack": 0, "range": 0, "defense": 3, "speed": 2, "morale": 24, "soldiers": 20 },
     "keywords": [{ "id": "perce-armure", "x": 2 }],
+    "feminine": true,
     "posture": "assaut"
   }
 ]

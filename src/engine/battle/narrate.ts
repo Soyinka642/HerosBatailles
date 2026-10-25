@@ -11,12 +11,24 @@ import { type MoraleTier, moraleTier } from './morale';
 import type { BattleSquad, BattleState, Outcome, PendingArrival } from './state';
 
 const TIER_NAMES: Record<MoraleTier, string> = { steady: 'fermes', shaken: 'ébranlés', wavering: 'vacillants' };
+const TIER_NAMES_FEMININE: Record<MoraleTier, string> = { steady: 'fermes', shaken: 'ébranlées', wavering: 'vacillantes' };
+
+function tierName(tier: MoraleTier, feminine: boolean): string {
+  return (feminine ? TIER_NAMES_FEMININE : TIER_NAMES)[tier];
+}
+
+/** Accord au féminin pluriel : « ils » ou « elles », « bloqués » ou « bloquées »… */
+function g(feminine: boolean, masculine: string, feminineForm: string): string {
+  return feminine ? feminineForm : masculine;
+}
 
 interface Names {
   name(id: string): string;
   maxMorale(id: string): number;
   /** Nom d'un site de fortification : « la palissade (4,1) ». */
   site(id: string): string;
+  /** Le nom de l'escouade est féminin (« les Brutes »). */
+  feminine(id: string): boolean;
 }
 
 /** Nombre à la française : virgule décimale, au plus deux décimales. */
@@ -34,6 +46,12 @@ function namesOf(data: GameData, state: BattleState): Names {
       return site ? `la ${name.toLowerCase()} ${formatCell(site.cell)}` : id;
     },
     name: (id) => find(id)?.name ?? id,
+    feminine: (id) => {
+      const s = find(id);
+      if (!s) return false;
+      if ('side' in s) return s.feminine === true;
+      return data.enemies.find((e) => e.id === s.enemy)?.feminine === true;
+    },
     maxMorale: (id) => {
       const s = find(id);
       if (!s) return 0;
@@ -58,7 +76,8 @@ function keywordName(data: GameData, id: string, x?: number): string {
 }
 
 /** « 6 + 2 (Soutien des Piquiers) − 2 = 6 × 0,9 (ébranlés) = 5,4 → 5 dégâts ». */
-export function formatDamage(data: GameData, names: Names, d: DamageBreakdown): string {
+export function formatDamage(data: GameData, names: Names, d: DamageBreakdown, attacker?: string): string {
+  const feminine = attacker !== undefined && names.feminine(attacker);
   let text = String(d.attack);
   for (const bonus of d.bonuses) {
     const source = bonus.from ? ` ${des(names.name(bonus.from))}` : '';
@@ -72,7 +91,7 @@ export function formatDamage(data: GameData, names: Names, d: DamageBreakdown): 
   if (data.config.damage.formula === 'percentage') text += ` (en pourcentage)`;
   text += ` = ${formatNumber(d.net)}`;
   const multiplied = d.efficiency !== 1 || d.woundedFactor !== 1;
-  if (d.efficiency !== 1) text += ` × ${formatNumber(d.efficiency)} (${TIER_NAMES[d.tier]})`;
+  if (d.efficiency !== 1) text += ` × ${formatNumber(d.efficiency)} (${tierName(d.tier, feminine)})`;
   if (d.woundedFactor !== 1) text += ` × ${formatNumber(d.woundedFactor)} (${wounded(d.wounded)} sur ${d.soldiers})`;
   if (multiplied) text += ` = ${formatNumber(d.raw)}`;
   if (d.floored) text += ` → minimum ${d.final}`;
@@ -86,30 +105,33 @@ function formatApplied(data: GameData, names: Names, target: string, a: DamageAp
   const max = names.maxMorale(target);
   const before = moraleTier(a.moraleBefore, max, data.config);
   const after = moraleTier(a.moraleAfter, max, data.config);
-  if (after !== before && a.moraleAfter > 0) text += ` ; ${les(names.name(target))} sont ${TIER_NAMES[after]}`;
+  if (after !== before && a.moraleAfter > 0) text += ` ; ${les(names.name(target))} sont ${tierName(after, names.feminine(target))}`;
   return text;
 }
 
-function formatBlock(names: Names, reason: BlockReason): string {
+function formatBlock(names: Names, squad: string, reason: BlockReason): string {
+  const f = (id: string) => names.feminine(id);
   switch (reason.kind) {
     case 'occupied':
       return `la case est tenue par ${les(names.name(reason.by))}`;
     case 'conflict':
-      return `${les(names.name(reason.winner))} y entrent avant eux (${reason.why === 'faster' ? 'plus rapides' : 'déployés avant'})`;
+      return `${les(names.name(reason.winner))} y entrent avant ${g(f(squad), 'eux', 'elles')} (${
+        reason.why === 'faster' ? 'plus rapides' : g(f(reason.winner), 'déployés avant', 'déployées avant')
+      })`;
     case 'cycle':
       return reason.with.length === 1
         ? `échange de cases avec ${les(names.name(reason.with[0]!))} : personne ne bouge`
         : `rotation avec ${reason.with.map((id) => les(names.name(id))).join(' et ')} : personne ne bouge`;
     case 'chain':
-      return `${les(names.name(reason.ahead))}, qui devaient libérer la case, sont bloqués`;
+      return `${les(names.name(reason.ahead))}, qui devaient libérer la case, sont ${g(f(reason.ahead), 'bloqués', 'bloquées')}`;
     case 'fortification':
       return `${names.site(reason.site)} barre le passage`;
   }
 }
 
-function formatHalt(names: Names, reason: HaltReason): string {
+function formatHalt(names: Names, squad: string, reason: HaltReason): string {
   return reason.kind === 'engaged'
-    ? `sont au contact ${des(names.name(reason.by))} : ils ne bougent plus`
+    ? `sont au contact ${des(names.name(reason.by))} : ${g(names.feminine(squad), 'ils', 'elles')} ne bougent plus`
     : `s'arrêtent : ${les(names.name(reason.target))} sont à portée`;
 }
 
@@ -166,25 +188,26 @@ function step(n: number): string {
 export function narrateEvent(data: GameData, names: Names, e: BattleEvent): string {
   const n = (id: string) => les(names.name(id));
   const N = (id: string) => Les(names.name(id));
+  const pronoun = (id: string) => g(names.feminine(id), 'ils', 'elles');
   switch (e.type) {
     case 'turnStart':
       return `\n== Tour ${e.turn} ==`;
     case 'arrival':
       return `${N(e.squad)} sortent du portail en ${formatCell(e.cell)}.`;
     case 'arrivalDelayed':
-      return `${N(e.squad)} ne trouvent aucune case libre au portail : ils attendent le tour suivant.`;
+      return `${N(e.squad)} ne trouvent aucune case libre au portail : ${pronoun(e.squad)} attendent le tour suivant.`;
     case 'move':
       return `${step(e.step)}${n(e.squad)} ${formatCell(e.from)} → ${formatCell(e.to)}${formatWhy(names, e.why)}.`;
     case 'wait':
       return `${step(e.step)}${n(e.squad)} attendent sur place (tour planifié).`;
     case 'blocked':
-      return `${step(e.step)}${n(e.squad)} ne peuvent pas entrer en ${formatCell(e.target)} : ${formatBlock(names, e.reason)}. Ils s'arrêtent pour ce tour.`;
+      return `${step(e.step)}${n(e.squad)} ne peuvent pas entrer en ${formatCell(e.target)} : ${formatBlock(names, e.squad, e.reason)}. ${capitalize(pronoun(e.squad))} s'arrêtent pour ce tour.`;
     case 'halted':
-      return `${step(e.step)}${n(e.squad)} ${formatHalt(names, e.reason)}.`;
+      return `${step(e.step)}${n(e.squad)} ${formatHalt(names, e.squad, e.reason)}.`;
     case 'breach':
-      return `  ${N(e.squad)} atteignent le cœur du campement en ${formatCell(e.cell)} : incursion n°${e.total}. Ils quittent la bataille.`;
+      return `  ${N(e.squad)} atteignent le cœur du campement en ${formatCell(e.cell)} : incursion n°${e.total}. ${capitalize(pronoun(e.squad))} quittent la bataille.`;
     case 'shot':
-      return `  ${N(e.attacker)} tirent sur ${n(e.target)} à ${e.distance} case${e.distance > 1 ? 's' : ''}${formatFire(data, e.fire)} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
+      return `  ${N(e.attacker)} tirent sur ${n(e.target)} à ${e.distance} case${e.distance > 1 ? 's' : ''}${formatFire(data, e.fire)} : ${formatDamage(data, names, e.damage, e.attacker)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
     case 'ignite':
       return formatIgnite(data, names, e);
     case 'burn':
@@ -192,9 +215,9 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
     case 'fortificationBurn':
       return `  ${capitalize(names.site(e.site))} brûle : structure ${e.before} → ${e.after}.${e.turnsLeft > 0 ? ` Encore ${e.turnsLeft} tour.` : ' Le feu s\'éteint.'}`;
     case 'strike':
-      return `  ${N(e.attacker)} frappent ${n(e.target)} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
+      return `  ${N(e.attacker)} frappent ${n(e.target)} : ${formatDamage(data, names, e.damage, e.attacker)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
     case 'fortificationHit':
-      return `  ${N(e.attacker)} frappent ${names.site(e.site)} : ${formatDamage(data, names, e.damage)} ; structure ${e.before} → ${e.after}.`;
+      return `  ${N(e.attacker)} frappent ${names.site(e.site)} : ${formatDamage(data, names, e.damage, e.attacker)} ; structure ${e.before} → ${e.after}.`;
     case 'fortificationDestroyed':
       return `  ${capitalize(names.site(e.site))} est détruite : la case est libre.`;
     case 'rout':

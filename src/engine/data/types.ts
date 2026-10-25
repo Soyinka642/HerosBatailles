@@ -179,6 +179,8 @@ export interface Enemy {
   provisional?: boolean;
   stats: EnemyStats;
   keywords: KeywordRef[];
+  /** Nom féminin (« les Brutes »), pour accorder le journal ; absent = masculin. */
+  feminine?: boolean;
   /** Comportement fixe, connu du joueur : une posture de postures.json. */
   posture: Id;
 }

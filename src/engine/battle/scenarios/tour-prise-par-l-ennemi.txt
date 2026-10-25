@@ -1,0 +1,108 @@
+Bataille « scenario » (vague).
+
+Fortifications :
+- La tour (2,2) : structure 30/30.
+- La palissade (4,0) : structure 24/24.
+- La palissade (4,1) : structure 24/24.
+- La palissade (4,3) : structure 24/24.
+- La palissade (4,4) : structure 24/24.
+
+Nos escouades, dans l’ordre de déploiement :
+- Archers en (2,2), Tenir : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.
+- Épéistes en (3,0), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
+
+Ennemis annoncés, dans l’ordre d’arrivée :
+- Brutes du portail n°1, tour 1, rangée 2 : mêlée 6, tir 0, défense 3, vitesse 2, moral 24 ; Perce-armure 2.
+
+== Tour 1 ==
+Les Brutes du portail n°1 sortent du portail en (11,2).
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (11,2) → (10,2).
+  pas 2 : les Brutes du portail n°1 (10,2) → (9,2).
+Fin du tour :
+  Archers en (2,2), moral 20/20
+  Épéistes en (3,0), moral 20/20
+  Brutes du portail n°1 en (9,2), moral 24/24
+
+== Tour 2 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (9,2) → (8,2).
+  pas 2 : les Brutes du portail n°1 (8,2) → (7,2).
+Fin du tour :
+  Archers en (2,2), moral 20/20
+  Épéistes en (3,0), moral 20/20
+  Brutes du portail n°1 en (7,2), moral 24/24
+
+== Tour 3 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (7,2) → (6,2).
+  pas 2 : les Brutes du portail n°1 (6,2) → (5,2).
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 24 → 22.
+Fin du tour :
+  Archers en (2,2), moral 20/20
+  Épéistes en (3,0), moral 20/20
+  Brutes du portail n°1 en (5,2), moral 22/24
+
+== Tour 4 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (5,2) → (4,2).
+  pas 2 : les Brutes du portail n°1 (4,2) → (3,2).
+Mêlée :
+  Les Archers frappent les Brutes du portail n°1 : 2 − 3 = −1 → minimum 1 dégât ; moral 22 → 21.
+  Les Brutes du portail n°1 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 20 → 15.
+Fin du tour :
+  Archers en (2,2), moral 15/20
+  Épéistes en (3,0), moral 20/20
+  Brutes du portail n°1 en (3,2), moral 21/24
+
+== Tour 5 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 sont au contact des Archers : elles ne bougent plus.
+Mêlée :
+  Les Archers frappent les Brutes du portail n°1 : 2 − 3 = −1 → minimum 1 dégât ; moral 21 → 20.
+  Les Brutes du portail n°1 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 15 → 10, blessés 0 → 3 ; les Archers sont ébranlés.
+Fin du tour :
+  Archers en (2,2), moral 10/20, 3 blessés
+  Épéistes en (3,0), moral 20/20
+  Brutes du portail n°1 en (3,2), moral 20/24
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 sont au contact des Archers : elles ne bougent plus.
+Mêlée :
+  Les Archers frappent les Brutes du portail n°1 : 2 − 3 = −1 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = −0,76 → minimum 1 dégât ; moral 20 → 19.
+  Les Brutes du portail n°1 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 10 → 5, blessés 3 → 8 ; les Archers sont vacillants.
+Fin du tour :
+  Archers en (2,2), moral 5/20, 8 blessés
+  Épéistes en (3,0), moral 20/20
+  Brutes du portail n°1 en (3,2), moral 19/24
+
+== Tour 7 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 sont au contact des Archers : elles ne bougent plus.
+Mêlée :
+  Les Archers frappent les Brutes du portail n°1 : 2 − 3 = −1 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = −0,48 → minimum 1 dégât ; moral 19 → 18.
+  Les Brutes du portail n°1 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 5 → 0, blessés 8 → 13.
+  Les Archers sont en déroute et quittent le terrain.
+Fin du tour :
+  Épéistes en (3,0), moral 20/20
+  Brutes du portail n°1 en (3,2), moral 18/24
+
+== Tour 8 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (3,2) → (2,2).
+  pas 2 : les Brutes du portail n°1 (2,2) → (1,2).
+Fin du tour :
+  Épéistes en (3,0), moral 20/20
+  Brutes du portail n°1 en (1,2), moral 18/24
+
+== Tour 9 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (1,2) → (0,2).
+  Les Brutes du portail n°1 atteignent le cœur du campement en (0,2) : incursion n°1. Elles quittent la bataille.
+Fin du tour :
+  Épéistes en (3,0), moral 20/20
+
+Victoire au tour 9 : plus aucun ennemi sur le terrain ni à venir.
+Incursions au cœur du campement : 1.

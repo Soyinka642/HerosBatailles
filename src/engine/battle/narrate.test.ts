@@ -7,7 +7,7 @@ import { fromTemplate } from './setup';
 import { ADVANCE, HOLD } from './test-helpers';
 
 const data = loadGameData();
-const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers', fantassins: 'Fantassins' })[id] ?? id, maxMorale: () => 16, site: (id: string) => `la palissade ${id}` };
+const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers', fantassins: 'Fantassins' })[id] ?? id, maxMorale: () => 16, site: (id: string) => `la palissade ${id}`, feminine: () => false };
 
 function damage(input: Partial<Parameters<typeof computeDamage>[0]>): DamageBreakdown {
   return computeDamage(
@@ -50,6 +50,19 @@ describe('texte des dégâts', () => {
       applied: { amount: 4, moraleBefore: 12, moraleAfter: 8, woundedBefore: 0, woundedAfter: 2 },
     });
     expect(line).toBe('  Les Épéistes frappent les Fantassins : 6 − 2 = 4 dégâts ; moral 12 → 8, blessés 0 → 2 ; les Fantassins sont ébranlés.');
+  });
+});
+
+describe('accord', () => {
+  it('les Brutes sont ébranlées, et elles ne bougent plus', () => {
+    const f = { ...names, name: (id: string) => (id === 'brutes' ? 'Brutes' : 'Épéistes'), feminine: (id: string) => id === 'brutes' };
+    const applied = { amount: 2, moraleBefore: 12, moraleAfter: 10, woundedBefore: 0, woundedAfter: 0 };
+    expect(narrateEvent(data, f, { type: 'strike', attacker: 'epeistes', target: 'brutes', damage: damage({}), applied })).toContain(
+      'les Brutes sont ébranlées',
+    );
+    expect(narrateEvent(data, f, { type: 'halted', step: 1, squad: 'brutes', reason: { kind: 'engaged', by: 'epeistes' } })).toBe(
+      '  pas 1 : les Brutes sont au contact des Épéistes : elles ne bougent plus.',
+    );
   });
 });
 

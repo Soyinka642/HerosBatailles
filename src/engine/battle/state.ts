@@ -31,6 +31,8 @@ export interface BattleSquad {
   /** Unique dans la bataille : id choisi par le joueur, ou « fantassins-du-portail#1 ». */
   id: string;
   name: string;
+  /** Nom féminin, pour accorder le journal. */
+  feminine?: boolean;
   side: Side;
   /** Ordre de déploiement (joueur) puis d'arrivée prévue (ennemis) : départage des conflits. */
   rank: number;
