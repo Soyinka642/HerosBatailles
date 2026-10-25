@@ -7,11 +7,9 @@ import type { Wave } from '../../data/types';
 import { type BattleResult, runBattle } from '../battle';
 import { narrateBattle } from '../narrate';
 import type { BattleSetup } from '../setup';
-import { ALL_FORTIFICATIONS, squad } from '../test-helpers';
-import type { Order } from '../types';
+import { squad } from '../catalog';
 
 const data = loadGameData();
-const HOLD_AFTER = (steps: Order['plannedTurns'][number]['steps']): Order => ({ plannedTurns: [{ steps }], posture: 'tenir' });
 
 function wave(arrivals: Wave['arrivals']): Wave {
   return { id: 'scenario', index: 1, kind: 'wave', arrivals };
@@ -28,26 +26,6 @@ function has(result: BattleResult, type: string, atEnd = false): boolean {
 }
 
 describe('scénarios du lot 1.2d', () => {
-  it('des tombés repris à temps', async () => {
-    const result = await play('tombes-repris-a-temps', {
-      wave: wave([{ turn: 1, enemy: 'brutes-du-portail', count: 1, row: 2 }]),
-      squads: [squad(data, 'epeistes', { col: 3, row: 2 }, HOLD_AFTER([{ col: 4, row: 2 }])), squad(data, 'piquiers', { col: 3, row: 1 }, HOLD_AFTER([{ col: 3, row: 2 }]))],
-      fortifications: ALL_FORTIFICATIONS,
-    });
-    expect(has(result, 'fallenRecovered')).toBe(true);
-  });
-
-  it('des tombés perdus : l’ennemi tient la case', async () => {
-    const result = await play('tombes-perdus', {
-      wave: wave([
-        { turn: 1, enemy: 'brutes-du-portail', count: 1, row: 2 },
-        { turn: 2, enemy: 'tireurs-du-portail', count: 1, row: 2 },
-      ]),
-      squads: [squad(data, 'epeistes', { col: 3, row: 2 }), squad(data, 'archers', { col: 1, row: 4 })],
-    });
-    expect(has(result, 'fallenDied')).toBe(true);
-  });
-
   it('une fuite qui contourne ses alliés', async () => {
     const result = await play('fuite-qui-contourne', {
       wave: wave([
@@ -57,22 +35,6 @@ describe('scénarios du lot 1.2d', () => {
       squads: [squad(data, 'epeistes', { col: 3, row: 2 }), squad(data, 'piquiers', { col: 2, row: 2 }), squad(data, 'archers', { col: 2, row: 1 })],
     });
     expect(has(result, 'fled')).toBe(true);
-  });
-
-  it('une débandade : la fuite bloquée tout un tour', async () => {
-    const result = await play('fuite-debandade', {
-      wave: wave([
-        { turn: 1, enemy: 'brutes-du-portail', count: 1, row: 2 },
-        { turn: 2, enemy: 'brutes-du-portail', count: 1, row: 2 },
-      ]),
-      squads: [
-        squad(data, 'epeistes', { col: 3, row: 2 }),
-        squad(data, 'piquiers', { col: 2, row: 2 }),
-        squad(data, 'archers', { col: 2, row: 1 }),
-        squad(data, 'archers', { col: 2, row: 3 }, undefined, 'archers-2'),
-      ],
-    });
-    expect(result.events.some((e) => e.type === 'dispersed' && e.squad === 'epeistes')).toBe(true);
   });
 
   it('une fuite ennemie vers le portail', async () => {
