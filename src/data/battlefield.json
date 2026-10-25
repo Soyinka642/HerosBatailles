@@ -1,0 +1,15 @@
+{
+  "provisional": true,
+  "width": 12,
+  "height": 5,
+  "campHeart": { "fromCol": 0, "toCol": 0, "fromRow": 0, "toRow": 4 },
+  "deploymentZone": { "fromCol": 1, "toCol": 3, "fromRow": 0, "toRow": 4 },
+  "portal": { "fromCol": 11, "toCol": 11, "fromRow": 1, "toRow": 3 },
+  "fortificationSites": [
+    { "fortification": "tour", "cell": { "col": 2, "row": 2 } },
+    { "fortification": "palissade", "cell": { "col": 4, "row": 0 } },
+    { "fortification": "palissade", "cell": { "col": 4, "row": 1 } },
+    { "fortification": "palissade", "cell": { "col": 4, "row": 3 } },
+    { "fortification": "palissade", "cell": { "col": 4, "row": 4 } }
+  ]
+}

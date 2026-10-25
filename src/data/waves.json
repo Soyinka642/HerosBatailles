@@ -1,0 +1,45 @@
+[
+  {
+    "id": "vague-1",
+    "index": 1,
+    "isFinal": false,
+    "provisional": true,
+    "announcement": "full",
+    "arrivals": [{ "turn": 1, "enemy": "fantassins-du-portail", "count": 2 }]
+  },
+  {
+    "id": "vague-2",
+    "index": 2,
+    "isFinal": false,
+    "provisional": true,
+    "announcement": "full",
+    "arrivals": [
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 2 },
+      { "turn": 3, "enemy": "tireurs-du-portail", "count": 1 }
+    ]
+  },
+  {
+    "id": "vague-3",
+    "index": 3,
+    "isFinal": false,
+    "provisional": true,
+    "announcement": "full",
+    "arrivals": [
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 2 },
+      { "turn": 1, "enemy": "tireurs-du-portail", "count": 1 },
+      { "turn": 3, "enemy": "brutes-du-portail", "count": 1 }
+    ]
+  },
+  {
+    "id": "vague-4",
+    "index": 4,
+    "isFinal": true,
+    "provisional": true,
+    "announcement": "full",
+    "arrivals": [
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 3 },
+      { "turn": 1, "enemy": "tireurs-du-portail", "count": 2 },
+      { "turn": 2, "enemy": "brutes-du-portail", "count": 2 }
+    ]
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "provisional": true,
+  "damage": { "formula": "subtraction", "minimum": 1, "percentPerDefense": 0.1 },
+  "morale": {
+    "shakenBelow": 0.66,
+    "waveringBelow": 0.33,
+    "efficiency": { "steady": 1, "shaken": 0.8, "wavering": 0.6 }
+  },
+  "wounded": { "powerFloor": 0.5 },
+  "fallen": { "turnsHeldBeforeDeath": 2 },
+  "field": { "maxSquadsPerSide": 4 },
+  "range": { "metric": "manhattan" },
+  "flank": { "attackBonus": 1, "extraMoraleLoss": 1 },
+  "pushback": { "damageThreshold": 4 },
+  "passingFire": { "damageFactor": 0.5 },
+  "encirclement": { "extraLosses": 1 },
+  "maxTurns": 30
+}

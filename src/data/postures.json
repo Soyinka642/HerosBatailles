@@ -1,0 +1,14 @@
+[
+  {
+    "id": "tenir",
+    "name": "Tenir",
+    "description": "L'escouade reste sur sa case.",
+    "movement": "hold"
+  },
+  {
+    "id": "avancer",
+    "name": "Avancer",
+    "description": "L'escouade va tout droit ; si un ennemi se trouve sur sa rangée, elle dévie vers le plus proche.",
+    "movement": "advance"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "palissade",
+    "name": "Palissade",
+    "kind": "terrain",
+    "provisional": true,
+    "blocksMovement": true,
+    "effects": []
+  },
+  {
+    "id": "tour",
+    "name": "Tour",
+    "kind": "occupiable",
+    "provisional": true,
+    "capacity": 1,
+    "blocksMovement": false,
+    "effects": [
+      {
+        "trigger": "whileOccupying",
+        "condition": { "kind": "hasRangedAttack" },
+        "target": "self",
+        "action": { "kind": "rangeBonus", "amount": 1 }
+      }
+    ]
+  }
+]

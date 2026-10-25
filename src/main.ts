@@ -1,5 +1,9 @@
 import Phaser from 'phaser';
 import { TitleScene } from './ui/TitleScene';
+import { loadGameData } from './engine/data/load';
+
+// Valide le contenu JSON dès le démarrage : une donnée invalide arrête le jeu avec la liste des problèmes.
+loadGameData();
 
 // Point d'entrée : démarre Phaser avec les scènes de l'interface.
 new Phaser.Game({
