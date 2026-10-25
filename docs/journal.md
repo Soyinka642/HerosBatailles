@@ -189,3 +189,21 @@ Tous marqués `"provisional": true`, acceptés comme point de départ et à retr
 - La pique aura un effet propre contre les cavaliers.
 
 **Prochaine étape** : 1.2, moteur de bataille sans affichage, avec des tests de scénarios (géométrie hexagonale, formule de dégâts, moral et blessés, pas simultanés, tir, mêlée, journal de bataille).
+
+## 2026-10-25 — Lot 1.2a (suite) : règles du lot reportées dans la conception
+
+### Ce qui a été fait
+
+- `docs/conception.md` reprend les règles du lot 1.2a qui n'étaient que dans le journal :
+  - « Les escouades » : le moral encaisse d'abord, puis 1 point de dégâts = 1 de moral et 1 blessé une fois l'escouade ébranlée ; les blessés réduisent l'attaque en proportion des valides, avec un plancher ; moral maximum = base commune que l'histoire de l'escouade fera évoluer ;
+  - « Dégâts » : arrondi au plus proche des dégâts finaux ;
+  - « La bataille » : réaction par défaut, résolution par pas, arrêt du tireur en Avancer dès qu'une cible est à portée, conflits de mouvement, contact qui engage, usage des consommables (une unité par usage, reste au campement, déroute sans perte, règle par défaut des flèches enflammées) ;
+  - « Questions ouvertes » : la question des blessés ne porte plus que sur le niveau du plancher.
+- Le texte de l'auteur sur les ordres est inchangé ; les ajouts sont des puces voisines. Fins de ligne CRLF conservées.
+- Aucune modification de code ni de données ; `typecheck`, `test` (52 tests) et `build` passent toujours.
+
+### Décisions prises
+
+- Aucune nouvelle règle : ce lot recopie dans la conception des décisions déjà prises (voir l'entrée précédente). Les chiffres restent dans la config, la conception ne nomme que les règles.
+
+**Prochaine étape** : 1.2, moteur de bataille sans affichage, avec des tests de scénarios.
