@@ -1,8 +1,10 @@
 // Boucle de bataille : arrivées par le portail, puis mouvement → tir → mêlée. Les conditions
-// de fin sont vérifiées à la fin de chaque phase ; le rituel et maxTurns, à la fin du tour.
+// de fin sont vérifiées à la fin de chaque phase ; les soldats tombés, le rituel et maxTurns, à la
+// fin du tour.
 
 import type { Area, Cell, GameData, Id } from '../data/types';
 import { burnPhase } from './burn';
+import { fallenPhase, resolveFallenAtEnd } from './fallen';
 import { destroyedSince, routBroken } from './combat';
 import type { BattleEvent } from './events';
 import { isStanding } from './fortifications';
@@ -86,6 +88,7 @@ function turnEnd(state: BattleState): BattleEvent {
         wounded: s.wounded,
         ...(s.status === 'fleeing' ? { fleeing: true } : {}),
       })),
+    fallen: structuredClone(state.fallen),
   };
 }
 
@@ -98,16 +101,20 @@ export function playTurn(data: GameData, previous: BattleState): { state: Battle
   state.turn += 1;
   const events: BattleEvent[] = [{ type: 'turnStart', turn: state.turn }, ...arrivals(data, state)];
   const standing = state.fortifications.filter(isStanding);
-  events.push(...burnPhase(data, state), ...destroyedSince(standing), ...routBroken(state));
+  events.push(...burnPhase(data, state), ...destroyedSince(standing), ...routBroken(data, state));
   state.outcome = phaseOutcome(state);
   for (const phase of state.outcome ? [] : PHASES) {
     events.push(...phase(data, state));
     state.outcome = phaseOutcome(state);
     if (state.outcome) break;
   }
+  if (!state.outcome) events.push(...fallenPhase(data, state));
   state.outcome ??= turnOutcome(data, state);
   events.push(turnEnd(state));
-  if (state.outcome) events.push({ type: 'battleEnd', turn: state.turn, outcome: state.outcome, breaches: state.breaches });
+  if (state.outcome) {
+    events.push(...resolveFallenAtEnd(state, state.outcome));
+    events.push({ type: 'battleEnd', turn: state.turn, outcome: state.outcome, breaches: state.breaches });
+  }
   return { state, events };
 }
 
@@ -115,6 +122,22 @@ export function playTurn(data: GameData, previous: BattleState): { state: Battle
 export interface CarriedLeft {
   squad: string;
   carried: Carried;
+}
+
+/** Pertes d'une de nos escouades : les morts réduisent son effectif pour la suite de la partie. */
+export interface SquadLosses {
+  squad: string;
+  /** Effectif restant : effectif de départ − morts. */
+  soldiers: number;
+  /** Blessés à la fin, tombés relevés compris. */
+  wounded: number;
+  dead: number;
+  /** Tombés relevés pendant la bataille. */
+  recovered: number;
+  /** Tombés relevés à la fin de la bataille. */
+  recoveredAtEnd: number;
+  /** Tombés morts à la fin de la bataille (déjà comptés dans `dead`). */
+  lostAtEnd: number;
 }
 
 export interface BattleResult {
@@ -126,6 +149,23 @@ export interface BattleResult {
   fortifications: { site: Id; structure: number }[];
   /** Consommables restants de chacune de nos escouades (une escouade en déroute garde sa part). */
   carried: CarriedLeft[];
+  losses: SquadLosses[];
+}
+
+function lossesOf(state: BattleState, events: readonly BattleEvent[]): SquadLosses[] {
+  const sum = (squad: string, type: 'fallenRecovered' | 'fallenDied', atEnd: boolean) =>
+    events.reduce((total, e) => (e.type === type && e.squad === squad && (e.atEnd === true) === atEnd ? total + e.count : total), 0);
+  return state.squads
+    .filter((s) => s.side === 'player')
+    .map((s) => ({
+      squad: s.id,
+      soldiers: s.stats.soldiers - s.dead,
+      wounded: s.wounded,
+      dead: s.dead,
+      recovered: sum(s.id, 'fallenRecovered', false),
+      recoveredAtEnd: sum(s.id, 'fallenRecovered', true),
+      lostAtEnd: sum(s.id, 'fallenDied', true),
+    }));
 }
 
 /** Joue toute la bataille ; même entrée, même résultat. */
@@ -140,5 +180,5 @@ export function runBattle(data: GameData, setup: BattleSetup): BattleResult {
   }
   const fortifications = state.fortifications.map((f) => ({ site: f.site, structure: f.structure }));
   const carried = state.squads.filter((s) => s.side === 'player').map((s) => ({ squad: s.id, carried: { ...s.carried } }));
-  return { initial, final: state, events, outcome: state.outcome, fortifications, carried };
+  return { initial, final: state, events, outcome: state.outcome, fortifications, carried, losses: lossesOf(state, events) };
 }

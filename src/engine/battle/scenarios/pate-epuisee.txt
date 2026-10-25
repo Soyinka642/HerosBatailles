@@ -212,6 +212,9 @@ Mêlée :
   Les Brutes du portail n°1 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 × 0,9 (ébranlées) × 0,95 (1 blessé sur 20) = 5,13 → 5 dégâts ; moral 10 → 5, blessés 3 → 8 ; les Épéistes sont vacillants.
   Les Brutes du portail n°3 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 dégâts ; moral 5 → 0, blessés 8 → 13.
   Les Épéistes sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (4,2).
+Tombés :
+  Les Piquiers relèvent 6 blessés des Épéistes en (4,2) : ils rejoignent les Épéistes.
 Fin du tour :
   Épéistes en (4,2), moral 0/20, 13 blessés, en fuite
   Piquiers en (3,2), moral 20/20
@@ -269,6 +272,9 @@ Mêlée :
   Les Brutes du portail n°1 frappent les Piquiers : 6 − 0 (défense 1, Perce-armure 2) = 6 × 0,8 (vacillantes) × 0,5 (11 blessés sur 20) = 2,4 → 2 dégâts ; moral 4 → 2, blessés 9 → 11.
   Les Brutes du portail n°3 frappent les Piquiers : 6 − 0 (défense 1, Perce-armure 2) = 6 dégâts ; moral 2 → 0, blessés 11 → 13.
   Les Piquiers sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (3,2).
+Tombés :
+  Les Archers relèvent 6 blessés des Piquiers en (3,2) : ils rejoignent les Piquiers.
 Fin du tour :
   Piquiers en (3,2), moral 0/20, 13 blessés, en fuite
   Archers en (2,2), moral 20/20
@@ -329,11 +335,14 @@ Mêlée :
   Les Brutes du portail n°1 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 × 0,8 (vacillantes) × 0,5 (14 blessés sur 20) = 2 dégâts ; moral 1 → 0, blessés 12 → 13.
   Les Brutes du portail n°3 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 0 → 0.
   Les Archers sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (2,2).
   Les Brutes du portail n°1 sont en déroute : elles fuient vers le portail.
 Fin du tour :
-  Archers en (2,2), moral 0/20, 13 blessés, en fuite
+  À terre en (2,2) : 6 blessés des Archers
+  Archers en (2,2), moral 0/20, 7 blessés, en fuite
   Brutes du portail n°1 en (2,1), moral 0/24, 15 blessés, en fuite
   Brutes du portail n°3 en (2,3), moral 19/24
+La bataille est perdue : 6 blessés des Archers restés en (2,2) meurent.
 
 Défaite au tour 17 : toutes nos escouades sont en déroute.
 Incursions au cœur du campement : 0.

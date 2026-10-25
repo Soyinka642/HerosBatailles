@@ -238,6 +238,9 @@ Mêlée :
   Les Fantassins du portail n°4 frappent les Épéistes : 5 − 2 = 3 dégâts ; moral 0 → 0.
   Les Fantassins du portail n°5 frappent les Épéistes de la garde : 5 − 2 = 3 dégâts ; moral 6 → 3, blessés 7 → 10.
   Les Épéistes sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (3,1).
+Tombés :
+  Les Piquiers relèvent 6 blessés des Épéistes en (3,1) : ils rejoignent les Épéistes.
 Fin du tour :
   Épéistes en (3,1), moral 0/20, 13 blessés, en fuite
   Piquiers en (2,1), moral 20/20
@@ -271,11 +274,13 @@ Mêlée :
   Les Fantassins du portail n°3 frappent les Épéistes de la garde : 5 − 2 = 3 × 0,8 (vacillants) × 0,75 (5 blessés sur 20) = 1,8 → 2 dégâts ; moral 1 → 0, blessés 12 → 13.
   Les Fantassins du portail n°5 frappent les Épéistes de la garde : 5 − 2 = 3 dégâts ; moral 0 → 0.
   Les Épéistes de la garde sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (3,3).
 Fin du tour :
+  À terre en (3,3) : 6 blessés des Épéistes de la garde
   Épéistes en (2,0), moral 0/20, 13 blessés, en fuite
   Piquiers en (2,1), moral 20/20
   Archers en (1,2), moral 20/20
-  Épéistes de la garde en (3,3), moral 0/20, 13 blessés, en fuite
+  Épéistes de la garde en (3,3), moral 0/20, 7 blessés, en fuite
   Fantassins du portail n°1 en (4,2), moral 7/16, 3 blessés
   Fantassins du portail n°2 en (3,1), moral 0/16, 10 blessés, en fuite
   Fantassins du portail n°3 en (4,3), moral 3/16, 7 blessés
@@ -303,10 +308,13 @@ Mêlée :
   Les Piquiers frappent les Fantassins du portail n°4 : 5 − 2 = 3 dégâts ; moral 16 → 13.
   Les Fantassins du portail n°1 frappent les Piquiers : 5 − 1 = 4 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 2,24 → 2 dégâts ; moral 20 → 18.
   Les Fantassins du portail n°4 frappent les Piquiers : 5 − 1 = 4 dégâts ; moral 18 → 14.
+Tombés :
+  Les Fantassins du portail n°3 tiennent (3,3), où gisent 6 blessés des Épéistes de la garde (tour 1 sur 2).
 Fin du tour :
+  À terre en (3,3) : 6 blessés des Épéistes de la garde
   Piquiers en (2,1), moral 14/20
   Archers en (1,2), moral 20/20
-  Épéistes de la garde en (1,3), moral 0/20, 13 blessés, en fuite
+  Épéistes de la garde en (1,3), moral 0/20, 7 blessés, en fuite
   Fantassins du portail n°1 en (3,2), moral 4/16, 6 blessés
   Fantassins du portail n°2 en (3,1), moral 0/16, 10 blessés, en fuite
   Fantassins du portail n°3 en (3,3), moral 3/16, 7 blessés
@@ -334,6 +342,7 @@ Mêlée :
   Les Fantassins du portail n°4 frappent les Piquiers : 5 − 1 = 4 dégâts ; moral 12 → 8, blessés 1 → 5.
   Les Fantassins du portail n°7 frappent les Piquiers : 5 − 1 = 4 dégâts ; moral 8 → 4, blessés 5 → 9 ; les Piquiers sont vacillants.
 Fin du tour :
+  À terre en (3,3) : 6 blessés des Épéistes de la garde
   Piquiers en (2,1), moral 4/20, 9 blessés
   Archers en (1,2), moral 20/20
   Fantassins du portail n°1 en (3,2), moral 1/16, 9 blessés
@@ -361,8 +370,11 @@ Mêlée :
   Les Fantassins du portail n°4 frappent les Piquiers : 5 − 1 = 4 dégâts ; moral 2 → 0, blessés 11 → 13.
   Les Fantassins du portail n°7 frappent les Piquiers : 5 − 1 = 4 dégâts ; moral 0 → 0.
   Les Piquiers sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (2,1).
 Fin du tour :
-  Piquiers en (2,1), moral 0/20, 13 blessés, en fuite
+  À terre en (3,3) : 6 blessés des Épéistes de la garde
+  À terre en (2,1) : 6 blessés des Piquiers
+  Piquiers en (2,1), moral 0/20, 7 blessés, en fuite
   Archers en (1,2), moral 18/20
   Fantassins du portail n°1 en (3,2), moral 1/16, 9 blessés
   Fantassins du portail n°2 en (5,0), moral 0/16, 10 blessés, en fuite
@@ -390,7 +402,11 @@ Mêlée :
   Les Fantassins du portail n°1 frappent les Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 1,76 → 2 dégâts ; moral 18 → 16.
   Les Fantassins du portail n°3 frappent les Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = 1,92 → 2 dégâts ; moral 16 → 14.
   Les Fantassins du portail n°1 sont en déroute : ils fuient vers le portail.
+Tombés :
+  Les Fantassins du portail n°7 tiennent (2,1), où gisent 6 blessés des Piquiers (tour 1 sur 2).
 Fin du tour :
+  À terre en (3,3) : 6 blessés des Épéistes de la garde
+  À terre en (2,1) : 6 blessés des Piquiers
   Archers en (1,2), moral 14/20
   Fantassins du portail n°1 en (2,2), moral 0/16, 10 blessés, en fuite
   Fantassins du portail n°2 en (6,0), moral 0/16, 10 blessés, en fuite
@@ -413,6 +429,8 @@ Mêlée :
   Les Fantassins du portail n°6 frappent les Archers : 5 − 1 = 4 dégâts ; moral 12 → 8, blessés 1 → 5.
   Les Fantassins du portail n°7 frappent les Archers : 5 − 1 = 4 dégâts ; moral 8 → 4, blessés 5 → 9 ; les Archers sont vacillants.
 Fin du tour :
+  À terre en (3,3) : 6 blessés des Épéistes de la garde
+  À terre en (2,1) : 6 blessés des Piquiers
   Archers en (1,2), moral 4/20, 9 blessés
   Fantassins du portail n°1 en (2,3), moral 0/16, 10 blessés, en fuite
   Fantassins du portail n°2 en (7,0), moral 0/16, 10 blessés, en fuite
@@ -436,13 +454,20 @@ Mêlée :
   Les Fantassins du portail n°6 frappent les Archers : 5 − 1 = 4 dégâts ; moral 2 → 0, blessés 11 → 13.
   Les Fantassins du portail n°7 frappent les Archers : 5 − 1 = 4 dégâts ; moral 0 → 0.
   Les Archers sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (1,2).
 Fin du tour :
-  Archers en (1,2), moral 0/20, 13 blessés, en fuite
+  À terre en (3,3) : 6 blessés des Épéistes de la garde
+  À terre en (2,1) : 6 blessés des Piquiers
+  À terre en (1,2) : 6 blessés des Archers
+  Archers en (1,2), moral 0/20, 7 blessés, en fuite
   Fantassins du portail n°1 en (3,3), moral 0/16, 10 blessés, en fuite
   Fantassins du portail n°2 en (8,0), moral 0/16, 10 blessés, en fuite
   Fantassins du portail n°3 en (1,3), moral 2/16, 8 blessés
   Fantassins du portail n°6 en (2,2), moral 14/16
   Fantassins du portail n°7 en (1,1), moral 12/16
+La bataille est perdue : 6 blessés des Épéistes de la garde restés en (3,3) meurent.
+La bataille est perdue : 6 blessés des Piquiers restés en (2,1) meurent.
+La bataille est perdue : 6 blessés des Archers restés en (1,2) meurent.
 
 Défaite au tour 16 : toutes nos escouades sont en déroute.
 Incursions au cœur du campement : 2.

@@ -232,11 +232,24 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
       return `  ${capitalize(names.site(e.site))} est détruite : la case est libre.`;
     case 'rout':
       return `  ${N(e.squad)} sont en déroute : ${pronoun(e.squad)} fuient vers ${names.side(e.squad) === 'player' ? 'le campement' : 'le portail'}.`;
+    case 'fallen':
+      return `    ${capitalize(pronoun(e.squad))} abandonnent ${wounded(e.count)} à terre en ${formatCell(e.cell)}.`;
+    case 'fallenHeld':
+      return `  ${N(e.by)} tiennent ${formatCell(e.cell)}, où gisent ${wounded(e.count)} ${des(names.name(e.squad))} (tour ${e.turns} sur ${data.config.fallen.turnsHeldBeforeDeath}).`;
+    case 'fallenRecovered':
+      return e.atEnd
+        ? `Maîtres du terrain, nous relevons ${wounded(e.count)} ${des(names.name(e.squad))} en ${formatCell(e.cell)} : ${pronoun(e.squad)} rejoignent ${les(names.name(e.squad))}.`
+        : `  ${N(e.by ?? e.squad)} relèvent ${wounded(e.count)} ${des(names.name(e.squad))} en ${formatCell(e.cell)} : ils rejoignent ${les(names.name(e.squad))}.`;
+    case 'fallenDied':
+      return e.atEnd
+        ? `La bataille est perdue : ${wounded(e.count)} ${des(names.name(e.squad))} restés en ${formatCell(e.cell)} meurent.`
+        : `  ${capitalize(wounded(e.count))} ${des(names.name(e.squad))} meurent en ${formatCell(e.cell)} : l'ennemi a tenu la case ${data.config.fallen.turnsHeldBeforeDeath} tours.`;
     case 'fled':
       return `  ${N(e.squad)} atteignent ${names.side(e.squad) === 'player' ? 'le campement' : 'le portail'} en ${formatCell(e.cell)} et quittent le terrain.`;
     case 'turnEnd':
       return [
         'Fin du tour :',
+        ...e.fallen.map((f) => `  À terre en ${formatCell(f.cell)} : ${wounded(f.count)} ${des(names.name(f.squad))}`),
         ...e.squads.map((s) => `  ${names.name(s.id)} en ${formatCell(s.cell)}, moral ${s.morale}/${s.maxMorale}${s.wounded > 0 ? `, ${wounded(s.wounded)}` : ''}${s.fleeing ? ', en fuite' : ''}`),
       ].join('\n');
     case 'battleEnd':
@@ -244,11 +257,12 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
   }
 }
 
-type Phase = 'Feu' | 'Mouvement' | 'Tir' | 'Mêlée';
+type Phase = 'Feu' | 'Mouvement' | 'Tir' | 'Mêlée' | 'Tombés';
 
 function phaseOf(e: BattleEvent): Phase | undefined {
   if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach' || e.type === 'fled') return 'Mouvement';
   if (e.type === 'burn' || e.type === 'fortificationBurn') return 'Feu';
+  if ((e.type === 'fallenHeld' || e.type === 'fallenRecovered' || e.type === 'fallenDied') && !('atEnd' in e && e.atEnd)) return 'Tombés';
   if (e.type === 'shot' || e.type === 'ignite') return 'Tir';
   if (e.type === 'strike' || e.type === 'fortificationHit') return 'Mêlée';
   return undefined;

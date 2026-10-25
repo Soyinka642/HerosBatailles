@@ -178,3 +178,13 @@ describe('fortifications en sortie', () => {
     expect(result.fortifications[1]!.structure).toBeLessThan(10);
   });
 });
+
+describe('pertes en sortie', () => {
+  it('la bataille rend, pour chacune de nos escouades, effectif, blessés, morts et tombés relevés', () => {
+    const result = runBattle(data, { wave: wave([{ turn: 1, enemy: 'brutes-du-portail', count: 1, row: 2 }]), squads: [squad(data, 'archers', { col: 3, row: 2 })] });
+    const archers = result.losses[0]!;
+    expect(archers.squad).toBe('archers');
+    expect(archers.soldiers).toBe(20 - archers.dead);
+    expect(archers.wounded + archers.dead).toBeLessThanOrEqual(20);
+  });
+});

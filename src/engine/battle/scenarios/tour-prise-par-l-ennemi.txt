@@ -86,8 +86,10 @@ Mêlée :
   Les Archers frappent les Brutes du portail n°1 : 2 − 3 = −1 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = −0,48 → minimum 1 dégât ; moral 19 → 18.
   Les Brutes du portail n°1 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 5 → 0, blessés 8 → 13.
   Les Archers sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (2,2).
 Fin du tour :
-  Archers en (2,2), moral 0/20, 13 blessés, en fuite
+  À terre en (2,2) : 6 blessés des Archers
+  Archers en (2,2), moral 0/20, 7 blessés, en fuite
   Épéistes en (3,0), moral 20/20
   Brutes du portail n°1 en (3,2), moral 18/24
 
@@ -99,6 +101,7 @@ Mouvement :
   pas 2 : les Brutes du portail n°1 (2,2) → (1,2).
   Les Archers atteignent le campement en (0,2) et quittent le terrain.
 Fin du tour :
+  À terre en (2,2) : 6 blessés des Archers
   Épéistes en (3,0), moral 20/20
   Brutes du portail n°1 en (1,2), moral 18/24
 
@@ -107,7 +110,9 @@ Mouvement :
   pas 1 : les Brutes du portail n°1 (1,2) → (0,2).
   Les Brutes du portail n°1 atteignent le cœur du campement en (0,2) : incursion n°1. Elles quittent la bataille.
 Fin du tour :
+  À terre en (2,2) : 6 blessés des Archers
   Épéistes en (3,0), moral 20/20
+Maîtres du terrain, nous relevons 6 blessés des Archers en (2,2) : ils rejoignent les Archers.
 
 Victoire au tour 9 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 1.

@@ -6,6 +6,7 @@
 import type { Action, Amount, GameData, KeywordRef, Trigger } from '../data/types';
 import { type AttackBonus, type DamageBreakdown, applyDamage, computeDamage } from './damage';
 import { ignite } from './burn';
+import { abandonWounded } from './fallen';
 import type { BattleEvent, FireDecision } from './events';
 import { behind, sameCell } from './hex';
 import { type FortificationBonus, defenseBonuses, isStanding } from './fortifications';
@@ -130,7 +131,7 @@ export function applyHits(
     events.push({ type: 'fortificationHit', attacker: hit.attacker.id, site: hit.fort.site, damage: hit.damage, before, after: hit.fort.structure });
   }
   events.push(...destroyedSince(standing));
-  return [...events, ...routBroken(state)];
+  return [...events, ...routBroken(data, state)];
 }
 
 /** Les fortifications de la liste tombées à 0 : la case redevient libre. */
@@ -138,13 +139,15 @@ export function destroyedSince(standing: readonly FortificationState[]): BattleE
   return standing.filter((f) => !isStanding(f)).map((f) => ({ type: 'fortificationDestroyed', site: f.site }));
 }
 
-/** Les escouades dont le moral est tombé à zéro partent en déroute : elles fuiront vers leur camp. */
-export function routBroken(state: BattleState): BattleEvent[] {
+/** Les escouades dont le moral est tombé à zéro partent en déroute : elles fuiront vers leur camp, et les nôtres abandonnent des blessés. */
+export function routBroken(data: GameData, state: BattleState): BattleEvent[] {
   const events: BattleEvent[] = [];
   for (const squad of state.squads) {
     if (squad.status !== 'active' || !isBroken(squad)) continue;
     squad.status = 'fleeing';
     events.push({ type: 'rout', squad: squad.id });
+    const fallen = abandonWounded(data, state, squad);
+    if (fallen) events.push(fallen);
   }
   return events;
 }

@@ -68,7 +68,10 @@ describe('tir', () => {
       ['archers', 'tireurs-du-portail#1', 3, 14, 11],
       ['tireurs-du-portail#1', 'archers', 2, 2, 0],
     ]);
-    expect(events.at(-1)).toEqual({ type: 'rout', squad: 'archers' });
+    expect(events.slice(-2)).toEqual([
+      { type: 'rout', squad: 'archers' },
+      { type: 'fallen', squad: 'archers', cell: { col: 3, row: 2 }, count: 1 },
+    ]);
   });
 });
 

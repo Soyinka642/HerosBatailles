@@ -323,6 +323,9 @@ Mouvement :
 Tir :
   Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 3 − 2 = 1 dégât ; moral 1 → 0, blessés 12 → 13.
   Les Épéistes sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (4,2).
+Tombés :
+  Les Piquiers relèvent 6 blessés des Épéistes en (4,2) : ils rejoignent les Épéistes.
 Fin du tour :
   Épéistes en (4,2), moral 0/20, 13 blessés, en fuite
   Piquiers en (3,2), moral 20/20

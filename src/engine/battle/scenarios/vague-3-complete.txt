@@ -365,7 +365,10 @@ Tir :
   Les Archers tirent sur les Fantassins du portail n°2 à 2 cases, volée normale (défense 2 sous le seuil de 3) : 5 − 2 = 3 dégâts ; moral 1 → 0, blessés 9 → 10.
   Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 3 − 2 = 1 dégât ; moral 1 → 0, blessés 12 → 13.
   Les Épéistes sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (4,2).
   Les Fantassins du portail n°2 sont en déroute : ils fuient vers le portail.
+Tombés :
+  Les Piquiers relèvent 6 blessés des Épéistes en (4,2) : ils rejoignent les Épéistes.
 Fin du tour :
   Épéistes en (4,2), moral 0/20, 13 blessés, en fuite
   Piquiers en (3,2), moral 20/20
