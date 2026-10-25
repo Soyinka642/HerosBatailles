@@ -8,6 +8,7 @@ import { GAME_TITLE } from '../engine';
 import { BattleScene } from './BattleScene';
 import { fieldSize } from './battle/layout';
 import { PALETTE } from './battle/palette';
+import { mirrorOf } from './battle/mirror';
 import { type RecordedBattle, recordBattle } from './battle/record';
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, className?: string, text?: string): HTMLElementTagNameMap[K] {
@@ -75,7 +76,7 @@ export class App {
     this.title.textContent = entry.title;
     const recorded = recordBattle(this.data, entry.setup(this.data));
     const scene = await this.ensureScene();
-    scene.showField(this.data, recorded.initial);
+    scene.reset(this.data, mirrorOf(recorded.initial));
     this.current = recorded;
   }
 
