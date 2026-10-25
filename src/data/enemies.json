@@ -3,36 +3,24 @@
     "id": "fantassins-du-portail",
     "name": "Fantassins du portail",
     "provisional": true,
-    "stats": { "meleeAttack": 1, "rangedAttack": 0, "range": 0, "defense": 1, "speed": 2, "morale": 8, "soldiers": 10 },
-    "slots": [
-      { "id": "arme", "accepts": ["epee"] },
-      { "id": "armure", "accepts": ["armure"] }
-    ],
-    "defaultEquipment": { "arme": "epee", "armure": "cuir" },
-    "keywords": []
+    "stats": { "meleeAttack": 5, "rangedAttack": 0, "range": 0, "defense": 2, "speed": 2, "morale": 16, "soldiers": 20 },
+    "keywords": [],
+    "posture": "avancer"
   },
   {
     "id": "tireurs-du-portail",
     "name": "Tireurs du portail",
     "provisional": true,
-    "stats": { "meleeAttack": 1, "rangedAttack": 0, "range": 0, "defense": 0, "speed": 2, "morale": 8, "soldiers": 8 },
-    "slots": [
-      { "id": "arme", "accepts": ["arc"] },
-      { "id": "armure", "accepts": ["armure"] }
-    ],
-    "defaultEquipment": { "arme": "arc-court", "armure": "cuir" },
-    "keywords": []
+    "stats": { "meleeAttack": 2, "rangedAttack": 4, "range": 3, "defense": 1, "speed": 2, "morale": 14, "soldiers": 20 },
+    "keywords": [],
+    "posture": "avancer"
   },
   {
     "id": "brutes-du-portail",
     "name": "Brutes du portail",
     "provisional": true,
-    "stats": { "meleeAttack": 2, "rangedAttack": 0, "range": 0, "defense": 1, "speed": 2, "morale": 10, "soldiers": 8 },
-    "slots": [
-      { "id": "arme", "accepts": ["masse"] },
-      { "id": "armure", "accepts": ["armure"] }
-    ],
-    "defaultEquipment": { "arme": "masse", "armure": "plates" },
-    "keywords": []
+    "stats": { "meleeAttack": 6, "rangedAttack": 0, "range": 0, "defense": 3, "speed": 2, "morale": 24, "soldiers": 20 },
+    "keywords": [{ "id": "perce-armure", "x": 2 }],
+    "posture": "avancer"
   }
 ]

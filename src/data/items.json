@@ -2,51 +2,50 @@
   {
     "id": "epee",
     "name": "Épée",
+    "kind": "weapon",
     "category": "epee",
+    "mastery": "maitrise-epee",
     "provisional": true,
-    "stats": { "meleeAttack": 3 },
+    "stats": { "meleeAttack": 4 },
     "keywords": [],
     "upgradeSlots": []
   },
   {
     "id": "arc-court",
     "name": "Arc court",
+    "kind": "weapon",
     "category": "arc",
+    "mastery": "maitrise-arc",
     "provisional": true,
-    "stats": { "rangedAttack": 3, "range": 3 },
+    "stats": { "rangedAttack": 5, "range": 3 },
     "keywords": [],
     "upgradeSlots": [{ "id": "fleches", "accepts": ["fleches"], "unlockedBy": "forgeron" }]
   },
   {
     "id": "pique",
     "name": "Pique",
+    "kind": "weapon",
     "category": "pique",
-    "provisional": true,
-    "stats": { "meleeAttack": 2 },
-    "keywords": [],
-    "upgradeSlots": []
-  },
-  {
-    "id": "masse",
-    "name": "Masse",
-    "category": "masse",
+    "mastery": "maitrise-pique",
     "provisional": true,
     "stats": { "meleeAttack": 3 },
-    "keywords": [{ "id": "perce-armure", "x": 1 }],
+    "keywords": [{ "id": "soutien" }],
     "upgradeSlots": []
   },
   {
     "id": "fleches-enflammees",
     "name": "Flèches enflammées",
+    "kind": "upgrade",
     "category": "fleches",
     "provisional": true,
     "stats": {},
-    "keywords": [{ "id": "feu" }],
+    "keywords": [{ "id": "feu", "consumes": "pate-incendiaire" }],
     "upgradeSlots": []
   },
   {
     "id": "cuir",
     "name": "Armure de cuir",
+    "kind": "armor",
     "category": "armure",
     "provisional": true,
     "stats": { "defense": 1 },
@@ -56,6 +55,7 @@
   {
     "id": "mailles",
     "name": "Cotte de mailles",
+    "kind": "armor",
     "category": "armure",
     "provisional": true,
     "stats": { "defense": 2 },
@@ -65,9 +65,10 @@
   {
     "id": "plates",
     "name": "Armure de plates",
+    "kind": "armor",
     "category": "armure",
     "provisional": true,
-    "stats": { "defense": 3, "speed": -1 },
+    "stats": { "defense": 4, "speed": -1 },
     "keywords": [],
     "upgradeSlots": []
   }

@@ -18,32 +18,42 @@ import {
   report,
 } from './reader';
 import {
-  ANNOUNCEMENTS,
+  ACTION_KINDS,
+  BATTLE_KINDS,
+  CONDITION_KINDS,
   DAMAGE_FORMULAS,
   FORTIFICATION_KINDS,
+  ITEM_KINDS,
   MOVEMENTS,
-  RANGE_METRICS,
+  OCCUPANTS,
   TARGETS,
   TRIGGERS,
   type Action,
   type Amount,
   type Area,
-  type BaseStats,
   type BattleConfig,
   type Battlefield,
   type Cell,
   type Condition,
+  type Consumable,
   type Effect,
+  type Enemy,
+  type EnemyStats,
   type Fortification,
   type FortificationSite,
   type GameData,
   type Item,
   type Keyword,
   type KeywordRef,
+  type Mastery,
+  type OrderSlots,
   type Posture,
+  type Slot,
   type SlotDef,
+  type SquadBase,
+  type SquadStats,
+  type SquadTemplate,
   type StatModifiers,
-  type UnitType,
   type Unlock,
   type Wave,
 } from './types';
@@ -52,10 +62,14 @@ import {
 export const DATA_FILES = {
   unlocks: 'unlocks.json',
   keywords: 'keywords.json',
+  masteries: 'masteries.json',
+  consumables: 'consumables.json',
   items: 'items.json',
-  units: 'units.json',
+  squad: 'squad.json',
+  templates: 'templates.json',
   enemies: 'enemies.json',
   postures: 'postures.json',
+  orders: 'orders.json',
   fortifications: 'fortifications.json',
   battlefield: 'battlefield.json',
   waves: 'waves.json',
@@ -72,16 +86,33 @@ const FRACTION = { min: 0, max: 1 } as const;
 
 // --- Briques communes ---
 
+function setUnlockedBy(ctx: Ctx, o: Record<string, unknown>, path: string, target: { unlockedBy?: string }): void {
+  const unlockedBy = readOptionalString(ctx, o, 'unlockedBy', path);
+  if (unlockedBy !== undefined) target.unlockedBy = unlockedBy;
+}
+
+/** Emplacement sans objet (tour planifié…). */
+function parseBareSlot(ctx: Ctx, value: unknown, path: string): Slot | undefined {
+  const o = readObject(ctx, value, path, ['id', 'unlockedBy']);
+  if (!o) return undefined;
+  const slot: Slot = { id: readString(ctx, o, 'id', path) };
+  setUnlockedBy(ctx, o, path, slot);
+  return slot;
+}
+
 function parseSlot(ctx: Ctx, value: unknown, path: string): SlotDef | undefined {
   const o = readObject(ctx, value, path, ['id', 'accepts', 'unlockedBy']);
   if (!o) return undefined;
   const slot: SlotDef = {
     id: readString(ctx, o, 'id', path),
-    accepts: readArray(ctx, o, 'accepts', path, (v, p) => (typeof v === 'string' ? v : badString(ctx, v, p))),
+    accepts: readStrings(ctx, o, 'accepts', path),
   };
-  const unlockedBy = readOptionalString(ctx, o, 'unlockedBy', path);
-  if (unlockedBy !== undefined) slot.unlockedBy = unlockedBy;
+  setUnlockedBy(ctx, o, path, slot);
   return slot;
+}
+
+function readStrings(ctx: Ctx, o: Record<string, unknown>, key: string, path: string): string[] {
+  return readArray(ctx, o, key, path, (v, p) => (typeof v === 'string' ? v : badString(ctx, v, p)));
 }
 
 function badString(ctx: Ctx, value: unknown, path: string): undefined {
@@ -90,11 +121,13 @@ function badString(ctx: Ctx, value: unknown, path: string): undefined {
 }
 
 function parseKeywordRef(ctx: Ctx, value: unknown, path: string): KeywordRef | undefined {
-  const o = readObject(ctx, value, path, ['id', 'x']);
+  const o = readObject(ctx, value, path, ['id', 'x', 'consumes']);
   if (!o) return undefined;
   const ref: KeywordRef = { id: readString(ctx, o, 'id', path) };
   const x = readOptionalNumber(ctx, o, 'x', path, NATURAL);
   if (x !== undefined) ref.x = x;
+  const consumes = readOptionalString(ctx, o, 'consumes', path);
+  if (consumes !== undefined) ref.consumes = consumes;
   return ref;
 }
 
@@ -106,23 +139,19 @@ function parseAmount(ctx: Ctx, value: unknown, path: string): Amount {
 function parseCondition(ctx: Ctx, value: unknown, path: string): Condition | undefined {
   const head = readObject(ctx, value, path, ['kind', 'cells']);
   if (!head) return undefined;
-  const kind = readEnum(ctx, head, 'kind', path, ['movedAtLeast', 'hasRangedAttack'] as const);
-  if (kind === 'hasRangedAttack') {
-    readObject(ctx, value, path, ['kind']);
-    return { kind };
-  }
-  return { kind, cells: readNumber(ctx, head, 'cells', path, POSITIVE) };
+  const kind = readEnum(ctx, head, 'kind', path, CONDITION_KINDS);
+  if (kind === 'movedStraightAtLeast') return { kind, cells: readNumber(ctx, head, 'cells', path, POSITIVE) };
+  readObject(ctx, value, path, ['kind']);
+  return { kind };
 }
 
-const ACTION_KINDS = ['ignoreDefense', 'attackBonus', 'defenseBonus', 'rangeBonus', 'delayedDamage', 'moraleLoss'] as const;
-
 function parseAction(ctx: Ctx, value: unknown, path: string): Action | undefined {
-  const head = readObject(ctx, value, path, ['kind', 'amount', 'delayTurns']);
+  const head = readObject(ctx, value, path, ['kind', 'amount', 'turns']);
   if (!head) return undefined;
   const kind = readEnum(ctx, head, 'kind', path, ACTION_KINDS);
   if (!('amount' in head)) report(ctx, child(path, 'amount'), 'champ obligatoire manquant');
   const amount = parseAmount(ctx, head['amount'], child(path, 'amount'));
-  if (kind === 'delayedDamage') return { kind, amount, delayTurns: readNumber(ctx, head, 'delayTurns', path, POSITIVE) };
+  if (kind === 'burn') return { kind, amount, turns: readNumber(ctx, head, 'turns', path, POSITIVE) };
   readObject(ctx, value, path, ['kind', 'amount']);
   return { kind, amount };
 }
@@ -174,6 +203,20 @@ function parseUnlock(ctx: Ctx, value: unknown, path: string): Unlock | undefined
   return { id: readString(ctx, o, 'id', path), name: readString(ctx, o, 'name', path), description: readString(ctx, o, 'description', path) };
 }
 
+function parseMastery(ctx: Ctx, value: unknown, path: string): Mastery | undefined {
+  const o = readObject(ctx, value, path, ['id', 'name', 'description']);
+  if (!o) return undefined;
+  return { id: readString(ctx, o, 'id', path), name: readString(ctx, o, 'name', path), description: readString(ctx, o, 'description', path) };
+}
+
+function parseConsumable(ctx: Ctx, value: unknown, path: string): Consumable | undefined {
+  const o = readObject(ctx, value, path, ['id', 'name', 'description', 'provisional']);
+  if (!o) return undefined;
+  const consumable: Consumable = { id: readString(ctx, o, 'id', path), name: readString(ctx, o, 'name', path), description: readString(ctx, o, 'description', path) };
+  setProvisional(ctx, o, path, consumable);
+  return consumable;
+}
+
 function parseKeyword(ctx: Ctx, value: unknown, path: string): Keyword | undefined {
   const o = readObject(ctx, value, path, ['id', 'name', 'description', 'hasParameter', 'effects']);
   if (!o) return undefined;
@@ -199,34 +242,53 @@ function parseModifiers(ctx: Ctx, value: unknown, path: string): StatModifiers {
 }
 
 function parseItem(ctx: Ctx, value: unknown, path: string): Item | undefined {
-  const o = readObject(ctx, value, path, ['id', 'name', 'category', 'provisional', 'stats', 'keywords', 'upgradeSlots']);
+  const o = readObject(ctx, value, path, ['id', 'name', 'kind', 'category', 'mastery', 'provisional', 'stats', 'keywords', 'upgradeSlots']);
   if (!o) return undefined;
   const item: Item = {
     id: readString(ctx, o, 'id', path),
     name: readString(ctx, o, 'name', path),
+    kind: readEnum(ctx, o, 'kind', path, ITEM_KINDS),
     category: readString(ctx, o, 'category', path),
     stats: parseModifiers(ctx, o['stats'], child(path, 'stats')),
     keywords: readArray(ctx, o, 'keywords', path, (v, p) => parseKeywordRef(ctx, v, p)),
     upgradeSlots: readArray(ctx, o, 'upgradeSlots', path, (v, p) => parseSlot(ctx, v, p)),
   };
+  const mastery = readOptionalString(ctx, o, 'mastery', path);
+  if (item.kind === 'weapon' && mastery === undefined) report(ctx, child(path, 'mastery'), 'obligatoire pour une arme');
+  if (item.kind !== 'weapon' && mastery !== undefined) report(ctx, child(path, 'mastery'), 'réservé aux armes');
+  if (mastery !== undefined) item.mastery = mastery;
   setProvisional(ctx, o, path, item);
   return item;
 }
 
-const BASE_STAT_KEYS = ['meleeAttack', 'rangedAttack', 'range', 'defense', 'speed', 'morale', 'soldiers'] as const;
+const SQUAD_STAT_KEYS = ['meleeAttack', 'rangedAttack', 'range', 'defense', 'speed', 'soldiers'] as const;
 
-function parseBaseStats(ctx: Ctx, value: unknown, path: string): BaseStats {
-  const o = readObject(ctx, value, path, BASE_STAT_KEYS) ?? {};
-  const read = (key: (typeof BASE_STAT_KEYS)[number], min: number): number => readNumber(ctx, o, key, path, { integer: true, min });
+function readSquadStats(ctx: Ctx, o: Record<string, unknown>, path: string): SquadStats {
+  const read = (key: (typeof SQUAD_STAT_KEYS)[number], min: number): number => readNumber(ctx, o, key, path, { integer: true, min });
   return {
     meleeAttack: read('meleeAttack', 0),
     rangedAttack: read('rangedAttack', 0),
     range: read('range', 0),
     defense: read('defense', 0),
     speed: read('speed', 0),
-    morale: read('morale', 1),
     soldiers: read('soldiers', 1),
   };
+}
+
+function parseSquadBase(ctx: Ctx, value: unknown, path: string): SquadBase {
+  const o = readObject(ctx, value, path, ['provisional', 'stats', 'slots']) ?? {};
+  const statsPath = child(path, 'stats');
+  const squad: SquadBase = {
+    stats: readSquadStats(ctx, readObject(ctx, o['stats'], statsPath, SQUAD_STAT_KEYS) ?? {}, statsPath),
+    slots: readArray(ctx, o, 'slots', path, (v, p) => parseSlot(ctx, v, p)),
+  };
+  setProvisional(ctx, o, path, squad);
+  return squad;
+}
+
+function parseEnemyStats(ctx: Ctx, value: unknown, path: string): EnemyStats {
+  const o = readObject(ctx, value, path, [...SQUAD_STAT_KEYS, 'morale']) ?? {};
+  return { ...readSquadStats(ctx, o, path), morale: readNumber(ctx, o, 'morale', path, POSITIVE) };
 }
 
 function parseEquipment(ctx: Ctx, value: unknown, path: string): Record<string, string> {
@@ -239,19 +301,31 @@ function parseEquipment(ctx: Ctx, value: unknown, path: string): Record<string, 
   return equipment;
 }
 
-function parseUnitType(ctx: Ctx, value: unknown, path: string): UnitType | undefined {
-  const o = readObject(ctx, value, path, ['id', 'name', 'provisional', 'stats', 'slots', 'defaultEquipment', 'keywords']);
+function parseTemplate(ctx: Ctx, value: unknown, path: string): SquadTemplate | undefined {
+  const o = readObject(ctx, value, path, ['id', 'name', 'provisional', 'equipment', 'masteries']);
   if (!o) return undefined;
-  const unit: UnitType = {
+  const template: SquadTemplate = {
     id: readString(ctx, o, 'id', path),
     name: readString(ctx, o, 'name', path),
-    stats: parseBaseStats(ctx, o['stats'], child(path, 'stats')),
-    slots: readArray(ctx, o, 'slots', path, (v, p) => parseSlot(ctx, v, p)),
-    defaultEquipment: parseEquipment(ctx, o['defaultEquipment'], child(path, 'defaultEquipment')),
-    keywords: readArray(ctx, o, 'keywords', path, (v, p) => parseKeywordRef(ctx, v, p)),
+    equipment: parseEquipment(ctx, o['equipment'], child(path, 'equipment')),
+    masteries: readStrings(ctx, o, 'masteries', path),
   };
-  setProvisional(ctx, o, path, unit);
-  return unit;
+  setProvisional(ctx, o, path, template);
+  return template;
+}
+
+function parseEnemy(ctx: Ctx, value: unknown, path: string): Enemy | undefined {
+  const o = readObject(ctx, value, path, ['id', 'name', 'provisional', 'stats', 'keywords', 'posture']);
+  if (!o) return undefined;
+  const enemy: Enemy = {
+    id: readString(ctx, o, 'id', path),
+    name: readString(ctx, o, 'name', path),
+    stats: parseEnemyStats(ctx, o['stats'], child(path, 'stats')),
+    keywords: readArray(ctx, o, 'keywords', path, (v, p) => parseKeywordRef(ctx, v, p)),
+    posture: readString(ctx, o, 'posture', path),
+  };
+  setProvisional(ctx, o, path, enemy);
+  return enemy;
 }
 
 function parsePosture(ctx: Ctx, value: unknown, path: string): Posture | undefined {
@@ -263,13 +337,17 @@ function parsePosture(ctx: Ctx, value: unknown, path: string): Posture | undefin
     description: readString(ctx, o, 'description', path),
     movement: readEnum(ctx, o, 'movement', path, MOVEMENTS),
   };
-  const unlockedBy = readOptionalString(ctx, o, 'unlockedBy', path);
-  if (unlockedBy !== undefined) posture.unlockedBy = unlockedBy;
+  setUnlockedBy(ctx, o, path, posture);
   return posture;
 }
 
+function parseOrderSlots(ctx: Ctx, value: unknown, path: string): OrderSlots {
+  const o = readObject(ctx, value, path, ['plannedTurnSlots']) ?? {};
+  return { plannedTurnSlots: readArray(ctx, o, 'plannedTurnSlots', path, (v, p) => parseBareSlot(ctx, v, p)) };
+}
+
 function parseFortification(ctx: Ctx, value: unknown, path: string): Fortification | undefined {
-  const o = readObject(ctx, value, path, ['id', 'name', 'kind', 'provisional', 'capacity', 'blocksMovement', 'effects']);
+  const o = readObject(ctx, value, path, ['id', 'name', 'kind', 'provisional', 'capacity', 'occupants', 'blocksMovement', 'structure', 'effects']);
   if (!o) return undefined;
   const fortification: Fortification = {
     id: readString(ctx, o, 'id', path),
@@ -278,10 +356,17 @@ function parseFortification(ctx: Ctx, value: unknown, path: string): Fortificati
     blocksMovement: readBoolean(ctx, o, 'blocksMovement', path),
     effects: readArray(ctx, o, 'effects', path, (v, p) => parseEffect(ctx, v, p)),
   };
+  const occupiable = fortification.kind === 'occupiable';
   const capacity = readOptionalNumber(ctx, o, 'capacity', path, POSITIVE);
-  if (fortification.kind === 'occupiable' && capacity === undefined) report(ctx, child(path, 'capacity'), 'obligatoire pour une fortification à occuper');
-  if (fortification.kind === 'terrain' && capacity !== undefined) report(ctx, child(path, 'capacity'), 'réservé aux fortifications à occuper');
+  if (occupiable && capacity === undefined) report(ctx, child(path, 'capacity'), 'obligatoire pour une fortification à occuper');
+  if (!occupiable && capacity !== undefined) report(ctx, child(path, 'capacity'), 'réservé aux fortifications à occuper');
   if (capacity !== undefined) fortification.capacity = capacity;
+  if ('occupants' in o) {
+    if (!occupiable) report(ctx, child(path, 'occupants'), 'réservé aux fortifications à occuper');
+    fortification.occupants = readEnum(ctx, o, 'occupants', path, OCCUPANTS);
+  }
+  const structure = readOptionalNumber(ctx, o, 'structure', path, POSITIVE);
+  if (structure !== undefined) fortification.structure = structure;
   setProvisional(ctx, o, path, fortification);
   return fortification;
 }
@@ -308,13 +393,12 @@ function parseBattlefield(ctx: Ctx, value: unknown, path: string): Battlefield {
 }
 
 function parseWave(ctx: Ctx, value: unknown, path: string): Wave | undefined {
-  const o = readObject(ctx, value, path, ['id', 'index', 'isFinal', 'provisional', 'announcement', 'arrivals']);
+  const o = readObject(ctx, value, path, ['id', 'index', 'kind', 'provisional', 'arrivals']);
   if (!o) return undefined;
   const wave: Wave = {
     id: readString(ctx, o, 'id', path),
     index: readNumber(ctx, o, 'index', path, POSITIVE),
-    isFinal: readBoolean(ctx, o, 'isFinal', path),
-    announcement: readEnum(ctx, o, 'announcement', path, ANNOUNCEMENTS),
+    kind: readEnum(ctx, o, 'kind', path, BATTLE_KINDS),
     arrivals: readArray(ctx, o, 'arrivals', path, (v, p) => {
       const a = readObject(ctx, v, p, ['turn', 'enemy', 'count', 'row']);
       if (!a) return undefined;
@@ -338,11 +422,13 @@ function readSection<K extends string>(ctx: Ctx, o: Record<string, unknown>, key
 }
 
 function parseConfig(ctx: Ctx, value: unknown, path: string): BattleConfig {
-  const keys = ['provisional', 'damage', 'morale', 'wounded', 'fallen', 'field', 'range', 'flank', 'pushback', 'passingFire', 'encirclement', 'maxTurns'];
+  const keys = [
+    'provisional', 'damage', 'morale', 'wounded', 'mastery', 'fireArrows', 'fallen', 'field',
+    'flank', 'pushback', 'passingFire', 'encirclement', 'waves', 'finalBattle', 'maxTurns',
+  ];
   const o = readObject(ctx, value, path, keys) ?? {};
   const damageObj = readObject(ctx, o['damage'], child(path, 'damage'), ['formula', 'minimum', 'percentPerDefense']) ?? {};
-  const moraleObj = readObject(ctx, o['morale'], child(path, 'morale'), ['shakenBelow', 'waveringBelow', 'efficiency']) ?? {};
-  const rangeObj = readObject(ctx, o['range'], child(path, 'range'), ['metric']) ?? {};
+  const moraleObj = readObject(ctx, o['morale'], child(path, 'morale'), ['base', 'shakenBelow', 'waveringBelow', 'efficiency']) ?? {};
   const dPath = child(path, 'damage');
   const mPath = child(path, 'morale');
   const config: BattleConfig = {
@@ -352,21 +438,26 @@ function parseConfig(ctx: Ctx, value: unknown, path: string): BattleConfig {
       percentPerDefense: readNumber(ctx, damageObj, 'percentPerDefense', dPath, FRACTION),
     },
     morale: {
+      base: readNumber(ctx, moraleObj, 'base', mPath, POSITIVE),
       shakenBelow: readNumber(ctx, moraleObj, 'shakenBelow', mPath, FRACTION),
       waveringBelow: readNumber(ctx, moraleObj, 'waveringBelow', mPath, FRACTION),
       efficiency: readSection(ctx, moraleObj, 'efficiency', mPath, { steady: FRACTION, shaken: FRACTION, wavering: FRACTION }),
     },
-    wounded: readSection(ctx, o, 'wounded', path, { powerFloor: FRACTION }),
+    wounded: readSection(ctx, o, 'wounded', path, { attackFloor: FRACTION }),
+    mastery: readSection(ctx, o, 'mastery', path, { unmasteredAttackPenalty: NATURAL }),
+    fireArrows: readSection(ctx, o, 'fireArrows', path, { minTargetDefense: NATURAL }),
     fallen: readSection(ctx, o, 'fallen', path, { turnsHeldBeforeDeath: POSITIVE }),
-    field: readSection(ctx, o, 'field', path, { maxSquadsPerSide: POSITIVE }),
-    range: { metric: readEnum(ctx, rangeObj, 'metric', child(path, 'range'), RANGE_METRICS) },
+    field: readSection(ctx, o, 'field', path, { maxPlayerSquads: POSITIVE }),
     flank: readSection(ctx, o, 'flank', path, { attackBonus: NATURAL, extraMoraleLoss: NATURAL }),
     pushback: readSection(ctx, o, 'pushback', path, { damageThreshold: POSITIVE }),
     passingFire: readSection(ctx, o, 'passingFire', path, { damageFactor: FRACTION }),
     encirclement: readSection(ctx, o, 'encirclement', path, { extraLosses: NATURAL }),
+    waves: readSection(ctx, o, 'waves', path, { fullyAnnounced: NATURAL }),
+    finalBattle: readSection(ctx, o, 'finalBattle', path, { ritualTurns: POSITIVE }),
     maxTurns: readNumber(ctx, o, 'maxTurns', path, POSITIVE),
   };
   if (config.morale.waveringBelow > config.morale.shakenBelow) report(ctx, mPath, 'waveringBelow doit être ≤ shakenBelow');
+  if (config.finalBattle.ritualTurns > config.maxTurns) report(ctx, child(path, 'finalBattle'), 'ritualTurns doit être ≤ maxTurns');
   setProvisional(ctx, o, path, config);
   return config;
 }
@@ -378,10 +469,14 @@ export function parseStructure(ctx: Ctx, raw: RawGameData): GameData {
   return {
     unlocks: list('unlocks', parseUnlock),
     keywords: list('keywords', parseKeyword),
+    masteries: list('masteries', parseMastery),
+    consumables: list('consumables', parseConsumable),
     items: list('items', parseItem),
-    units: list('units', parseUnitType),
-    enemies: list('enemies', parseUnitType),
+    squad: parseSquadBase(ctx, raw.squad, DATA_FILES.squad),
+    templates: list('templates', parseTemplate),
+    enemies: list('enemies', parseEnemy),
     postures: list('postures', parsePosture),
+    orders: parseOrderSlots(ctx, raw.orders, DATA_FILES.orders),
     fortifications: list('fortifications', parseFortification),
     battlefield: parseBattlefield(ctx, raw.battlefield, DATA_FILES.battlefield),
     waves: list('waves', parseWave),

@@ -42,40 +42,63 @@ Tout repose sur une règle : **tout est emplacement, et les emplacements se déb
 - Deux jauges : le **moral**, qui baisse en premier, avec des paliers d'efficacité (ferme, ébranlé, vacillant) et la déroute à zéro ; les **effectifs**, en valides, blessés et morts (rares).
 - La perte d'effectifs affaiblit modérément, sans effondrer.
 - Un **sergent** émerge avec l'expérience. Les héros sont des unités spéciales à part.
-- Unités de départ héritées de la version plateau : épéistes, archers (portée 3), piquiers (soutien), cavaliers, catapultes. Leurs chiffres sont à recalibrer.
+- **Pas de type d'escouade figé** : épéistes, archers et piquiers sont des compositions de départ, c'est-à-dire un équipement et des maîtrises. Une escouade peut changer d'arme et apprendre de nouvelles maîtrises par l'entraînement au campement. Elle peut porter une arme qu'elle ne maîtrise pas, mais sans les capacités spéciales de l'arme (le soutien de la pique, par exemple) et avec un malus d'attaque. Cavaliers et catapultes viendront plus tard ; leurs chiffres sont à calibrer.
 
 ### Dégâts
 
 - **Dégâts = Attaque − Défense, avec un minimum.** La formule vit dans une seule fonction du code pour pouvoir passer au pourcentage si besoin.
-- Mots-clés : *Perce-armure X* (ignore X de défense), *Feu* (dégâts au tour suivant et perte de moral), *Charge* (bonus après une course suffisante).
+- Mots-clés : *Perce-armure X* (ignore X de défense), *Feu* (perte de moral à l'impact, puis brûlure : des dégâts fixes qui ignorent la défense ; une escouade déjà en feu voit sa brûlure rafraîchie, sans cumul ; si la cible se tient sur une fortification, la fortification brûle aussi), *Charge* (bonus après une course suffisante).
 
 ### La bataille
 
 - **Tours animés**, avec accélération, ralentissement et pause. Ordre des phases : mouvement, tir, mêlée.
-- **Terrain asymétrique** : le campement fortifié d'un côté, le portail de l'autre. Il grandit avec le campement.
+- **Terrain asymétrique**, sur une grille hexagonale : le campement fortifié d'un côté, le portail de l'autre. Il grandit avec le campement.
 - **L'ennemi arrive par vagues** depuis le portail, selon un calendrier annoncé au moins en partie.
-- **Postures données au déploiement** : *Tenir*, *Avancer*, *Contre-charger*, puis d'autres débloquées (*Rallier*, *Retraite ordonnée*…).
-- **Mouvement** : par vagues de vitesse (les rapides d'abord). En *Avancer*, l'escouade va tout droit ; si un ennemi se trouve sur sa rangée pendant le mouvement, elle dévie vers le plus proche.
+- **Les ordres** se donnent au déploiement, comme le ferait un commandant. Leur
+  finesse se déplie avec l'expérience du héros :
+  1. **Ordres généraux** : au début, une posture pour toute la bataille
+     (*Tenir*, *Avancer*, *Contre-charger*…, puis d'autres débloquées :
+     *Charger*, *Rallier*, *Retraite ordonnée*…). En *Avancer*, l'escouade va
+     tout droit sur sa rangée ; si un ennemi s'y trouve, elle dévie vers le
+     plus proche.
+  2. **Premier tour planifié** : on fixe exactement le premier tour (trajet
+     dessiné case par case, arrêts, tirs), puis l'escouade reprend sa posture.
+  3. **Tours planifiés supplémentaires** : deuxième tour, troisième tour…
+  4. **Ordres conditionnels**, en petit nombre par escouade (par exemple trois
+     pour les plus grosses unités) : « si tu es chargé, recule ».
+- **Quand le plan se heurte à la réalité** (chemin barré, aucune cible à
+  portée), l'escouade applique une **réaction par défaut**, connue d'avance.
+  Le dépliage permet de la modifier.
+- **Mouvements simultanés** : toutes les escouades exécutent leur tour en même
+  temps, et des règles fixes tranchent les conflits (même case visée, trajets
+  qui se croisent). La bataille reste entièrement déterministe.
 - **Tir de passage** : traverser la zone d'un tireur coûte des dégâts sans arrêter le mouvement. Les catapultes frappent une zone fixe choisie au déploiement.
-- **Mêlée simultanée** : les deux camps subissent leurs dégâts en même temps. Soutien des piquiers placés derrière, recul en cas de gros dégâts.
+- **Mêlée simultanée** : les deux camps subissent leurs dégâts en même temps. Soutien d'une pique maîtrisée placée derrière (la pique aura plus tard un effet propre contre les cavaliers), recul en cas de gros dégâts.
 - **Flanc** : bonus d'attaque et perte de moral supplémentaire pour l'escouade prise de côté.
-- **Choix en cours de bataille** (déborder, départager deux cibles) : seulement si le héros est présent, avec un mode commandement activable à tout moment ; sinon une règle par défaut s'applique.
+- **En cours de bataille**, le héros, s'il est présent, peut modifier des
+  ordres grâce à ses leviers.
+- **Les ennemis** ont un comportement simple et fixe par type, connu du joueur.
+- **Les consommables** (la pâte des flèches enflammées…) sont portés par les
+  escouades. Par défaut, le stock est réparti à parts égales entre les
+  escouades capables de s'en servir. Avant chaque bataille, on peut changer
+  cette répartition, qui est ensuite conservée. Ce qui n'est pas utilisé reste
+  à l'escouade. Si l'escouade est détruite, sa part est perdue.
 - **Celui qui tient le terrain relève les siens** : les soldats tombés restent sur leur case ; repris à temps, ils reviennent blessés ; si l'ennemi tient la case plusieurs tours, ils meurent. L'encerclement aggrave les pertes.
 
 ### Équipement et développement
 
-- **Emplacements fixes** : armes, armure (casque éventuel), monture, accessoires. Chacun a des **sous-emplacements d'amélioration** (flèches enflammées sur l'arc, caparaçon sur le cheval).
+- **Emplacements fixes** : armes, armure (casque éventuel), monture, accessoires. Chacun a des **sous-emplacements d'amélioration** (flèches enflammées sur l'arc, qui consomment de la pâte incendiaire ; caparaçon sur le cheval).
 - **Système de mains** : deux mains par défaut, plus avec des mutations. Arme à distance puis mêlée ; arme d'allonge puis arme courte ; deux armes = attaque modestement accrue sans défense ; épée et bouclier = défense.
 - Certains objets ralentissent (plates, caparaçon). La rareté des matériaux limite l'équipement lourd.
-- **On apprend ce qu'on pratique** : le combat améliore ce qu'on a fait au combat ; l'entraînement au campement permet d'apprendre le reste.
+- **On apprend ce qu'on pratique** : le combat améliore ce qu'on a fait au combat ; l'entraînement au campement permet d'apprendre le reste, dont de nouvelles maîtrises d'armes.
 - **Traits vécus**, surtout positifs, nés de ce qui est arrivé (*Aguerris au tir*, *Craintifs*).
-- **L'équipement change les chiffres, le vécu change le comportement.**
+- **L'équipement et les maîtrises changent les chiffres et les capacités, le vécu change le comportement.**
 
 ### Le campement
 
 - Les escouades et les civils reçoivent des **tâches une fois par cycle** : s'entraîner, construire, récolter, se reposer. Le nombre de tâches simultanées se débloque.
 - Les **civils** travaillent, peuvent être recueillis en exploration et entraînés pour devenir soldats. Ils servent aussi de jauge de survie.
-- **Fortifications** : surtout des structures à occuper (une tour amplifie les archers qui la tiennent), du terrain passif (palissades, fossés, haies) et quelques pièges. Un piège échoue selon des conditions lisibles : usage unique, déjoué par les éclaireurs ou les volants.
+- **Fortifications** : surtout des structures à occuper, du terrain passif (palissades, fossés, haies) et quelques pièges. Une **tour**, réservée aux tireurs, augmente leur portée et leur défense ; l'ennemi peut la prendre en mêlée. Une **palissade** bloque le passage jusqu'à sa destruction (points de structure) et protège qui se tient derrière. Les dégâts des fortifications persistent après la bataille et se réparent au campement. Un piège échoue selon des conditions lisibles : usage unique, déjoué par les éclaireurs ou les volants.
 
 ### Le héros
 
@@ -100,7 +123,7 @@ Tout repose sur une règle : **tout est emplacement, et les emplacements se déb
 
 On gagne en **fermant le portail**, on perd quand **il n'y a plus de civils** ou quand **le héros meurt**.
 
-- **Victoire** : l'exploration révèle le moyen de sceller le portail (artefact, rituel, peuple qui sait faire). La fermeture exige de tenir une dernière bataille, la plus rude, pendant le rituel. Thématiquement, le prince ne reconquiert rien : il fait son deuil et choisit de vivre ici.
+- **Victoire** : l'exploration révèle le moyen de sceller le portail (artefact, rituel, peuple qui sait faire). La fermeture exige de tenir une dernière bataille, la plus rude, pendant le rituel : après les quatre vagues, une cinquième bataille où il faut tenir un nombre de tours fixé. Thématiquement, le prince ne reconquiert rien : il fait son deuil et choisit de vivre ici.
 - **Défaite immédiate** : un ennemi qui atteint le cœur du campement tue des civils ; quand il n'en reste plus, la partie est perdue.
 - **Le héros** : tombé sur sa case, il est sauvé blessé et immobilisé quelques cycles si un allié reprend la case à temps ; il meurt si l'ennemi la tient trop longtemps, et la partie s'arrête.
 - **Difficulté** : escalade fixe des vagues pour commencer.
@@ -143,9 +166,9 @@ Le premier prototype est une **tranche complète simplifiée**, jouable du débu
 
 - **Exploration** : carte d'environ 15 × 15 cases faite à la main, héros case par case, une dizaine de lieux, quelques petits butins, trois ou quatre rencontres à choix.
 - **Campement** : quelques civils, trois tâches (s'entraîner, construire, récolter), deux ou trois ressources, entretien lié au moral.
-- **Escouades** : épéistes, archers, piquiers ; une arme et une armure ; un sous-emplacement (flèches enflammées) ; postures *Tenir* et *Avancer* ; moral et blessés.
+- **Escouades** : trois compositions de départ (épéistes, archers, piquiers) ; une arme et une armure ; un sous-emplacement (flèches enflammées) ; ordres : un premier tour planifié, puis les postures *Tenir* et *Avancer* ; moral et blessés.
 - **Bataille** : terrain fixe, une palissade et une tour à occuper, tours animés, ennemis sortant du portail, règle « celui qui tient le terrain relève les siens », journal de bataille.
-- **Partie** : quatre vagues, un objet à trouver pour fermer le portail, une bataille finale.
+- **Partie** : quatre vagues, un objet à trouver pour fermer le portail, puis une cinquième bataille, finale, pendant le rituel de fermeture.
 - **Un seul vrai dépliage** pour tester la sensation : rencontrer un forgeron débloque les sous-emplacements d'amélioration.
 - **Graphismes et son provisoires** : formes et icônes simples.
 

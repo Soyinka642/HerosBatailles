@@ -8,7 +8,7 @@
   {
     "id": "avancer",
     "name": "Avancer",
-    "description": "L'escouade va tout droit ; si un ennemi se trouve sur sa rangée, elle dévie vers le plus proche.",
+    "description": "L'escouade va tout droit sur sa rangée ; si un ennemi s'y trouve, elle dévie vers le plus proche. Un tireur s'arrête dès qu'une cible est à portée.",
     "movement": "advance"
   }
 ]
