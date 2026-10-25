@@ -1,0 +1,8 @@
+{
+  "provisional": true,
+  "stats": { "meleeAttack": 2, "rangedAttack": 0, "range": 0, "defense": 0, "speed": 2, "soldiers": 20 },
+  "slots": [
+    { "id": "arme", "accepts": ["epee", "arc", "pique"] },
+    { "id": "armure", "accepts": ["armure"] }
+  ]
+}

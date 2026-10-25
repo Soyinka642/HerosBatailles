@@ -2,17 +2,21 @@
   "provisional": true,
   "damage": { "formula": "subtraction", "minimum": 1, "percentPerDefense": 0.1 },
   "morale": {
+    "base": 20,
     "shakenBelow": 0.66,
     "waveringBelow": 0.33,
-    "efficiency": { "steady": 1, "shaken": 0.8, "wavering": 0.6 }
+    "efficiency": { "steady": 1, "shaken": 0.9, "wavering": 0.8 }
   },
-  "wounded": { "powerFloor": 0.5 },
+  "wounded": { "attackFloor": 0.5 },
+  "mastery": { "unmasteredAttackPenalty": 2 },
+  "fireArrows": { "minTargetDefense": 3 },
   "fallen": { "turnsHeldBeforeDeath": 2 },
-  "field": { "maxSquadsPerSide": 4 },
-  "range": { "metric": "manhattan" },
-  "flank": { "attackBonus": 1, "extraMoraleLoss": 1 },
-  "pushback": { "damageThreshold": 4 },
+  "field": { "maxPlayerSquads": 4 },
+  "flank": { "attackBonus": 2, "extraMoraleLoss": 2 },
+  "pushback": { "damageThreshold": 6 },
   "passingFire": { "damageFactor": 0.5 },
   "encirclement": { "extraLosses": 1 },
+  "waves": { "fullyAnnounced": 2 },
+  "finalBattle": { "ritualTurns": 12 },
   "maxTurns": 30
 }

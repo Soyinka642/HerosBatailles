@@ -3,10 +3,14 @@
 
 import unlocks from '../../data/unlocks.json';
 import keywords from '../../data/keywords.json';
+import masteries from '../../data/masteries.json';
+import consumables from '../../data/consumables.json';
 import items from '../../data/items.json';
-import units from '../../data/units.json';
+import squad from '../../data/squad.json';
+import templates from '../../data/templates.json';
 import enemies from '../../data/enemies.json';
 import postures from '../../data/postures.json';
+import orders from '../../data/orders.json';
 import fortifications from '../../data/fortifications.json';
 import battlefield from '../../data/battlefield.json';
 import waves from '../../data/waves.json';
@@ -17,7 +21,22 @@ import { checkReferences } from './references';
 import type { GameData } from './types';
 
 /** Contenu brut livré avec le jeu. */
-export const BUNDLED_DATA: RawGameData = { unlocks, keywords, items, units, enemies, postures, fortifications, battlefield, waves, config };
+export const BUNDLED_DATA: RawGameData = {
+  unlocks,
+  keywords,
+  masteries,
+  consumables,
+  items,
+  squad,
+  templates,
+  enemies,
+  postures,
+  orders,
+  fortifications,
+  battlefield,
+  waves,
+  config,
+};
 
 export class DataError extends Error {
   constructor(readonly issues: readonly string[]) {

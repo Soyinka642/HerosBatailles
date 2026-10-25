@@ -2,10 +2,18 @@
   {
     "id": "palissade",
     "name": "Palissade",
-    "kind": "terrain",
+    "kind": "barrier",
     "provisional": true,
     "blocksMovement": true,
-    "effects": []
+    "structure": 24,
+    "effects": [
+      {
+        "trigger": "whileBehind",
+        "condition": { "kind": "incomingRanged" },
+        "target": "self",
+        "action": { "kind": "defenseBonus", "amount": 2 }
+      }
+    ]
   },
   {
     "id": "tour",
@@ -13,14 +21,12 @@
     "kind": "occupiable",
     "provisional": true,
     "capacity": 1,
+    "occupants": "ranged",
     "blocksMovement": false,
+    "structure": 30,
     "effects": [
-      {
-        "trigger": "whileOccupying",
-        "condition": { "kind": "hasRangedAttack" },
-        "target": "self",
-        "action": { "kind": "rangeBonus", "amount": 1 }
-      }
+      { "trigger": "whileOccupying", "target": "self", "action": { "kind": "rangeBonus", "amount": 1 } },
+      { "trigger": "whileOccupying", "target": "self", "action": { "kind": "defenseBonus", "amount": 2 } }
     ]
   }
 ]

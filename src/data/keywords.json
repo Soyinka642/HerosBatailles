@@ -11,25 +11,34 @@
   {
     "id": "feu",
     "name": "Feu",
-    "description": "La cible brûle : dégâts au tour suivant et perte de moral.",
+    "description": "À l'impact, la cible perd du moral ; puis elle brûle (dégâts fixes qui ignorent la défense). Une cible déjà en feu voit sa brûlure rafraîchie, sans cumul. Si elle se tient sur une fortification, la fortification brûle aussi.",
     "hasParameter": false,
     "effects": [
-      { "trigger": "onHit", "target": "attackTarget", "action": { "kind": "delayedDamage", "amount": 2, "delayTurns": 1 } },
-      { "trigger": "onHit", "target": "attackTarget", "action": { "kind": "moraleLoss", "amount": 1 } }
+      { "trigger": "onHit", "target": "attackTarget", "action": { "kind": "moraleLoss", "amount": 2 } },
+      { "trigger": "onHit", "target": "attackTarget", "action": { "kind": "burn", "amount": 2, "turns": 2 } }
     ]
   },
   {
     "id": "charge",
     "name": "Charge",
-    "description": "Bonus d'attaque après une course suffisante.",
+    "description": "Bonus d'attaque après une course suffisante en ligne droite.",
     "hasParameter": false,
     "effects": [
       {
         "trigger": "onAttack",
-        "condition": { "kind": "movedAtLeast", "cells": 3 },
+        "condition": { "kind": "movedStraightAtLeast", "cells": 3 },
         "target": "self",
         "action": { "kind": "attackBonus", "amount": 2 }
       }
+    ]
+  },
+  {
+    "id": "soutien",
+    "name": "Soutien",
+    "description": "L'escouade juste devant, sur la même rangée, gagne de l'attaque en mêlée ; pas si l'escouade qui soutient est elle-même en mêlée.",
+    "hasParameter": false,
+    "effects": [
+      { "trigger": "allyInFrontMelee", "target": "allyInFront", "action": { "kind": "attackBonus", "amount": 2 } }
     ]
   }
 ]

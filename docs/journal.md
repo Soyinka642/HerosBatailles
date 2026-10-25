@@ -88,3 +88,104 @@ Ni les chiffres de la version plateau ni les 17 questions de règles posées en 
 - La palissade bloque-t-elle aussi nos propres escouades ? Le terrain provisoire lui laisse un passage sur la rangée centrale.
 
 **Prochaine étape** : 1.2, moteur de bataille sans affichage, en commençant par trancher les règles ci-dessus.
+
+## 2026-10-25 — Lot 1.2a : formats révisés et chiffres provisoires
+
+### Ce qui a été fait
+
+- Formats de données révisés selon les décisions de l'auteur (elles remplacent les choix provisoires du lot 1.1). Pas encore de moteur de bataille.
+- Fichiers de `src/data/` :
+  - supprimé : `units.json` (plus de types d'escouades) ;
+  - nouveaux : `squad.json` (stats de base communes et emplacements), `masteries.json` (maîtrises de l'épée, de l'arc, de la pique), `templates.json` (modèles de départ : épéistes, archers, piquiers), `consumables.json` (pâte incendiaire), `orders.json` (emplacement « premier-tour ») ;
+  - révisés : `items.json` (`kind`, `mastery` ; masse retirée ; flèches enflammées qui consomment de la pâte), `enemies.json` (stats directes, mots-clés, posture), `keywords.json` (Feu en brûlure, Soutien, Charge en ligne droite), `fortifications.json` (structure, occupants, bonus de défense), `battlefield.json` (portail élargi aux 5 rangées), `waves.json` (4 vagues + bataille finale), `config.json`, `postures.json` (description d'Avancer).
+- Types : `src/engine/data/types.ts` révisé ; nouveau `src/engine/battle/types.ts` pour ce que le joueur décide (ordre, tour planifié, consommables portés, modificateurs de moral), qui n'est pas du contenu.
+- Validation (`parse.ts`, `references.ts`) adaptée : maîtrise obligatoire pour une arme et réservée aux armes ; maîtrises, consommables, postures des ennemis et emplacements de l'équipement de départ vérifiés ; une seule bataille finale, en dernier ; rituel pas plus long que `maxTurns` ; occupants et capacité réservés aux fortifications à occuper ; ids uniques dans tous les fichiers, y compris les emplacements de tours planifiés.
+- Conception mise à jour : escouades sans type figé, maîtrises, Feu, grille hexagonale, nouveau texte des ordres, ennemis, consommables, tour, palissade, bataille finale, et la phrase « L'équipement et les maîtrises changent les chiffres et les capacités, le vécu change le comportement ».
+- Tests : 52, dont 29 qui vérifient que des données invalides sont rejetées avec un message précis. `typecheck`, `test` et `build` passent ; le jeu se lance sans erreur dans la console.
+
+### Décisions de règle de ce lot
+
+**Grille et terrain**
+1. Grille hexagonale « pointe en haut », coordonnées décalées `{ col, row }` (« odd-r » : rangées impaires décalées d'un demi-hexagone vers l'est). Une rangée est une ligne droite du campement (ouest) au portail (est). Distance = nombre de pas d'hexagone (le moteur passera par les coordonnées cubiques, dans une seule fonction).
+2. « Devant » et « derrière » = voisins est et ouest sur la même rangée.
+3. Terrain 12 × 5 inchangé ; portail élargi aux 5 rangées de la colonne 11.
+
+**Escouades, équipement, maîtrises**
+4. Pas de type d'escouade figé : épéistes, archers et piquiers sont des modèles de départ (un équipement et des maîtrises).
+5. Chiffres = stats de base communes + bonus de l'équipement. Sans arme de mêlée, l'escouade se bat à mains nues (mêlée de base 2).
+6. Arme non maîtrisée : pas de capacités spéciales et malus d'attaque réglable (`mastery.unmasteredAttackPenalty`, 2).
+7. Les flèches enflammées n'exigent pas la maîtrise de l'arc (les capacités d'une amélioration ne dépendent pas de la maîtrise).
+8. Armures : cuir, mailles, plates (les plates ralentissent).
+
+**Moral et dégâts**
+9. Dégâts = attaque − défense, minimum 1, arrondis au plus proche, sur les dégâts finaux.
+10. Les dégâts touchent d'abord le moral. Une fois l'escouade ébranlée, chaque point de dégâts retire 1 de moral et fait 1 blessé.
+11. Les blessés réduisent l'attaque en proportion des valides, avec un plancher réglable (`wounded.attackFloor`, 0,5).
+12. Moral maximum = base commune (`morale.base`, 20) + modificateurs de l'escouade ; aucun modificateur au prototype.
+
+**Mots-clés**
+13. Feu : perte de moral à l'impact (2), puis brûlure de 2 dégâts fixes, sans défense, au début de chacun des 2 tours suivants. Une escouade déjà en feu voit sa brûlure rafraîchie, sans cumul.
+14. Feu sur une fortification : les deux brûlent (la fortification perd de la structure et l'escouade abritée prend la brûlure).
+15. Charge : +2 en mêlée après au moins 3 cases en ligne droite ; réservée aux cavaliers, portée par personne au prototype.
+16. Soutien (pique maîtrisée) : +2 en attaque à l'escouade juste devant quand elle combat en mêlée ; un piquier lui-même en mêlée ne soutient pas.
+17. Perce-armure 2 : porté par les brutes du portail.
+
+**Fortifications**
+18. Tour : réservée aux tireurs (capacité 1), portée +1 et défense +2, 30 points de structure. L'ennemi peut la prendre en mêlée : l'occupant est attaqué normalement ; s'il part en déroute, l'attaquant entre ; des tireurs ennemis peuvent ensuite l'occuper.
+19. Palissade : bloque le passage (des deux camps) jusqu'à sa destruction (24 points de structure). L'escouade sur la case juste derrière, côté campement, a +2 de défense contre les tirs ; pas de mêlée à travers la palissade.
+20. Les dégâts des fortifications persistent après la bataille (réparation au campement, lot 1.5).
+
+**Partie et vagues**
+21. Quatre vagues, puis une cinquième bataille, finale, pendant le rituel de fermeture : il faut tenir `finalBattle.ritualTurns` tours (12) ; les règles habituelles de défaite s'appliquent.
+22. Arrivées échelonnées sur plusieurs tours. Les `waves.fullyAnnounced` (2) premières batailles sont annoncées en entier ; les suivantes en partie : la liste des ennemis, sans les tours d'arrivée.
+
+**Ordres**
+23. Un ordre = une liste de tours planifiés, puis une posture. La profondeur autorisée passe par le mécanisme unique de déblocage (`orders.json`). Pas de format pour les ordres conditionnels.
+24. Le prototype contient un premier tour planifié, disponible dès le début de la partie (le forgeron reste le seul dépliage).
+25. Tour planifié = une liste de pas (au plus la vitesse) : une case voisine de la précédente, ou « wait » (rester sur place), n'importe où dans le trajet. Au prototype, il ne sert qu'au placement : il n'a pas de tir, et la phase de tir de ce tour suit la règle par défaut.
+26. Vérifications au déploiement (lot 1.2) : pas plus de pas que la vitesse réelle ; chaque case voisine de la précédente, sur le terrain, ni palissade ni case d'un allié qui ne bouge pas ; la tour seulement pour des tireurs.
+27. Postures du prototype : Tenir et Avancer. En Avancer, un tireur s'arrête dès qu'une cible est à portée au début d'un pas.
+28. Déviation d'Avancer : vers l'ennemi le plus proche ; à égalité, celui de la rangée la plus au nord, puis le plus à l'ouest.
+29. Réaction par défaut quand le plan est contrarié (chemin barré, conflit perdu, engagement) : l'escouade s'arrête sur sa case pour la fin du tour, combat ce qu'elle a au contact ou à portée, frappe l'obstacle hostile s'il est destructible (les ennemis frappent la palissade), et reprend sa posture au tour suivant.
+
+**Ennemis**
+30. Comportement fixe par type, connu du joueur : une posture de `postures.json` (Avancer pour tous au prototype). Format simplifié : stats directes, mots-clés, noms provisoires.
+
+**Consommables**
+31. Les consommables sont portés par les escouades. Chaque volée enflammée consomme une unité de pâte incendiaire ; sans pâte, la volée part normale.
+32. Par défaut, le stock non attribué est réparti à parts égales entre les escouades capables de s'en servir ; le reste de la division reste au campement. La répartition modifiée par le joueur est conservée ; ce qui n'est pas utilisé reste à l'escouade.
+33. Seule une escouade détruite perd sa part ; une escouade en déroute la garde.
+34. Règle par défaut des flèches enflammées : seulement sur une cible de défense au moins égale à `fireArrows.minTargetDefense` (3), et pas si elle brûle déjà.
+
+**Mouvements simultanés**
+35. Résolution par pas : au pas k, toutes les escouades de vitesse ≥ k bougent d'une case en même temps ; chacune choisit sa case d'après les positions du début du pas (au tour planifié, la case de son trajet).
+36. Une escouade au contact d'un ennemi au début d'un pas est engagée et ne bouge plus.
+37. Échanges et rotations de cases : personne ne bouge.
+38. Deux escouades qui visent la même case : la plus rapide entre, puis l'ordre de déploiement (nos escouades avant les ennemis ; entre ennemis, l'ordre d'arrivée puis l'ordre de la liste) ; les autres restent sur place.
+39. Entrer dans une case qui se libère au même pas est autorisé ; si l'occupant est bloqué, celui qui le suit l'est aussi, en chaîne.
+40. Ordre d'un pas : intentions, puis annulation des cycles, puis conflits de case, puis chaînes (répétées jusqu'à stabilité), puis application.
+
+### Chiffres provisoires
+
+Tous marqués `"provisional": true`, acceptés comme point de départ et à retravailler en jouant.
+- Base commune : mêlée 2, tir 0, défense 0, vitesse 2, 20 soldats, moral 20.
+- Épée +4 mêlée ; pique +3 mêlée ; arc court +5 tir, portée 3 ; cuir +1, mailles +2, plates +4 défense et −1 vitesse.
+- Fantassins 5/2 (mêlée/défense), moral 16 ; tireurs tir 4, portée 3, défense 1, moral 14 ; brutes 6/3, moral 24, Perce-armure 2.
+- Paliers de moral : ébranlée sous 0,66, vacillante sous 0,33 ; efficacité 1 / 0,9 / 0,8 (adoucie parce que les blessés réduisent aussi l'attaque).
+
+### Questions apparues
+
+- Au prototype, aucun ennemi n'a le Feu : la règle « les deux brûlent » ne jouera que si nos archers tirent sur un ennemi qui a pris la tour.
+- Le Feu ne peut toucher la palissade puisque personne ne se tient dessus (option « case juste derrière »).
+- Le moteur choisira la rangée d'apparition d'un ennemi quand l'arrivée n'en précise pas : règle à fixer en 1.2.
+- La règle de flanc, le recul et l'encerclement sont encore à définir en hexagones (1.2).
+- Le nombre de maîtrises d'une escouade pourrait devenir un emplacement à débloquer ; rien de prévu avant le lot 1.5.
+- Les sprites se choisiront par la paire arme + armure ; il manque un sprite « mains nues » et un archer en plates.
+
+### Idées notées pour plus tard (non codées)
+
+- Un tireur qui ne maîtrise pas son arme pourrait viser la mauvaise case, selon une règle déterministe.
+- Tir planifié (avec le deuxième tour planifié) : la cible serait une escouade ennemie désignée, numérotée par type dans l'ordre de l'annonce (par exemple `brutes-du-portail#1`), et le choix d'utiliser les flèches enflammées ne vaudrait que pour cette cible ; si le tir se reporte sur une autre cible, la règle par défaut décide.
+- La pique aura un effet propre contre les cavaliers.
+
+**Prochaine étape** : 1.2, moteur de bataille sans affichage, avec des tests de scénarios (géométrie hexagonale, formule de dégâts, moral et blessés, pas simultanés, tir, mêlée, journal de bataille).

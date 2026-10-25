@@ -1,0 +1,17 @@
+[
+  {
+    "id": "maitrise-epee",
+    "name": "Maîtrise de l'épée",
+    "description": "L'escouade se bat à l'épée sans malus."
+  },
+  {
+    "id": "maitrise-arc",
+    "name": "Maîtrise de l'arc",
+    "description": "L'escouade tire à l'arc sans malus."
+  },
+  {
+    "id": "maitrise-pique",
+    "name": "Maîtrise de la pique",
+    "description": "L'escouade se bat à la pique sans malus et peut soutenir l'escouade de devant."
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "epeistes",
+    "name": "Épéistes",
+    "provisional": true,
+    "equipment": { "arme": "epee", "armure": "mailles" },
+    "masteries": ["maitrise-epee"]
+  },
+  {
+    "id": "archers",
+    "name": "Archers",
+    "provisional": true,
+    "equipment": { "arme": "arc-court", "armure": "cuir" },
+    "masteries": ["maitrise-arc"]
+  },
+  {
+    "id": "piquiers",
+    "name": "Piquiers",
+    "provisional": true,
+    "equipment": { "arme": "pique", "armure": "cuir" },
+    "masteries": ["maitrise-pique"]
+  }
+]
