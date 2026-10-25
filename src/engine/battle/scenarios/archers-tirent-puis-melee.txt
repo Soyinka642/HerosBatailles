@@ -128,9 +128,13 @@ Mouvement :
 Mêlée :
   Les Archers frappent les Fantassins du portail n°1 : 2 − 2 = 0 × 0,8 (vacillants) × 0,5 (11 blessés sur 20) = 0 → minimum 1 dégât ; moral 4 → 3, blessés 6 → 7.
   Les Fantassins du portail n°1 frappent les Archers : 5 − 1 = 4 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 2,24 → 2 dégâts ; moral 2 → 0, blessés 11 → 13.
-  Les Archers sont en déroute et quittent le terrain.
+  Les Archers sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (2,2).
 Fin du tour :
+  À terre en (2,2) : 6 blessés des Archers
+  Archers en (2,2), moral 0/20, 7 blessés, en fuite
   Fantassins du portail n°1 en (3,2), moral 3/16, 7 blessés
+La bataille est perdue : 6 blessés des Archers restés en (2,2) meurent.
 
 Défaite au tour 14 : toutes nos escouades sont en déroute.
 Incursions au cœur du campement : 0.

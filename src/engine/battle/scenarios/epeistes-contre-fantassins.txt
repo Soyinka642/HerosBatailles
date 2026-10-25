@@ -97,9 +97,10 @@ Mouvement :
 Mêlée :
   Les Épéistes frappent les Fantassins du portail n°1 : 6 − 2 = 4 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 3,06 → 3 dégâts ; moral 1 → 0, blessés 9 → 10.
   Les Fantassins du portail n°1 frappent les Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 1,32 → 1 dégât ; moral 10 → 9, blessés 3 → 4.
-  Les Fantassins du portail n°1 sont en déroute et quittent le terrain.
+  Les Fantassins du portail n°1 sont en déroute : ils fuient vers le portail.
 Fin du tour :
   Épéistes en (3,2), moral 9/20, 4 blessés
+  Fantassins du portail n°1 en (4,2), moral 0/16, 10 blessés, en fuite
 
 Victoire au tour 11 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 0.

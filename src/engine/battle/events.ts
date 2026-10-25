@@ -3,7 +3,7 @@
 
 import type { Cell } from '../data/types';
 import type { DamageApplied, DamageBreakdown } from './damage';
-import type { Burning, Outcome } from './state';
+import type { Burning, FallenGroup, Outcome } from './state';
 
 /** Pourquoi un déplacement n'a pas eu lieu : l'escouade s'arrête pour la fin du tour. */
 export type BlockReason =
@@ -27,6 +27,8 @@ export type HaltReason =
 export type MoveWhy =
   | { kind: 'planned' }
   | { kind: 'straight' }
+  /** En déroute : vers son camp. */
+  | { kind: 'flee' }
   /** Avancer : aucun ennemi devant sur sa rangée, l'escouade dévie vers le plus proche. */
   | { kind: 'deviate'; toward: string };
 
@@ -43,6 +45,7 @@ export interface SquadSnapshot {
   morale: number;
   maxMorale: number;
   wounded: number;
+  fleeing?: boolean;
 }
 
 export type BattleEvent =
@@ -81,5 +84,17 @@ export type BattleEvent =
   | { type: 'fortificationHit'; attacker: string; site: string; damage: DamageBreakdown; before: number; after: number }
   | { type: 'fortificationDestroyed'; site: string }
   | { type: 'rout'; squad: string }
-  | { type: 'turnEnd'; turn: number; squads: SquadSnapshot[] }
+  /** Une de nos escouades en déroute abandonne des blessés sur sa case. */
+  | { type: 'fallen'; squad: string; cell: Cell; count: number }
+  /** Fin de tour : l'ennemi tient une case où sont nos tombés. */
+  | { type: 'fallenHeld'; squad: string; cell: Cell; count: number; by: string; turns: number }
+  /** Nos tombés sont relevés (par une escouade, ou à la fin de la bataille) et rejoignent leur escouade, blessés. */
+  | { type: 'fallenRecovered'; squad: string; cell: Cell; count: number; by?: string; atEnd?: boolean }
+  /** Nos tombés meurent : l'ennemi a tenu la case, ou la bataille est perdue. */
+  | { type: 'fallenDied'; squad: string; cell: Cell; count: number; atEnd?: boolean }
+  /** Une escouade en fuite atteint son camp (cœur du campement ou portail) et quitte le terrain. */
+  | { type: 'fled'; squad: string; cell: Cell }
+  /** Une escouade en fuite bloquée tout un tour se débande et quitte le terrain. */
+  | { type: 'dispersed'; squad: string; cell: Cell }
+  | { type: 'turnEnd'; turn: number; squads: SquadSnapshot[]; fallen: FallenGroup[] }
   | { type: 'battleEnd'; turn: number; outcome: Outcome; breaches: number };

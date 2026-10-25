@@ -281,3 +281,71 @@ describe('cœur du campement', () => {
     expect(state.breaches).toBe(1);
   });
 });
+
+describe('fuite en déroute', () => {
+  function fleeing(state: BattleState, id: string): void {
+    const s = findSquad(state, id);
+    s.status = 'fleeing';
+    s.morale = 0;
+  }
+
+  it('tout droit vers le campement, puis quitte le terrain au cœur du campement', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 2, row: 2 })]);
+    fleeing(state, 'epeistes');
+    const events = movementPhase(data, state);
+    expect(events).toEqual([
+      { type: 'move', step: 1, squad: 'epeistes', from: { col: 2, row: 2 }, to: { col: 1, row: 2 }, why: { kind: 'flee' } },
+      { type: 'move', step: 2, squad: 'epeistes', from: { col: 1, row: 2 }, to: { col: 0, row: 2 }, why: { kind: 'flee' } },
+      { type: 'fled', squad: 'epeistes', cell: { col: 0, row: 2 } },
+    ]);
+    expect(findSquad(state, 'epeistes').status).toBe('routed');
+  });
+
+  it('contourne un allié par la diagonale arrière nord, puis sud', () => {
+    const state = stateWith(data, [
+      squad(data, 'epeistes', { col: 3, row: 2 }),
+      squad(data, 'piquiers', { col: 2, row: 2 }),
+      squad(data, 'archers', { col: 2, row: 1 }),
+    ]);
+    fleeing(state, 'epeistes');
+    const events = movementPhase(data, state);
+    // Droit derrière (2,2) : les Piquiers ; nord-ouest (2,1) : les Archers ; reste le sud-ouest (2,3).
+    expect(events[0]).toMatchObject({ type: 'move', to: { col: 2, row: 3 }, why: { kind: 'flee' } });
+  });
+
+  it('bloquée tout un tour (les trois cases arrière prises), elle se débande et quitte le terrain avec ses blessés', () => {
+    const state = stateWith(data, [
+      squad(data, 'epeistes', { col: 3, row: 2 }),
+      squad(data, 'piquiers', { col: 2, row: 2 }),
+      squad(data, 'archers', { col: 2, row: 1 }),
+      squad(data, 'archers', { col: 2, row: 3 }, HOLD, 'archers-2'),
+    ]);
+    fleeing(state, 'epeistes');
+    findSquad(state, 'epeistes').wounded = 7;
+    expect(movementPhase(data, state)).toEqual([{ type: 'dispersed', squad: 'epeistes', cell: { col: 3, row: 2 } }]);
+    expect(findSquad(state, 'epeistes')).toMatchObject({ status: 'routed', wounded: 7 });
+  });
+
+  it('une escouade en fuite qui a bougé au moins une fois ne se débande pas', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 }), squad(data, 'piquiers', { col: 1, row: 2 })]);
+    fleeing(state, 'epeistes');
+    // Pas 1 : (3,2) → (2,2) ; pas 2 : (1,2) prise, diagonales (1,1)… libre.
+    const events = movementPhase(data, state);
+    expect(events.some((e) => e.type === 'dispersed')).toBe(false);
+  });
+
+  it('rompt le contact, et l’ennemi voisin n’est pas retenu par elle', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 })], [{ enemy: BRUTES, cell: { col: 4, row: 2 } }]);
+    fleeing(state, 'epeistes');
+    movementPhase(data, state);
+    expect(cellOf(state, 'epeistes')).toEqual({ col: 1, row: 2 });
+    expect(cellOf(state, 'brutes-du-portail#1')).toEqual({ col: 2, row: 2 });
+  });
+
+  it('un ennemi en déroute fuit vers le portail et le franchit', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 1, row: 2 })], [{ enemy: BRUTES, cell: { col: 9, row: 2 } }]);
+    fleeing(state, 'brutes-du-portail#1');
+    const events = movementPhase(data, state);
+    expect(events.at(-1)).toEqual({ type: 'fled', squad: 'brutes-du-portail#1', cell: { col: 11, row: 2 } });
+  });
+});

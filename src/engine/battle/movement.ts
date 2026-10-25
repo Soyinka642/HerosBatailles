@@ -4,12 +4,14 @@
 // (réaction par défaut) et reprend sa posture au tour suivant.
 //
 // Une palissade debout barre le passage des deux camps ; la tour se traverse.
+// Une escouade en déroute fuit vers son camp, sans être retenue par le contact ; bloquée tout un
+// tour, elle se débande et quitte le terrain.
 
 import type { Area, Cell, GameData } from '../data/types';
 import type { BattleEvent, BlockReason, HaltReason, MoveWhy } from './events';
 import { barrierAt, occupiedFortification } from './fortifications';
-import { ahead, isOnField, sameCell } from './hex';
-import { type BattleSquad, type BattleState, isShooter, squadAt } from './state';
+import { type Direction, ahead, behind, isOnField, neighbor, sameCell } from './hex';
+import { type BattleSquad, type BattleState, isOnField as onField, isShooter, squadAt } from './state';
 import { adjacentEnemies, enemyAheadOnRow, nearestEnemy, rangedTarget, stepToward } from './targeting';
 
 export type Intent =
@@ -66,9 +68,23 @@ function assaultIntent(data: GameData, state: BattleState, squad: BattleSquad): 
   return straightIntent(data, squad);
 }
 
+/** Diagonales arrière, nord puis sud : vers l'ouest pour nous, vers l'est pour l'ennemi. */
+const BACK_DIAGONALS: Record<BattleSquad['side'], readonly Direction[]> = { player: ['NW', 'SW'], enemy: ['NE', 'SE'] };
+
+/**
+ * Fuite en déroute : tout droit vers son camp ; si la case droit derrière est prise (escouade ou
+ * palissade) au début du pas, la diagonale arrière nord, puis sud ; sinon elle reste sur place.
+ */
+function fleeIntent(data: GameData, state: BattleState, squad: BattleSquad): Intent {
+  const candidates = [behind(squad.cell, squad.side), ...BACK_DIAGONALS[squad.side].map((d) => neighbor(squad.cell, d))];
+  const free = candidates.find((cell) => isOnField(data.battlefield, cell) && !squadAt(state, cell) && !barrierAt(data, state, cell));
+  return free ? { kind: 'move', to: free, why: { kind: 'flee' } } : { kind: 'none' };
+}
+
 /** Ce que veut faire une escouade au pas `step`, d'après les positions du début du pas. */
 export function intentFor(data: GameData, state: BattleState, squad: BattleSquad, step: number): Intent {
   if (squad.stats.speed < step) return { kind: 'none' };
+  if (squad.status === 'fleeing') return fleeIntent(data, state, squad);
   const planned = plannedIntent(state, squad, step);
   if (planned) return planned;
   switch (squad.movement) {
@@ -175,9 +191,20 @@ function checkBreaches(data: GameData, state: BattleState, events: BattleEvent[]
   }
 }
 
+/** Une escouade en fuite qui atteint son camp (cœur du campement, ou portail pour l'ennemi) quitte le terrain. */
+function checkFled(data: GameData, state: BattleState, events: BattleEvent[]): void {
+  for (const squad of state.squads) {
+    if (squad.status !== 'fleeing') continue;
+    const home = squad.side === 'player' ? data.battlefield.campHeart : data.battlefield.portal;
+    if (!inArea(home, squad.cell)) continue;
+    squad.status = 'routed';
+    events.push({ type: 'fled', squad: squad.id, cell: { ...squad.cell } });
+  }
+}
+
 /** Joue un pas : modifie l'état et rend ses événements, dans l'ordre des escouades. */
 function playStep(data: GameData, state: BattleState, step: number, stopped: string[]): BattleEvent[] {
-  const movers = state.squads.filter((s) => s.status === 'active' && !stopped.includes(s.id));
+  const movers = state.squads.filter((s) => onField(s) && !stopped.includes(s.id));
   const intents = movers.map((squad) => ({ squad, intent: intentFor(data, state, squad, step) }));
   const requests: MoveRequest[] = intents.flatMap(({ squad, intent }) => (intent.kind === 'move' ? [{ squad, to: intent.to }] : []));
   const blocked = resolveStep(data, state, requests);
@@ -204,16 +231,33 @@ function playStep(data: GameData, state: BattleState, step: number, stopped: str
     if (intent.kind === 'move' && !blocked[squad.id]) squad.cell = { ...intent.to };
   }
   checkBreaches(data, state, events);
+  checkFled(data, state, events);
   return events;
 }
 
 /** Phase de mouvement complète : modifie l'état et rend les événements. */
 export function movementPhase(data: GameData, state: BattleState): BattleEvent[] {
-  const active = state.squads.filter((s) => s.status === 'active');
-  const steps = Math.max(0, ...active.map((s) => s.stats.speed));
+  const moving = state.squads.filter(onField);
+  const steps = Math.max(0, ...moving.map((s) => s.stats.speed));
   for (const squad of state.squads) delete squad.obstacle;
   const stopped: string[] = [];
   const events: BattleEvent[] = [];
+  checkFled(data, state, events);
+  const fleeing = state.squads.filter((s) => s.status === 'fleeing');
   for (let step = 1; step <= steps; step++) events.push(...playStep(data, state, step, stopped));
+  events.push(...disperseStuck(fleeing, events));
   return events;
+}
+
+/**
+ * Débandade : une escouade en fuite qui n'a pas pu bouger de tout le tour quitte le terrain, comme
+ * si elle avait atteint son camp (les nôtres gardent les blessés qu'elles emmenaient).
+ */
+function disperseStuck(fleeing: readonly BattleSquad[], events: readonly BattleEvent[]): BattleEvent[] {
+  return fleeing
+    .filter((s) => s.status === 'fleeing' && !events.some((e) => e.type === 'move' && e.squad === s.id))
+    .map((s) => {
+      s.status = 'routed';
+      return { type: 'dispersed', squad: s.id, cell: { ...s.cell } };
+    });
 }

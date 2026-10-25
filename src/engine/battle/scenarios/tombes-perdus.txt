@@ -1,0 +1,168 @@
+Bataille « scenario » (vague).
+
+Aucune fortification bâtie.
+
+Nos escouades, dans l’ordre de déploiement :
+- Épéistes en (3,2), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
+- Archers en (1,4), Tenir : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.
+
+Ennemis annoncés, dans l’ordre d’arrivée :
+- Brutes du portail n°1, tour 1, rangée 2 : mêlée 6, tir 0, défense 3, vitesse 2, moral 24 ; Perce-armure 2.
+- Tireurs du portail n°1, tour 2, rangée 2 : mêlée 2, tir 3 (portée 3), défense 1, vitesse 2, moral 14.
+
+== Tour 1 ==
+Les Brutes du portail n°1 sortent du portail en (11,2).
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (11,2) → (10,2).
+  pas 2 : les Brutes du portail n°1 (10,2) → (9,2).
+Fin du tour :
+  Épéistes en (3,2), moral 20/20
+  Archers en (1,4), moral 20/20
+  Brutes du portail n°1 en (9,2), moral 24/24
+
+== Tour 2 ==
+Les Tireurs du portail n°1 sortent du portail en (11,2).
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (9,2) → (8,2).
+  pas 1 : les Tireurs du portail n°1 (11,2) → (10,2).
+  pas 2 : les Brutes du portail n°1 (8,2) → (7,2).
+  pas 2 : les Tireurs du portail n°1 (10,2) → (9,2).
+Fin du tour :
+  Épéistes en (3,2), moral 20/20
+  Archers en (1,4), moral 20/20
+  Brutes du portail n°1 en (7,2), moral 24/24
+  Tireurs du portail n°1 en (9,2), moral 14/14
+
+== Tour 3 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (7,2) → (6,2).
+  pas 1 : les Tireurs du portail n°1 (9,2) → (8,2).
+  pas 2 : les Brutes du portail n°1 (6,2) → (5,2).
+  pas 2 : les Tireurs du portail n°1 (8,2) → (7,2).
+Fin du tour :
+  Épéistes en (3,2), moral 20/20
+  Archers en (1,4), moral 20/20
+  Brutes du portail n°1 en (5,2), moral 24/24
+  Tireurs du portail n°1 en (7,2), moral 14/14
+
+== Tour 4 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (5,2) → (4,2).
+  pas 1 : les Tireurs du portail n°1 (7,2) → (6,2).
+  pas 2 : les Brutes du portail n°1 sont au contact des Épéistes : elles ne bougent plus.
+  pas 2 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 3 − 2 = 1 dégât ; moral 20 → 19.
+Mêlée :
+  Les Épéistes frappent les Brutes du portail n°1 : 6 − 3 = 3 dégâts ; moral 24 → 21.
+  Les Brutes du portail n°1 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 dégâts ; moral 19 → 13 ; les Épéistes sont ébranlés.
+Fin du tour :
+  Épéistes en (3,2), moral 13/20
+  Archers en (1,4), moral 20/20
+  Brutes du portail n°1 en (4,2), moral 21/24
+  Tireurs du portail n°1 en (6,2), moral 14/14
+
+== Tour 5 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 sont au contact des Épéistes : elles ne bougent plus.
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 3 − 2 = 1 dégât ; moral 13 → 12, blessés 0 → 1.
+Mêlée :
+  Les Épéistes frappent les Brutes du portail n°1 : 6 − 3 = 3 × 0,9 (ébranlés) × 0,95 (1 blessé sur 20) = 2,57 → 3 dégâts ; moral 21 → 18.
+  Les Brutes du portail n°1 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 dégâts ; moral 12 → 6, blessés 1 → 7 ; les Épéistes sont vacillants.
+Fin du tour :
+  Épéistes en (3,2), moral 6/20, 7 blessés
+  Archers en (1,4), moral 20/20
+  Brutes du portail n°1 en (4,2), moral 18/24
+  Tireurs du portail n°1 en (6,2), moral 14/14
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 sont au contact des Épéistes : elles ne bougent plus.
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Épéistes sont à portée.
+Tir :
+  Les Tireurs du portail n°1 tirent sur les Épéistes à 3 cases : 3 − 2 = 1 dégât ; moral 6 → 5, blessés 7 → 8.
+Mêlée :
+  Les Épéistes frappent les Brutes du portail n°1 : 6 − 3 = 3 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = 1,44 → 1 dégât ; moral 18 → 17.
+  Les Brutes du portail n°1 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 dégâts ; moral 5 → 0, blessés 8 → 13.
+  Les Épéistes sont en déroute : ils fuient vers le campement.
+    Ils abandonnent 6 blessés à terre en (3,2).
+Fin du tour :
+  À terre en (3,2) : 6 blessés des Épéistes
+  Épéistes en (3,2), moral 0/20, 7 blessés, en fuite
+  Archers en (1,4), moral 20/20
+  Brutes du portail n°1 en (4,2), moral 17/24
+  Tireurs du portail n°1 en (6,2), moral 14/14
+
+== Tour 7 ==
+Mouvement :
+  pas 1 : les Épéistes (3,2) → (2,2) (en fuite).
+  pas 1 : les Brutes du portail n°1 (4,2) → (3,2).
+  pas 1 : les Tireurs du portail n°1 (6,2) → (5,2).
+  pas 2 : les Épéistes (2,2) → (1,2) (en fuite).
+  pas 2 : les Brutes du portail n°1 (3,2) → (2,2).
+  pas 2 : les Tireurs du portail n°1 (5,2) → (4,2).
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 2 cases : 5 − 3 = 2 dégâts ; moral 17 → 15 ; les Brutes du portail n°1 sont ébranlées.
+Fin du tour :
+  À terre en (3,2) : 6 blessés des Épéistes
+  Épéistes en (1,2), moral 0/20, 7 blessés, en fuite
+  Archers en (1,4), moral 20/20
+  Brutes du portail n°1 en (2,2), moral 15/24
+  Tireurs du portail n°1 en (4,2), moral 14/14
+
+== Tour 8 ==
+Mouvement :
+  pas 1 : les Épéistes (1,2) → (0,2) (en fuite).
+  pas 1 : les Brutes du portail n°1 (2,2) → (1,2).
+  pas 1 : les Tireurs du portail n°1 (4,2) → (3,2).
+  Les Épéistes atteignent le campement en (0,2) et quittent le terrain.
+  pas 2 : les Brutes du portail n°1 (1,2) → (0,2).
+  pas 2 : les Tireurs du portail n°1 s'arrêtent : les Archers sont à portée.
+  Les Brutes du portail n°1 atteignent le cœur du campement en (0,2) : incursion n°1. Elles quittent la bataille.
+Tir :
+  Les Archers tirent sur les Tireurs du portail n°1 à 3 cases : 5 − 1 = 4 dégâts ; moral 14 → 10.
+  Les Tireurs du portail n°1 tirent sur les Archers à 3 cases : 3 − 1 = 2 dégâts ; moral 20 → 18.
+Tombés :
+  Les Tireurs du portail n°1 tiennent (3,2), où gisent 6 blessés des Épéistes (tour 1 sur 2).
+Fin du tour :
+  À terre en (3,2) : 6 blessés des Épéistes
+  Archers en (1,4), moral 18/20
+  Tireurs du portail n°1 en (3,2), moral 10/14
+
+== Tour 9 ==
+Mouvement :
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Archers sont à portée.
+Tir :
+  Les Archers tirent sur les Tireurs du portail n°1 à 3 cases : 5 − 1 = 4 dégâts ; moral 10 → 6, blessés 0 → 3 ; les Tireurs du portail n°1 sont ébranlés.
+  Les Tireurs du portail n°1 tirent sur les Archers à 3 cases : 3 − 1 = 2 dégâts ; moral 18 → 16.
+Tombés :
+  6 blessés des Épéistes meurent en (3,2) : l'ennemi a tenu la case 2 tours.
+Fin du tour :
+  Archers en (1,4), moral 16/20
+  Tireurs du portail n°1 en (3,2), moral 6/14, 3 blessés
+
+== Tour 10 ==
+Mouvement :
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Archers sont à portée.
+Tir :
+  Les Archers tirent sur les Tireurs du portail n°1 à 3 cases : 5 − 1 = 4 dégâts ; moral 6 → 2, blessés 3 → 7 ; les Tireurs du portail n°1 sont vacillants.
+  Les Tireurs du portail n°1 tirent sur les Archers à 3 cases : 3 − 1 = 2 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 1,53 → 2 dégâts ; moral 16 → 14.
+Fin du tour :
+  Archers en (1,4), moral 14/20
+  Tireurs du portail n°1 en (3,2), moral 2/14, 7 blessés
+
+== Tour 11 ==
+Mouvement :
+  pas 1 : les Tireurs du portail n°1 s'arrêtent : les Archers sont à portée.
+Tir :
+  Les Archers tirent sur les Tireurs du portail n°1 à 3 cases : 5 − 1 = 4 dégâts ; moral 2 → 0, blessés 7 → 9.
+  Les Tireurs du portail n°1 tirent sur les Archers à 3 cases : 3 − 1 = 2 × 0,8 (vacillants) × 0,65 (7 blessés sur 20) = 1,04 → 1 dégât ; moral 14 → 13 ; les Archers sont ébranlés.
+  Les Tireurs du portail n°1 sont en déroute : ils fuient vers le portail.
+Fin du tour :
+  Archers en (1,4), moral 13/20
+  Tireurs du portail n°1 en (3,2), moral 0/14, 9 blessés, en fuite
+
+Victoire au tour 11 : plus aucun ennemi sur le terrain ni à venir.
+Incursions au cœur du campement : 1.

@@ -25,7 +25,11 @@ export interface UnmasteredWeapon {
   lostKeywords: Id[];
 }
 
-export type SquadStatus = 'active' | 'routed' | 'breached';
+/**
+ * active : se bat ; fleeing : en déroute, fuit vers son camp (encore sur le terrain, mais ni
+ * cible ni menace) ; routed : en déroute et sortie du terrain ; breached : ennemi entré au cœur du campement.
+ */
+export type SquadStatus = 'active' | 'fleeing' | 'routed' | 'breached';
 
 export interface BattleSquad {
   /** Unique dans la bataille : id choisi par le joueur, ou « fantassins-du-portail#1 ». */
@@ -52,6 +56,8 @@ export interface BattleSquad {
   carried: Carried;
   /** Brûlure en cours : dégâts fixes au début de chacun des tours restants. */
   burning?: Burning;
+  /** Soldats morts dans cette bataille (des tombés que l'ennemi a gardés). */
+  dead: number;
   /** Fortification qui a barré son chemin pendant le mouvement de ce tour (site), remise à zéro à chaque tour. */
   obstacle?: Id;
 }
@@ -67,6 +73,20 @@ export interface FortificationState {
   structure: number;
   maxStructure: number;
   burning?: Burning;
+}
+
+/**
+ * Soldats tombés : des blessés qu'une de nos escouades a abandonnés en partant en déroute.
+ * Ils restent sur leur case ; repris à temps, ils reviennent blessés ; si l'ennemi tient la
+ * case assez longtemps, ils meurent.
+ */
+export interface FallenGroup {
+  /** L'escouade d'origine, à qui ils reviennent. */
+  squad: string;
+  cell: Cell;
+  count: number;
+  /** Tours consécutifs où l'ennemi a tenu la case. */
+  heldTurns: number;
 }
 
 export interface Burning {
@@ -98,9 +118,16 @@ export interface BattleState {
   pending: PendingArrival[];
   /** Fortifications bâties, dans l'ordre des sites de battlefield.json. */
   fortifications: FortificationState[];
+  /** Soldats tombés encore à terre, dans l'ordre où ils sont tombés. */
+  fallen: FallenGroup[];
   /** Ennemis qui ont atteint le cœur du campement. */
   breaches: number;
   outcome?: Outcome;
+}
+
+/** Encore sur le terrain : au combat, ou en fuite. Une escouade en fuite occupe toujours sa case. */
+export function isOnField(squad: BattleSquad): boolean {
+  return squad.status === 'active' || squad.status === 'fleeing';
 }
 
 export function activeSquads(state: BattleState): BattleSquad[] {
@@ -112,7 +139,7 @@ export function activeEnemiesOf(state: BattleState, squad: BattleSquad): BattleS
 }
 
 export function squadAt(state: BattleState, cell: Cell): BattleSquad | undefined {
-  return state.squads.find((squad) => squad.status === 'active' && squad.cell.col === cell.col && squad.cell.row === cell.row);
+  return state.squads.find((squad) => isOnField(squad) && squad.cell.col === cell.col && squad.cell.row === cell.row);
 }
 
 export function findSquad(state: BattleState, id: string): BattleSquad {

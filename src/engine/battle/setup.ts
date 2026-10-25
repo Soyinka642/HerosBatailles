@@ -260,6 +260,7 @@ function playerSquad(data: GameData, squad: PlayerSquadSetup, rank: number): Bat
     movement: movementOf(data, squad.order.posture),
     plannedTurns: structuredClone(squad.order.plannedTurns),
     status: 'active',
+    dead: 0,
     carried: { ...squad.carried },
   };
 }
@@ -318,6 +319,7 @@ export function enemySquad(data: GameData, arrival: PendingArrival, cell: Cell):
     movement: movementOf(data, enemy.posture),
     plannedTurns: [],
     status: 'active',
+    dead: 0,
     carried: {},
   };
 }
@@ -335,6 +337,7 @@ export function createBattle(data: GameData, setup: BattleSetup): BattleState {
     squads: setup.squads.map((squad, index) => playerSquad(data, squad, index)),
     pending: pendingArrivals(data, setup.wave, setup.squads.length),
     fortifications,
+    fallen: [],
     breaches: 0,
   };
 }

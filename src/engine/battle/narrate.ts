@@ -30,6 +30,8 @@ interface Names {
   site(id: string): string;
   /** Le nom de l'escouade est féminin (« les Brutes »). */
   feminine(id: string): boolean;
+  /** Le camp de l'escouade (les ennemis annoncés sont du côté ennemi). */
+  side(id: string): 'player' | 'enemy';
 }
 
 /** Nombre à la française : virgule décimale, au plus deux décimales. */
@@ -47,6 +49,10 @@ function namesOf(data: GameData, state: BattleState): Names {
       return site ? `la ${name.toLowerCase()} ${formatCell(site.cell)}` : id;
     },
     name: (id) => find(id)?.name ?? id,
+    side: (id) => {
+      const s = find(id);
+      return s && 'side' in s ? s.side : 'enemy';
+    },
     feminine: (id) => {
       const s = find(id);
       if (!s) return false;
@@ -141,6 +147,7 @@ function formatHalt(names: Names, squad: string, reason: HaltReason): string {
 function formatWhy(names: Names, why: MoveWhy): string {
   if (why.kind === 'planned') return ' (tour planifié)';
   if (why.kind === 'deviate') return `, en déviant vers ${les(names.name(why.toward))}`;
+  if (why.kind === 'flee') return ' (en fuite)';
   return '';
 }
 
@@ -224,22 +231,42 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
     case 'fortificationDestroyed':
       return `  ${capitalize(names.site(e.site))} est détruite : la case est libre.`;
     case 'rout':
-      return `  ${N(e.squad)} sont en déroute et quittent le terrain.`;
+      return `  ${N(e.squad)} sont en déroute : ${pronoun(e.squad)} fuient vers ${names.side(e.squad) === 'player' ? 'le campement' : 'le portail'}.`;
+    case 'fallen':
+      return `    ${capitalize(pronoun(e.squad))} abandonnent ${wounded(e.count)} à terre en ${formatCell(e.cell)}.`;
+    case 'fallenHeld':
+      return `  ${N(e.by)} tiennent ${formatCell(e.cell)}, où gisent ${wounded(e.count)} ${des(names.name(e.squad))} (tour ${e.turns} sur ${data.config.fallen.turnsHeldBeforeDeath}).`;
+    case 'fallenRecovered':
+      return e.atEnd
+        ? `Maîtres du terrain, nous relevons ${wounded(e.count)} ${des(names.name(e.squad))} en ${formatCell(e.cell)} : ${pronoun(e.squad)} rejoignent ${les(names.name(e.squad))}.`
+        : `  ${N(e.by ?? e.squad)} relèvent ${wounded(e.count)} ${des(names.name(e.squad))} en ${formatCell(e.cell)} : ils rejoignent ${les(names.name(e.squad))}.`;
+    case 'fallenDied':
+      return e.atEnd
+        ? `La bataille est perdue : ${wounded(e.count)} ${des(names.name(e.squad))} restés en ${formatCell(e.cell)} meurent.`
+        : `  ${capitalize(wounded(e.count))} ${des(names.name(e.squad))} meurent en ${formatCell(e.cell)} : l'ennemi a tenu la case ${data.config.fallen.turnsHeldBeforeDeath} tours.`;
+    case 'dispersed':
+      return `  ${N(e.squad)}, ${g(names.feminine(e.squad), 'bloqués', 'bloquées')} dans leur fuite en ${formatCell(e.cell)}, se débandent et quittent le terrain${
+        names.side(e.squad) === 'player' ? ` : ${pronoun(e.squad)} regagnent le campement avec leurs blessés` : ''
+      }.`;
+    case 'fled':
+      return `  ${N(e.squad)} atteignent ${names.side(e.squad) === 'player' ? 'le campement' : 'le portail'} en ${formatCell(e.cell)} et quittent le terrain.`;
     case 'turnEnd':
       return [
         'Fin du tour :',
-        ...e.squads.map((s) => `  ${names.name(s.id)} en ${formatCell(s.cell)}, moral ${s.morale}/${s.maxMorale}${s.wounded > 0 ? `, ${wounded(s.wounded)}` : ''}`),
+        ...e.fallen.map((f) => `  À terre en ${formatCell(f.cell)} : ${wounded(f.count)} ${des(names.name(f.squad))}`),
+        ...e.squads.map((s) => `  ${names.name(s.id)} en ${formatCell(s.cell)}, moral ${s.morale}/${s.maxMorale}${s.wounded > 0 ? `, ${wounded(s.wounded)}` : ''}${s.fleeing ? ', en fuite' : ''}`),
       ].join('\n');
     case 'battleEnd':
       return `\n${formatOutcome(e.outcome, e.turn, e.breaches)}`;
   }
 }
 
-type Phase = 'Feu' | 'Mouvement' | 'Tir' | 'Mêlée';
+type Phase = 'Feu' | 'Mouvement' | 'Tir' | 'Mêlée' | 'Tombés';
 
 function phaseOf(e: BattleEvent): Phase | undefined {
-  if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach') return 'Mouvement';
+  if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach' || e.type === 'fled' || e.type === 'dispersed') return 'Mouvement';
   if (e.type === 'burn' || e.type === 'fortificationBurn') return 'Feu';
+  if ((e.type === 'fallenHeld' || e.type === 'fallenRecovered' || e.type === 'fallenDied') && !('atEnd' in e && e.atEnd)) return 'Tombés';
   if (e.type === 'shot' || e.type === 'ignite') return 'Tir';
   if (e.type === 'strike' || e.type === 'fortificationHit') return 'Mêlée';
   return undefined;

@@ -152,10 +152,11 @@ Tir :
 Mêlée :
   Les Épéistes frappent les Brutes du portail n°1 : 6 − 3 = 3 dégâts ; moral 1 → 0, blessés 14 → 15.
   Les Brutes du portail n°1 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 × 0,8 (vacillantes) × 0,5 (14 blessés sur 20) = 2,4 → 2 dégâts ; moral 17 → 15.
-  Les Brutes du portail n°1 sont en déroute et quittent le terrain.
+  Les Brutes du portail n°1 sont en déroute : elles fuient vers le portail.
 Fin du tour :
   Épéistes en (3,1), moral 15/20
   Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (4,1), moral 0/24, 15 blessés, en fuite
 
 Victoire au tour 12 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 0.

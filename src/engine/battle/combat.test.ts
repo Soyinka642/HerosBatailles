@@ -68,7 +68,10 @@ describe('tir', () => {
       ['archers', 'tireurs-du-portail#1', 3, 14, 11],
       ['tireurs-du-portail#1', 'archers', 2, 2, 0],
     ]);
-    expect(events.at(-1)).toEqual({ type: 'rout', squad: 'archers' });
+    expect(events.slice(-2)).toEqual([
+      { type: 'rout', squad: 'archers' },
+      { type: 'fallen', squad: 'archers', cell: { col: 3, row: 2 }, count: 1 },
+    ]);
   });
 });
 
@@ -178,13 +181,19 @@ describe('mêlée', () => {
 });
 
 describe('déroute', () => {
-  it('à zéro de moral, l’escouade quitte le terrain', () => {
+  it('à zéro de moral, l’escouade part en déroute : elle fuit, mais occupe encore sa case', () => {
     const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 })], [{ enemy: FANTASSINS, cell: { col: 4, row: 2 } }]);
     findSquad(state, 'fantassins-du-portail#1').morale = 3;
     const events = meleePhase(data, state);
     expect(events.at(-1)).toEqual({ type: 'rout', squad: 'fantassins-du-portail#1' });
-    expect(findSquad(state, 'fantassins-du-portail#1').status).toBe('routed');
-    expect(squadAt(state, { col: 4, row: 2 })).toBeUndefined();
+    expect(findSquad(state, 'fantassins-du-portail#1').status).toBe('fleeing');
+    expect(squadAt(state, { col: 4, row: 2 })?.id).toBe('fantassins-du-portail#1');
+  });
+
+  it('une escouade en fuite n’est plus une cible et ne frappe plus', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 })], [{ enemy: FANTASSINS, cell: { col: 4, row: 2 } }]);
+    findSquad(state, 'fantassins-du-portail#1').status = 'fleeing';
+    expect(meleePhase(data, state)).toEqual([]);
   });
 
   it('une escouade en déroute au tir ne combat pas en mêlée', () => {

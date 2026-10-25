@@ -312,7 +312,11 @@ export interface BattleConfig {
   mastery: { unmasteredAttackPenalty: number };
   /** Règle par défaut : défense minimale d'une cible pour qu'on l'enflamme. */
   fireArrows: { minTargetDefense: number };
-  fallen: { turnsHeldBeforeDeath: number };
+  /**
+   * Soldats tombés : part des blessés (0 à 1) qu'une escouade en déroute abandonne sur sa case,
+   * et nombre de tours consécutifs où l'ennemi doit tenir la case pour qu'ils meurent.
+   */
+  fallen: { turnsHeldBeforeDeath: number; abandonedShare: number };
   field: { maxPlayerSquads: number };
   flank: { attackBonus: number; extraMoraleLoss: number };
   pushback: { damageThreshold: number };

@@ -108,12 +108,13 @@ Mêlée :
   Les Épéistes de la garde frappent les Fantassins du portail n°1 : 6 − 2 = 4 dégâts ; moral 0 → 0.
   Les Fantassins du portail n°1 frappent les Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = 1,44 → 1 dégât ; moral 8 → 7, blessés 5 → 6.
   Les Fantassins du portail n°2 frappent les Épéistes : 5 − 2 = 3 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 2,43 → 2 dégâts ; moral 7 → 5, blessés 6 → 8 ; les Épéistes sont vacillants.
-  Les Fantassins du portail n°1 sont en déroute et quittent le terrain.
+  Les Fantassins du portail n°1 sont en déroute : ils fuient vers le portail.
 Fin du tour :
   Épéistes en (8,1), moral 5/20, 8 blessés
   Piquiers en (7,1), moral 20/20
   Archers en (2,2), moral 20/20
   Épéistes de la garde en (8,3), moral 20/20
+  Fantassins du portail n°1 en (8,2), moral 0/16, 10 blessés, en fuite
   Fantassins du portail n°2 en (9,1), moral 5/16, 5 blessés
 
 == Tour 6 ==
@@ -121,18 +122,21 @@ Mouvement :
   pas 1 : les Épéistes sont au contact des Fantassins du portail n°2 : ils ne bougent plus.
   pas 1 : les Piquiers ne peuvent pas entrer en (8,1) : la case est tenue par les Épéistes. Ils s'arrêtent pour ce tour.
   pas 1 : les Épéistes de la garde (8,3) → (9,2), en déviant vers les Fantassins du portail n°2.
+  pas 1 : les Fantassins du portail n°1 ne peuvent pas entrer en (9,2) : les Épéistes de la garde y entrent avant eux (plus rapides). Ils s'arrêtent pour ce tour.
   pas 1 : les Fantassins du portail n°2 sont au contact des Épéistes : ils ne bougent plus.
   pas 2 : les Épéistes de la garde sont au contact des Fantassins du portail n°2 : ils ne bougent plus.
+  Les Fantassins du portail n°1, bloqués dans leur fuite en (8,2), se débandent et quittent le terrain.
 Mêlée :
   Les Épéistes frappent les Fantassins du portail n°2 : 6 + 2 (Soutien des Piquiers) − 2 = 6 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = 2,88 → 3 dégâts ; moral 5 → 2, blessés 5 → 8.
   Les Épéistes de la garde frappent les Fantassins du portail n°2 : 6 − 2 = 4 dégâts ; moral 2 → 0, blessés 8 → 10.
   Les Fantassins du portail n°2 frappent les Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,75 (5 blessés sur 20) = 1,8 → 2 dégâts ; moral 5 → 3, blessés 8 → 10.
-  Les Fantassins du portail n°2 sont en déroute et quittent le terrain.
+  Les Fantassins du portail n°2 sont en déroute : ils fuient vers le portail.
 Fin du tour :
   Épéistes en (8,1), moral 3/20, 10 blessés
   Piquiers en (7,1), moral 20/20
   Archers en (2,2), moral 20/20
   Épéistes de la garde en (9,2), moral 20/20
+  Fantassins du portail n°2 en (9,1), moral 0/16, 10 blessés, en fuite
 
 Victoire au tour 6 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 0.

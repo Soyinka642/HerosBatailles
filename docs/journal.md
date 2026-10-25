@@ -385,3 +385,74 @@ Aucune incursion ; la tour n'est jamais touchée. Les intentions de Q24 sont ten
 - Les Épéistes de la brèche partent en déroute dans presque toutes les batailles : c'est le poste le plus exposé.
 
 **Prochaine étape** : fusion du lot 1.2c dans `main` (accord donné si le bilan correspond à l'annonce), puis lot 1.2d.
+
+## 2026-10-25 — Lot 1.2d : soldats tombés et fuite en déroute
+
+Dernier lot du moteur de bataille pour le prototype.
+
+### Ce qui a été fait
+
+- **Fuite en déroute** (retour sur Q18) : une escouade dont le moral tombe à 0 passe au statut `fleeing`. Elle fuit vers son camp à sa vitesse : tout droit, sinon la diagonale arrière nord, puis sud, sinon elle reste sur place. Elle rompt le contact et n'est plus une cible, mais elle occupe encore sa case. Elle quitte le terrain en atteignant son camp : le cœur du campement pour nous, le portail pour l'ennemi. Elle compte comme en déroute dès sa déroute, pour la fin de bataille.
+- **Soldats tombés** (`fallen.ts`) :
+  - une de nos escouades en déroute abandonne la moitié de ses blessés, arrondie à l'inférieur, sur sa case (`fallen.abandonedShare`, 0,5) ;
+  - à la fin de chaque tour, si un ennemi se tient sur la case et qu'aucune de nos escouades au combat n'est dessus ou au contact, l'ennemi la tient ; au bout de 2 tours consécutifs (`fallen.turnsHeldBeforeDeath`), les tombés meurent ;
+  - sinon l'horloge repart à zéro ; s'il n'y a aucun ennemi sur la case et qu'une de nos escouades est dessus ou au contact, les tombés sont relevés et rejoignent leur escouade, blessés ;
+  - à la fin de la bataille : relevés en cas de victoire, morts en cas de défaite ; en cas d'issue indécise, morts si la case est tenue, relevés sinon ;
+  - l'ennemi n'abandonne pas de tombés.
+- **Ce que rend la bataille** : `losses`, pour chacune de nos escouades : effectif restant (effectif − morts), blessés (tombés relevés compris), morts, tombés relevés pendant la bataille, relevés à la fin, perdus à la fin.
+- **Journal** : déroute (« ils fuient vers le campement »), blessés abandonnés, case tenue (« tour 1 sur 2 »), tombés relevés ou morts, sortie du terrain, tombés à terre listés en fin de tour.
+- **Scénarios** : cinq nouveaux (`scenarios/fallen.test.ts`) : tombés repris à temps, tombés perdus, fuite qui contourne ses alliés, fuite ennemie vers le portail, défaite qui fait mourir les tombés. Les anciens sont regénérés.
+- Tests : 240 (y compris `CI=true`). `typecheck`, `test` et `build` passent.
+
+### Décisions de règle de ce lot
+
+T1 A, T2 A, T3 B, T4 A, T5 B, T6 A, T7 A ; F1 A à F8 A ; R1 (voir l'étape A du lot et le résumé ci-dessus). La brûlure d'une escouade en fuite (F8) ne fait plus rien, son moral étant à 0 : le moteur ne la joue simplement plus.
+
+### Reporté en Phase 2
+
+Tir de passage, flanc, recul, encerclement : leurs paramètres restent dans `config.json` (`passingFire`, `flank`, `pushback`, `encirclement`), sans être lus par le moteur. S'y ajoute la **poursuite des escouades en fuite** (F4 B : une escouade en fuite reste une cible, et les coups font de nouveaux tombés).
+
+### Bilan d'équilibrage (déploiement sensé, chiffres du lot 1.2c)
+
+| Bataille | Issue | Tours | Nos escouades à la fin | Volées (enflammées) | Morts | Tombés relevés (pendant + fin) | Palissades N / CN / CS / S |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Vague 1 | victoire | 13 | Épéistes 16/20, Piquiers 20/20, Archers 20/20 | 9 (0) | 0 | 0 + 0 | 36 / 12 / 36 / 36 |
+| Vague 2 | victoire | 24 | Épéistes en déroute (13 blessés), Piquiers 13/20, Archers 20/20 | 13 (0) | 0 | 6 + 0 | 36 / 36 / 12 / 36 |
+| Vague 3 | victoire | 22 | Épéistes en déroute (13 blessés), Piquiers 13/20, Archers 20/20 | 18 (3) | 0 | 6 + 0 | 36 / 10 / 36 / 0 |
+| Vague 4 | victoire | 20 | Épéistes et Piquiers en déroute (13 blessés chacun), les deux Archers 20/20 | 26 (2) | 0 | 12 + 0 | 27 / 16 / 0 / 29 |
+| Finale | victoire (rituel) | 12 | Épéistes 8/20 (5 blessés), Piquiers 20/20, Archers 20/20, Archers en renfort 16/20 | 18 (0) | 0 | 0 + 0 | 34 / 15 / 6 / 36 |
+
+- Issues et durées identiques au lot 1.2c. La règle ne rapproche pas les batailles de l'objectif de 10 à 15 tours.
+- Aucun mort dans les cinq batailles : chaque fois que les Épéistes cèdent dans la brèche, les Piquiers juste derrière relèvent aussitôt leurs 6 blessés. Les morts n'apparaissent que dans les scénarios où notre ligne cède sans voisin (« tombés perdus ») et dans les défaites.
+- Finale un peu plus facile qu'au lot 1.2c (Épéistes 8/20 au lieu de 3/20, palissade nord à 34 au lieu de 29) : des ennemis en fuite gênent ceux qui arrivent.
+
+### Questions apparues
+
+- **Embouteillage de fuite** : dans la bataille finale, les Fantassins n°1 en fuite en (6,2) ont derrière eux les Fantassins n°4, et leurs deux diagonales arrière sont prises. Ni les uns ni les autres ne bougent du tour 9 à la fin (tour 12), et les Fantassins n°6 restent bloqués en chaîne. C'est conforme à F2 A (« sinon elle reste sur place »), mais c'est un blocage permanent. Options proposées dans le compte rendu du lot ; règle inchangée en attendant.
+- La poursuite (F4 B) rendrait la fuite plus coûteuse ; à jouer en Phase 2.
+
+**Prochaine étape** : trancher l'embouteillage de fuite, fusionner le lot 1.2d, puis lot 1.3 (affichage de la bataille en tours animés).
+
+## 2026-10-25 — Lot 1.2d (suite) : débandade, conception
+
+### Ce qui a été fait
+
+- **Débandade** (décision de l'auteur, option A) : une escouade en fuite qui n'a pas pu bouger de tout un tour (phase de mouvement entière) quitte le terrain. Pour nos escouades, c'est comme si elle avait atteint le campement : elle garde les blessés qu'elle emmenait ; les tombés déjà abandonnés suivent leur propre règle. Événement `dispersed`, raconté « bloqués dans leur fuite, se débandent et quittent le terrain ».
+- Nouveau scénario `fuite-debandade` : nos Épéistes cèdent, leurs trois cases arrière sont tenues par nos propres escouades, et ils se débandent au tour suivant avec leurs blessés.
+- `docs/conception.md` : nouvelle puce « Déroute » (fuite, débandade) et règle complète « celui qui tient le terrain relève les siens ».
+- Scénarios regénérés ; `typecheck`, `test` et `build` passent.
+
+### Bilan final (déploiement sensé)
+
+| Bataille | Issue | Tours | Nos escouades à la fin | Volées (enflammées) | Morts | Tombés relevés (pendant + fin) | Débandades | Palissades N / CN / CS / S |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Vague 1 | victoire | 13 | Épéistes 16/20, Piquiers 20/20, Archers 20/20 | 9 (0) | 0 | 0 + 0 | 0 | 36 / 12 / 36 / 36 |
+| Vague 2 | victoire | 24 | Épéistes en déroute (13 blessés), Piquiers 13/20, Archers 20/20 | 13 (0) | 0 | 6 + 0 | 0 | 36 / 36 / 12 / 36 |
+| Vague 3 | victoire | 22 | Épéistes en déroute (13 blessés), Piquiers 13/20, Archers 20/20 | 18 (3) | 0 | 6 + 0 | 0 | 36 / 10 / 36 / 0 |
+| Vague 4 | victoire | 20 | Épéistes et Piquiers en déroute (13 blessés chacun), les deux Archers 20/20 | 26 (2) | 0 | 12 + 0 | 0 | 27 / 16 / 0 / 29 |
+| Finale | victoire (rituel) | 12 | Épéistes 3/20 (10 blessés), Piquiers 20/20, Archers 20/20, Archers en renfort 16/20 | 18 (0) | 0 | 0 + 0 | 1 | 31 / 15 / 6 / 36 |
+
+- Aucune issue ne change. Dans la finale, les Fantassins n°1 bloqués en (6,2) se débandent ; la rangée 2 se libère, et les Épéistes retrouvent l'état du lot 1.2c (3/20).
+- Le moteur de bataille du prototype est complet. La durée (20 à 24 tours pour les vagues 2 à 4) reste au-dessus de l'objectif de 10 à 15 tours.
+
+**Prochaine étape** : lot 1.3, affichage de la bataille en tours animés.
