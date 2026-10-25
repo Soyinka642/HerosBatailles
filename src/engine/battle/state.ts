@@ -5,7 +5,7 @@
 
 import type { BattleKind, Cell, FortificationKind, Id, KeywordRef, Movement } from '../data/types';
 import type { Side } from './hex';
-import type { PlannedTurn } from './types';
+import type { Carried, PlannedTurn } from './types';
 
 /** Chiffres réels d'une escouade en bataille (base + équipement, ou stats directes d'un ennemi). */
 export interface CombatStats {
@@ -46,6 +46,10 @@ export interface BattleSquad {
   /** Tours planifiés : le tour n utilise plannedTurns[n − 1], puis la posture. */
   plannedTurns: PlannedTurn[];
   status: SquadStatus;
+  /** Consommables portés : ce qui reste est rendu à la fin de la bataille. */
+  carried: Carried;
+  /** Brûlure en cours : dégâts fixes au début de chacun des tours restants. */
+  burning?: Burning;
   /** Fortification qui a barré son chemin pendant le mouvement de ce tour (site), remise à zéro à chaque tour. */
   obstacle?: Id;
 }
@@ -60,6 +64,12 @@ export interface FortificationState {
   /** Points de structure restants ; 0 = détruite (la case redevient libre). */
   structure: number;
   maxStructure: number;
+  burning?: Burning;
+}
+
+export interface Burning {
+  amount: number;
+  turnsLeft: number;
 }
 
 /** Un ennemi annoncé qui n'est pas encore sorti du portail. */

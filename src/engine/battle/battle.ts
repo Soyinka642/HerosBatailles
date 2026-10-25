@@ -2,12 +2,16 @@
 // de fin sont vérifiées à la fin de chaque phase ; le rituel et maxTurns, à la fin du tour.
 
 import type { Area, Cell, GameData, Id } from '../data/types';
+import { burnPhase } from './burn';
+import { destroyedSince, routBroken } from './combat';
 import type { BattleEvent } from './events';
+import { isStanding } from './fortifications';
 import { firePhase } from './fire';
 import { meleePhase } from './melee';
 import { movementPhase } from './movement';
 import { type BattleSetup, createBattle, enemySquad } from './setup';
 import { type BattleState, type Outcome, squadAt } from './state';
+import type { Carried } from './types';
 
 /** Rangées du portail dans l'ordre d'apparition : le centre, puis en alternant nord et sud. */
 export function portalRows(area: Area): number[] {
@@ -84,7 +88,10 @@ export function playTurn(data: GameData, previous: BattleState): { state: Battle
   const state = structuredClone(previous);
   state.turn += 1;
   const events: BattleEvent[] = [{ type: 'turnStart', turn: state.turn }, ...arrivals(data, state)];
-  for (const phase of PHASES) {
+  const standing = state.fortifications.filter(isStanding);
+  events.push(...burnPhase(data, state), ...destroyedSince(standing), ...routBroken(state));
+  state.outcome = phaseOutcome(state);
+  for (const phase of state.outcome ? [] : PHASES) {
     events.push(...phase(data, state));
     state.outcome = phaseOutcome(state);
     if (state.outcome) break;
@@ -95,6 +102,12 @@ export function playTurn(data: GameData, previous: BattleState): { state: Battle
   return { state, events };
 }
 
+/** Ce qui reste des consommables d'une de nos escouades. */
+export interface CarriedLeft {
+  squad: string;
+  carried: Carried;
+}
+
 export interface BattleResult {
   initial: BattleState;
   final: BattleState;
@@ -102,6 +115,8 @@ export interface BattleResult {
   outcome: Outcome;
   /** Structure finale de chaque fortification bâtie : ses dégâts persistent après la bataille. */
   fortifications: { site: Id; structure: number }[];
+  /** Consommables restants de chacune de nos escouades (une escouade en déroute garde sa part). */
+  carried: CarriedLeft[];
 }
 
 /** Joue toute la bataille ; même entrée, même résultat. */
@@ -115,5 +130,6 @@ export function runBattle(data: GameData, setup: BattleSetup): BattleResult {
     events.push(...turn.events);
   }
   const fortifications = state.fortifications.map((f) => ({ site: f.site, structure: f.structure }));
-  return { initial, final: state, events, outcome: state.outcome, fortifications };
+  const carried = state.squads.filter((s) => s.side === 'player').map((s) => ({ squad: s.id, carried: { ...s.carried } }));
+  return { initial, final: state, events, outcome: state.outcome, fortifications, carried };
 }

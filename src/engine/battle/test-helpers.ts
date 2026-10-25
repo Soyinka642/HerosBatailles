@@ -18,6 +18,14 @@ export const ALL_FORTIFICATIONS: FortificationSetup[] = [
 ];
 export const NO_ARRIVALS: Wave = { id: 'essai', index: 1, kind: 'wave', arrivals: [] };
 
+/** Archers aux flèches enflammées, avec `paste` unités de pâte incendiaire. */
+export function fireArchers(data: GameData, cell: Cell, paste: number, order: Order = HOLD, id?: string): PlayerSquadSetup {
+  const archers = squad(data, 'archers', cell, order, id);
+  archers.upgrades = { arme: { fleches: 'fleches-enflammees' } };
+  archers.carried = { 'pate-incendiaire': paste };
+  return archers;
+}
+
 export function squad(data: GameData, template: Id, cell: Cell, order: Order = HOLD, id?: string): PlayerSquadSetup {
   return fromTemplate(data, template, { cell, order, ...(id === undefined ? {} : { id }) });
 }
@@ -25,6 +33,7 @@ export function squad(data: GameData, template: Id, cell: Cell, order: Order = H
 /**
  * État au début du tour `turn` : nos escouades, puis des ennemis déjà sur le terrain
  * (numérotés par type, rangs à la suite des nôtres). Aucune vérification de zone pour les ennemis.
+ * Tous les déblocages sont obtenus.
  */
 export function stateWith(
   data: GameData,
@@ -33,7 +42,8 @@ export function stateWith(
   turn = 1,
   fortifications: FortificationSetup[] = [],
 ): BattleState {
-  const state = createBattle(data, { wave: NO_ARRIVALS, squads: players, fortifications });
+  const unlocks = data.unlocks.map((u) => u.id);
+  const state = createBattle(data, { wave: NO_ARRIVALS, squads: players, fortifications, unlocks });
   const counters: Record<Id, number> = {};
   for (const { enemy, cell } of enemies) {
     const number = (counters[enemy] ?? 0) + 1;

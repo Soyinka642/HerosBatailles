@@ -5,7 +5,8 @@
 
 import type { Action, Amount, GameData, KeywordRef, Trigger } from '../data/types';
 import { type AttackBonus, type DamageBreakdown, applyDamage, computeDamage } from './damage';
-import type { BattleEvent } from './events';
+import { ignite } from './burn';
+import type { BattleEvent, FireDecision } from './events';
 import { behind, sameCell } from './hex';
 import { type FortificationBonus, defenseBonuses, isStanding } from './fortifications';
 import { moraleEfficiency, isBroken, tierOf } from './morale';
@@ -94,6 +95,8 @@ export interface PlannedHit {
   damage: DamageBreakdown;
   /** Distance du tir ; absente pour la mêlée. */
   distance?: number;
+  /** Choix du Feu, pour un tireur qui en porte. */
+  fire?: FireDecision;
 }
 
 /** Un coup porté à une fortification (l'ennemi frappe la palissade qui lui barre la route). */
@@ -113,10 +116,12 @@ export function applyHits(
   hits: readonly PlannedHit[],
   fortHits: readonly PlannedFortificationHit[] = [],
 ): BattleEvent[] {
-  const events: BattleEvent[] = hits.map((hit) => {
+  const events: BattleEvent[] = hits.flatMap((hit): BattleEvent[] => {
     const applied = applyDamage(hit.target, hit.damage.final, data.config);
     const common = { attacker: hit.attacker.id, target: hit.target.id, damage: hit.damage, applied };
-    return hit.distance === undefined ? { type: 'strike', ...common } : { type: 'shot', distance: hit.distance, ...common };
+    if (hit.distance === undefined) return [{ type: 'strike', ...common }];
+    const shot: BattleEvent = { type: 'shot', distance: hit.distance, ...common, ...(hit.fire ? { fire: hit.fire } : {}) };
+    return hit.fire?.used ? [shot, ignite(data, state, hit.attacker, hit.target, hit.fire)] : [shot];
   });
   const standing = state.fortifications.filter(isStanding);
   for (const hit of fortHits) {

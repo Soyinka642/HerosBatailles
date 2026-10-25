@@ -5,7 +5,7 @@ import type { Area, Cell, GameData, Id, Item, KeywordRef, StatModifiers, Wave } 
 import { type FortificationSetup, buildFortifications, fortificationData } from './fortifications';
 import { hexDistance, isOnField, sameCell } from './hex';
 import type { BattleSquad, BattleState, CombatStats, FortificationState, PendingArrival, UnmasteredWeapon } from './state';
-import type { MoraleModifier, Order } from './types';
+import type { Carried, MoraleModifier, Order } from './types';
 
 /** Une de nos escouades telle que le joueur la déploie. */
 export interface PlayerSquadSetup {
@@ -17,7 +17,13 @@ export interface PlayerSquadSetup {
   cell: Cell;
   order: Order;
   moraleModifiers?: MoraleModifier[];
+  /** Améliorations : id d'emplacement → id de sous-emplacement → id d'objet (les flèches enflammées sur l'arc). */
+  upgrades?: Upgrades;
+  /** Consommables portés (la pâte incendiaire…). */
+  carried?: Carried;
 }
+
+export type Upgrades = Record<Id, Record<Id, Id>>;
 
 export interface BattleSetup {
   wave: Wave;
@@ -66,15 +72,30 @@ export interface SquadProfile {
   unmastered: UnmasteredWeapon[];
 }
 
+/** Améliorations posées, dans l'ordre des emplacements de squad.json puis des sous-emplacements de l'objet. */
+function upgradeItems(data: GameData, equipment: Record<Id, Id>, upgrades: Upgrades): Item[] {
+  return data.squad.slots.flatMap((slot) => {
+    const itemId = equipment[slot.id];
+    const chosen = upgrades[slot.id];
+    if (itemId === undefined || chosen === undefined) return [];
+    return itemById(data, itemId).upgradeSlots.flatMap((sub) => {
+      const upgradeId = chosen[sub.id];
+      return upgradeId === undefined ? [] : [itemById(data, upgradeId)];
+    });
+  });
+}
+
 /**
- * Stats réelles d'une de nos escouades : base commune + équipement ; une arme non maîtrisée
- * perd ses capacités et donne un malus ; moral maximum = base + modificateurs.
+ * Stats réelles d'une de nos escouades : base commune + équipement + améliorations ; une arme
+ * non maîtrisée perd ses capacités et donne un malus (les capacités d'une amélioration ne
+ * dépendent pas de la maîtrise) ; moral maximum = base + modificateurs.
  */
 export function computeSquadStats(
   data: GameData,
   equipment: Record<Id, Id>,
   masteries: readonly Id[],
   moraleModifiers: readonly MoraleModifier[] = [],
+  upgrades: Upgrades = {},
 ): SquadProfile {
   const base = data.squad.stats;
   const stats: CombatStats = {
@@ -97,6 +118,10 @@ export function computeSquadStats(
       unmastered.push({ item: item.id, penalty, lostKeywords: item.keywords.map((k) => k.id) });
     }
   }
+  for (const upgrade of upgradeItems(data, equipment, upgrades)) {
+    for (const key of STAT_KEYS) stats[key] += upgrade.stats[key] ?? 0;
+    keywords.push(...upgrade.keywords);
+  }
   stats.speed = Math.max(0, stats.speed);
   return { stats, keywords, unmastered };
 }
@@ -116,7 +141,24 @@ function staysStillOnTurnOne(data: GameData, squad: PlayerSquadSetup): boolean {
   return data.postures.find((p) => p.id === squad.order.posture)?.movement === 'hold';
 }
 
-function checkEquipment(data: GameData, squad: PlayerSquadSetup, issues: string[]): void {
+/** Une amélioration va dans un sous-emplacement de l'objet porté, débloqué, qui accepte sa catégorie. */
+function checkUpgrades(data: GameData, setup: BattleSetup, squad: PlayerSquadSetup, issues: string[]): void {
+  for (const [slotId, chosen] of Object.entries(squad.upgrades ?? {}).sort(([a], [b]) => a.localeCompare(b))) {
+    const itemId = squad.equipment[slotId];
+    const item = itemId === undefined ? undefined : data.items.find((i) => i.id === itemId);
+    for (const [subId, upgradeId] of Object.entries(chosen).sort(([a], [b]) => a.localeCompare(b))) {
+      const where = `${squad.id} : amélioration ${slotId}.${subId}`;
+      const sub = item?.upgradeSlots.find((s) => s.id === subId);
+      const upgrade = data.items.find((i) => i.id === upgradeId);
+      if (!sub) issues.push(`${where} : aucun sous-emplacement « ${subId} » sur l'objet porté`);
+      else if (sub.unlockedBy !== undefined && !(setup.unlocks ?? []).includes(sub.unlockedBy)) issues.push(`${where} : verrouillé (${sub.unlockedBy})`);
+      if (!upgrade) issues.push(`${where} : objet inconnu « ${upgradeId} »`);
+      else if (sub && !sub.accepts.includes(upgrade.category)) issues.push(`${where} : « ${upgradeId} » ne va pas dans ce sous-emplacement`);
+    }
+  }
+}
+
+function checkEquipment(data: GameData, setup: BattleSetup, squad: PlayerSquadSetup, issues: string[]): void {
   for (const slot of data.squad.slots) {
     const itemId = squad.equipment[slot.id];
     if (itemId === undefined) continue;
@@ -126,6 +168,11 @@ function checkEquipment(data: GameData, squad: PlayerSquadSetup, issues: string[
   }
   for (const slotId of Object.keys(squad.equipment).sort()) {
     if (!data.squad.slots.some((s) => s.id === slotId)) issues.push(`${squad.id} : emplacement inconnu « ${slotId} »`);
+  }
+  checkUpgrades(data, setup, squad, issues);
+  for (const [consumable, amount] of Object.entries(squad.carried ?? {}).sort(([a], [b]) => a.localeCompare(b))) {
+    if (!data.consumables.some((c) => c.id === consumable)) issues.push(`${squad.id} : consommable inconnu « ${consumable} »`);
+    if (!Number.isInteger(amount) || amount < 0) issues.push(`${squad.id} : quantité invalide de « ${consumable} » (${amount})`);
   }
   for (const mastery of squad.masteries) {
     if (!data.masteries.some((m) => m.id === mastery)) issues.push(`${squad.id} : maîtrise inconnue « ${mastery} »`);
@@ -139,7 +186,7 @@ function checkFortifiedCell(data: GameData, forts: readonly FortificationState[]
   const fortification = fortificationData(data, fort.fortification);
   const at = `(${cell.col},${cell.row})`;
   if (fortification.blocksMovement) issues.push(`${where} : ${at} est une ${fort.name.toLowerCase()}, infranchissable`);
-  const stats = computeSquadStats(data, squad.equipment, squad.masteries).stats;
+  const stats = profileOf(data, squad).stats;
   const shooter = stats.rangedAttack > 0 && stats.range > 0;
   if (fortification.occupants === 'ranged' && !shooter) issues.push(`${where} : ${at} est une ${fort.name.toLowerCase()}, réservée aux tireurs`);
 }
@@ -155,7 +202,7 @@ function checkPlannedTurns(
   if (squad.order.plannedTurns.length > allowed) {
     issues.push(`${squad.id} : ${squad.order.plannedTurns.length} tours planifiés pour ${allowed} autorisé(s)`);
   }
-  const speed = computeSquadStats(data, squad.equipment, squad.masteries).stats.speed;
+  const speed = profileOf(data, squad).stats.speed;
   const firstTurn = squad.order.plannedTurns[0];
   if (!firstTurn) return;
   if (firstTurn.steps.length > speed) issues.push(`${squad.id} : ${firstTurn.steps.length} pas pour une vitesse de ${speed}`);
@@ -186,7 +233,7 @@ function checkPlayerSquads(data: GameData, setup: BattleSetup, forts: readonly F
     const posture = data.postures.find((p) => p.id === squad.order.posture);
     if (!posture) issues.push(`${squad.id} : posture inconnue « ${squad.order.posture} »`);
     else if (posture.enemyOnly) issues.push(`${squad.id} : la posture « ${posture.id} » est réservée aux ennemis`);
-    checkEquipment(data, squad, issues);
+    checkEquipment(data, setup, squad, issues);
     checkFortifiedCell(data, forts, squad, squad.cell, squad.id, issues);
     checkPlannedTurns(data, setup, forts, squad, issues);
   });
@@ -199,7 +246,7 @@ function movementOf(data: GameData, postureId: Id): BattleSquad['movement'] {
 }
 
 function playerSquad(data: GameData, squad: PlayerSquadSetup, rank: number): BattleSquad {
-  const profile = computeSquadStats(data, squad.equipment, squad.masteries, squad.moraleModifiers);
+  const profile = profileOf(data, squad);
   return {
     id: squad.id,
     name: squad.name,
@@ -213,7 +260,12 @@ function playerSquad(data: GameData, squad: PlayerSquadSetup, rank: number): Bat
     movement: movementOf(data, squad.order.posture),
     plannedTurns: structuredClone(squad.order.plannedTurns),
     status: 'active',
+    carried: { ...squad.carried },
   };
+}
+
+function profileOf(data: GameData, squad: PlayerSquadSetup): SquadProfile {
+  return computeSquadStats(data, squad.equipment, squad.masteries, squad.moraleModifiers, squad.upgrades);
 }
 
 /**
@@ -265,6 +317,7 @@ export function enemySquad(data: GameData, arrival: PendingArrival, cell: Cell):
     movement: movementOf(data, enemy.posture),
     plannedTurns: [],
     status: 'active',
+    carried: {},
   };
 }
 

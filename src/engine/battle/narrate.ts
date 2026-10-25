@@ -5,7 +5,7 @@
 import type { Cell, GameData } from '../data/types';
 import type { BattleResult } from './battle';
 import type { DamageApplied, DamageBreakdown } from './damage';
-import type { BattleEvent, BlockReason, HaltReason, MoveWhy } from './events';
+import type { BattleEvent, BlockReason, FireDecision, HaltReason, MoveWhy } from './events';
 import { formatCell } from './hex';
 import { type MoraleTier, moraleTier } from './morale';
 import type { BattleSquad, BattleState, Outcome, PendingArrival } from './state';
@@ -129,6 +129,31 @@ function formatOutcome(outcome: Outcome, turn: number, breaches: number): string
   return `${text}\nIncursions au cœur du campement : ${breaches}.`;
 }
 
+function consumableName(data: GameData, id: string): string {
+  return data.consumables.find((c) => c.id === id)?.name ?? id;
+}
+
+/** « , volée enflammée » ou « , volée normale (plus de pâte incendiaire) ». */
+function formatFire(data: GameData, fire: FireDecision | undefined): string {
+  if (!fire) return '';
+  if (fire.used) return `, volée enflammée (${keywordName(data, fire.keyword)})`;
+  const why = {
+    noConsumable: () => `plus de ${consumableName(data, fire.consumable ?? '').toLowerCase()}`,
+    lowDefense: () => `défense ${fire.why === 'lowDefense' ? fire.defense : 0} sous le seuil de ${data.config.fireArrows.minTargetDefense}`,
+    alreadyBurning: () => 'la cible brûle déjà',
+  }[fire.why]();
+  return `, volée normale (${why})`;
+}
+
+function formatIgnite(data: GameData, names: Names, e: Extract<BattleEvent, { type: 'ignite' }>): string {
+  const target = les(names.name(e.target));
+  let text = `    ${keywordName(data, e.keyword)} : ${target} perdent ${e.moraleBefore - e.moraleAfter} de moral (moral ${e.moraleBefore} → ${e.moraleAfter})`;
+  if (e.burn) text += ` et brûleront ${e.burn.turnsLeft} tours (${e.burn.amount} dégâts par tour)`;
+  if (e.site) text += ` ; ${names.site(e.site)} brûle aussi`;
+  if (e.consumed) text += `. ${consumableName(data, e.consumed.consumable)} restante : ${e.consumed.left}`;
+  return `${text}.`;
+}
+
 function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1);
 }
@@ -159,7 +184,13 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
     case 'breach':
       return `  ${N(e.squad)} atteignent le cœur du campement en ${formatCell(e.cell)} : incursion n°${e.total}. Ils quittent la bataille.`;
     case 'shot':
-      return `  ${N(e.attacker)} tirent sur ${n(e.target)} à ${e.distance} case${e.distance > 1 ? 's' : ''} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
+      return `  ${N(e.attacker)} tirent sur ${n(e.target)} à ${e.distance} case${e.distance > 1 ? 's' : ''}${formatFire(data, e.fire)} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
+    case 'ignite':
+      return formatIgnite(data, names, e);
+    case 'burn':
+      return `  ${N(e.squad)} brûlent : ${e.amount} dégâts qui ignorent la défense ; ${formatApplied(data, names, e.squad, e.applied)}.${e.turnsLeft > 0 ? ` Encore ${e.turnsLeft} tour.` : ' Le feu s\'éteint.'}`;
+    case 'fortificationBurn':
+      return `  ${capitalize(names.site(e.site))} brûle : structure ${e.before} → ${e.after}.${e.turnsLeft > 0 ? ` Encore ${e.turnsLeft} tour.` : ' Le feu s\'éteint.'}`;
     case 'strike':
       return `  ${N(e.attacker)} frappent ${n(e.target)} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
     case 'fortificationHit':
@@ -178,11 +209,12 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
   }
 }
 
-type Phase = 'Mouvement' | 'Tir' | 'Mêlée';
+type Phase = 'Feu' | 'Mouvement' | 'Tir' | 'Mêlée';
 
 function phaseOf(e: BattleEvent): Phase | undefined {
   if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach') return 'Mouvement';
-  if (e.type === 'shot') return 'Tir';
+  if (e.type === 'burn' || e.type === 'fortificationBurn') return 'Feu';
+  if (e.type === 'shot' || e.type === 'ignite') return 'Tir';
   if (e.type === 'strike' || e.type === 'fortificationHit') return 'Mêlée';
   return undefined;
 }
@@ -203,6 +235,9 @@ function describeSquad(data: GameData, s: BattleSquad): string[] {
     const item = data.items.find((i) => i.id === u.item)?.name ?? u.item;
     const lost = u.lostKeywords.length > 0 ? `, sans ${u.lostKeywords.map((k) => keywordName(data, k)).join(', ')}` : '';
     lines.push(`  ${item} non maîtrisée : −${u.penalty} en attaque${lost}.`);
+  }
+  for (const [id, amount] of Object.entries(s.carried).sort(([a], [b]) => a.localeCompare(b))) {
+    lines.push(`  Porte ${amount} ${consumableName(data, id).toLowerCase()}.`);
   }
   s.plannedTurns.forEach((turn, index) => {
     const steps = turn.steps.length > 0 ? turn.steps.map(formatStep).join(', ') : 'rester sur place';
