@@ -1,0 +1,74 @@
+[
+  {
+    "id": "epee",
+    "name": "Épée",
+    "category": "epee",
+    "provisional": true,
+    "stats": { "meleeAttack": 3 },
+    "keywords": [],
+    "upgradeSlots": []
+  },
+  {
+    "id": "arc-court",
+    "name": "Arc court",
+    "category": "arc",
+    "provisional": true,
+    "stats": { "rangedAttack": 3, "range": 3 },
+    "keywords": [],
+    "upgradeSlots": [{ "id": "fleches", "accepts": ["fleches"], "unlockedBy": "forgeron" }]
+  },
+  {
+    "id": "pique",
+    "name": "Pique",
+    "category": "pique",
+    "provisional": true,
+    "stats": { "meleeAttack": 2 },
+    "keywords": [],
+    "upgradeSlots": []
+  },
+  {
+    "id": "masse",
+    "name": "Masse",
+    "category": "masse",
+    "provisional": true,
+    "stats": { "meleeAttack": 3 },
+    "keywords": [{ "id": "perce-armure", "x": 1 }],
+    "upgradeSlots": []
+  },
+  {
+    "id": "fleches-enflammees",
+    "name": "Flèches enflammées",
+    "category": "fleches",
+    "provisional": true,
+    "stats": {},
+    "keywords": [{ "id": "feu" }],
+    "upgradeSlots": []
+  },
+  {
+    "id": "cuir",
+    "name": "Armure de cuir",
+    "category": "armure",
+    "provisional": true,
+    "stats": { "defense": 1 },
+    "keywords": [],
+    "upgradeSlots": []
+  },
+  {
+    "id": "mailles",
+    "name": "Cotte de mailles",
+    "category": "armure",
+    "provisional": true,
+    "stats": { "defense": 2 },
+    "keywords": [],
+    "upgradeSlots": []
+  },
+  {
+    "id": "plates",
+    "name": "Armure de plates",
+    "category": "armure",
+    "provisional": true,
+    "stats": { "defense": 3, "speed": -1 },
+    "keywords": [],
+    "upgradeSlots": []
+  }
+]

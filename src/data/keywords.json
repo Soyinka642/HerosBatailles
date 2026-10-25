@@ -1,0 +1,35 @@
+[
+  {
+    "id": "perce-armure",
+    "name": "Perce-armure {X}",
+    "description": "Ignore {X} points de défense de la cible.",
+    "hasParameter": true,
+    "effects": [
+      { "trigger": "onAttack", "target": "self", "action": { "kind": "ignoreDefense", "amount": "X" } }
+    ]
+  },
+  {
+    "id": "feu",
+    "name": "Feu",
+    "description": "La cible brûle : dégâts au tour suivant et perte de moral.",
+    "hasParameter": false,
+    "effects": [
+      { "trigger": "onHit", "target": "attackTarget", "action": { "kind": "delayedDamage", "amount": 2, "delayTurns": 1 } },
+      { "trigger": "onHit", "target": "attackTarget", "action": { "kind": "moraleLoss", "amount": 1 } }
+    ]
+  },
+  {
+    "id": "charge",
+    "name": "Charge",
+    "description": "Bonus d'attaque après une course suffisante.",
+    "hasParameter": false,
+    "effects": [
+      {
+        "trigger": "onAttack",
+        "condition": { "kind": "movedAtLeast", "cells": 3 },
+        "target": "self",
+        "action": { "kind": "attackBonus", "amount": 2 }
+      }
+    ]
+  }
+]
