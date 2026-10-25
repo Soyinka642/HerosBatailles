@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { loadGameData } from '../data/load';
 import { runBattle } from './battle';
 import { type DamageBreakdown, computeDamage } from './damage';
-import { formatDamage, formatNumber, narrateBattle, narrateEvent, of } from './narrate';
+import { formatDamage, formatNumber, narrateBattle, narrateEvent } from './narrate';
 import { fromTemplate } from './setup';
 import { ADVANCE, HOLD } from './test-helpers';
 
 const data = loadGameData();
-const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers' })[id] ?? id, maxMorale: () => 16 };
+const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers', fantassins: 'Fantassins' })[id] ?? id, maxMorale: () => 16 };
 
 function damage(input: Partial<Parameters<typeof computeDamage>[0]>): DamageBreakdown {
   return computeDamage(
@@ -23,19 +23,13 @@ describe('texte des dégâts', () => {
     expect(formatNumber(-3)).toBe('−3');
   });
 
-  it('élision devant une voyelle', () => {
-    expect(of('Épéistes')).toBe("d'Épéistes");
-    expect(of('Archers')).toBe("d'Archers");
-    expect(of('Piquiers')).toBe('de Piquiers');
-  });
-
   it('soustraction simple', () => {
     expect(formatDamage(data, names, damage({}))).toBe('6 − 2 = 4 dégâts');
   });
 
   it('bonus, moral, blessés et arrondi', () => {
     const d = damage({ bonuses: [{ keyword: 'soutien', from: 'piquiers', amount: 2 }], tier: 'shaken', efficiency: 0.9, wounded: 2 });
-    expect(formatDamage(data, names, d)).toBe('6 + 2 (Soutien de Piquiers) − 2 = 6 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 4,86 → 5 dégâts');
+    expect(formatDamage(data, names, d)).toBe('6 + 2 (Soutien des Piquiers) − 2 = 6 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 4,86 → 5 dégâts');
     const one = damage({ wounded: 1 });
     expect(formatDamage(data, names, one)).toBe('6 − 2 = 4 × 0,95 (1 blessé sur 20) = 3,8 → 4 dégâts');
   });
@@ -55,7 +49,7 @@ describe('texte des dégâts', () => {
       damage: damage({}),
       applied: { amount: 4, moraleBefore: 12, moraleAfter: 8, woundedBefore: 0, woundedAfter: 2 },
     });
-    expect(line).toBe('  Épéistes frappent fantassins : 6 − 2 = 4 dégâts ; moral 12 → 8, blessés 0 → 2 ; ils sont ébranlés.');
+    expect(line).toBe('  Les Épéistes frappent les Fantassins : 6 − 2 = 4 dégâts ; moral 12 → 8, blessés 0 → 2 ; les Fantassins sont ébranlés.');
   });
 });
 

@@ -36,10 +36,10 @@ function namesOf(data: GameData, state: BattleState): Names {
   };
 }
 
-/** « de » devant un nom, élidé devant une voyelle : « d'Épéistes », « de Piquiers ». */
-export function of(name: string): string {
-  return /^[AEIOUYÀÂÉÈÊÎÔaeiouyàâéèêîô]/.test(name) ? `d'${name}` : `de ${name}`;
-}
+// Les noms d'escouades sont des pluriels : « les Épéistes », « des Fantassins du portail n°1 ».
+export const les = (name: string): string => `les ${name}`;
+export const Les = (name: string): string => `Les ${name}`;
+export const des = (name: string): string => `des ${name}`;
 
 function wounded(count: number): string {
   return `${count} blessé${count > 1 ? 's' : ''}`;
@@ -54,7 +54,7 @@ function keywordName(data: GameData, id: string, x?: number): string {
 export function formatDamage(data: GameData, names: Names, d: DamageBreakdown): string {
   let text = String(d.attack);
   for (const bonus of d.bonuses) {
-    const source = bonus.from ? ` ${of(names.name(bonus.from))}` : '';
+    const source = bonus.from ? ` ${des(names.name(bonus.from))}` : '';
     text += ` + ${bonus.amount} (${keywordName(data, bonus.keyword)}${source})`;
   }
   if (d.ignoreDefense.length > 0) {
@@ -80,34 +80,34 @@ function formatApplied(data: GameData, names: Names, target: string, a: DamageAp
   const max = names.maxMorale(target);
   const before = moraleTier(a.moraleBefore, max, data.config);
   const after = moraleTier(a.moraleAfter, max, data.config);
-  if (after !== before && a.moraleAfter > 0) text += ` ; ils sont ${TIER_NAMES[after]}`;
+  if (after !== before && a.moraleAfter > 0) text += ` ; ${les(names.name(target))} sont ${TIER_NAMES[after]}`;
   return text;
 }
 
 function formatBlock(names: Names, reason: BlockReason): string {
   switch (reason.kind) {
     case 'occupied':
-      return `la case est tenue par ${names.name(reason.by)}`;
+      return `la case est tenue par ${les(names.name(reason.by))}`;
     case 'conflict':
-      return `${names.name(reason.winner)} y entrent avant eux (${reason.why === 'faster' ? 'plus rapides' : 'déployés avant'})`;
+      return `${les(names.name(reason.winner))} y entrent avant eux (${reason.why === 'faster' ? 'plus rapides' : 'déployés avant'})`;
     case 'cycle':
       return reason.with.length === 1
-        ? `échange de cases avec ${names.name(reason.with[0]!)} : personne ne bouge`
-        : `rotation avec ${reason.with.map((id) => names.name(id)).join(' et ')} : personne ne bouge`;
+        ? `échange de cases avec ${les(names.name(reason.with[0]!))} : personne ne bouge`
+        : `rotation avec ${reason.with.map((id) => les(names.name(id))).join(' et ')} : personne ne bouge`;
     case 'chain':
-      return `${names.name(reason.ahead)}, qui devaient libérer la case, sont bloqués`;
+      return `${les(names.name(reason.ahead))}, qui devaient libérer la case, sont bloqués`;
   }
 }
 
 function formatHalt(names: Names, reason: HaltReason): string {
   return reason.kind === 'engaged'
-    ? `sont au contact ${of(names.name(reason.by))} : ils ne bougent plus`
-    : `s'arrêtent : ${names.name(reason.target)} sont à portée`;
+    ? `sont au contact ${des(names.name(reason.by))} : ils ne bougent plus`
+    : `s'arrêtent : ${les(names.name(reason.target))} sont à portée`;
 }
 
 function formatWhy(names: Names, why: MoveWhy): string {
   if (why.kind === 'planned') return ' (tour planifié)';
-  if (why.kind === 'deviate') return `, en déviant vers ${names.name(why.toward)}`;
+  if (why.kind === 'deviate') return `, en déviant vers ${les(names.name(why.toward))}`;
   return '';
 }
 
@@ -127,14 +127,15 @@ function step(n: number): string {
 
 /** Une ligne de journal par événement (sans les en-têtes de phase). */
 export function narrateEvent(data: GameData, names: Names, e: BattleEvent): string {
-  const n = (id: string) => names.name(id);
+  const n = (id: string) => les(names.name(id));
+  const N = (id: string) => Les(names.name(id));
   switch (e.type) {
     case 'turnStart':
       return `\n== Tour ${e.turn} ==`;
     case 'arrival':
-      return `${n(e.squad)} sortent du portail en ${formatCell(e.cell)}.`;
+      return `${N(e.squad)} sortent du portail en ${formatCell(e.cell)}.`;
     case 'arrivalDelayed':
-      return `${n(e.squad)} ne trouvent aucune case libre au portail : ils attendent le tour suivant.`;
+      return `${N(e.squad)} ne trouvent aucune case libre au portail : ils attendent le tour suivant.`;
     case 'move':
       return `${step(e.step)}${n(e.squad)} ${formatCell(e.from)} → ${formatCell(e.to)}${formatWhy(names, e.why)}.`;
     case 'wait':
@@ -144,17 +145,17 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
     case 'halted':
       return `${step(e.step)}${n(e.squad)} ${formatHalt(names, e.reason)}.`;
     case 'breach':
-      return `  ${n(e.squad)} atteignent le cœur du campement en ${formatCell(e.cell)} : incursion n°${e.total}. Ils quittent la bataille.`;
+      return `  ${N(e.squad)} atteignent le cœur du campement en ${formatCell(e.cell)} : incursion n°${e.total}. Ils quittent la bataille.`;
     case 'shot':
-      return `  ${n(e.attacker)} tirent sur ${n(e.target)} à ${e.distance} case${e.distance > 1 ? 's' : ''} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
+      return `  ${N(e.attacker)} tirent sur ${n(e.target)} à ${e.distance} case${e.distance > 1 ? 's' : ''} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
     case 'strike':
-      return `  ${n(e.attacker)} frappent ${n(e.target)} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
+      return `  ${N(e.attacker)} frappent ${n(e.target)} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
     case 'rout':
-      return `  ${n(e.squad)} sont en déroute et quittent le terrain.`;
+      return `  ${N(e.squad)} sont en déroute et quittent le terrain.`;
     case 'turnEnd':
       return [
         'Fin du tour :',
-        ...e.squads.map((s) => `  ${n(s.id)} en ${formatCell(s.cell)}, moral ${s.morale}/${s.maxMorale}${s.wounded > 0 ? `, ${wounded(s.wounded)}` : ''}`),
+        ...e.squads.map((s) => `  ${names.name(s.id)} en ${formatCell(s.cell)}, moral ${s.morale}/${s.maxMorale}${s.wounded > 0 ? `, ${wounded(s.wounded)}` : ''}`),
       ].join('\n');
     case 'battleEnd':
       return `\n${formatOutcome(e.outcome, e.turn, e.breaches)}`;

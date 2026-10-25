@@ -9,10 +9,10 @@ Ennemis annoncés, dans l’ordre d’arrivée :
 - Brutes du portail n°1, tour 1, rangée 2 : mêlée 6, tir 0, défense 3, vitesse 2, moral 24 ; Perce-armure 2.
 
 == Tour 1 ==
-Brutes du portail n°1 sortent du portail en (11,2).
+Les Brutes du portail n°1 sortent du portail en (11,2).
 Mouvement :
-  pas 1 : Brutes du portail n°1 (11,2) → (10,2).
-  pas 2 : Brutes du portail n°1 (10,2) → (9,2).
+  pas 1 : les Brutes du portail n°1 (11,2) → (10,2).
+  pas 2 : les Brutes du portail n°1 (10,2) → (9,2).
 Fin du tour :
   Épéistes en plates en (3,2), moral 20/20
   Archers en (1,2), moral 20/20
@@ -20,8 +20,8 @@ Fin du tour :
 
 == Tour 2 ==
 Mouvement :
-  pas 1 : Brutes du portail n°1 (9,2) → (8,2).
-  pas 2 : Brutes du portail n°1 (8,2) → (7,2).
+  pas 1 : les Brutes du portail n°1 (9,2) → (8,2).
+  pas 2 : les Brutes du portail n°1 (8,2) → (7,2).
 Fin du tour :
   Épéistes en plates en (3,2), moral 20/20
   Archers en (1,2), moral 20/20
@@ -29,8 +29,8 @@ Fin du tour :
 
 == Tour 3 ==
 Mouvement :
-  pas 1 : Brutes du portail n°1 (7,2) → (6,2).
-  pas 2 : Brutes du portail n°1 (6,2) → (5,2).
+  pas 1 : les Brutes du portail n°1 (7,2) → (6,2).
+  pas 2 : les Brutes du portail n°1 (6,2) → (5,2).
 Fin du tour :
   Épéistes en plates en (3,2), moral 20/20
   Archers en (1,2), moral 20/20
@@ -38,13 +38,13 @@ Fin du tour :
 
 == Tour 4 ==
 Mouvement :
-  pas 1 : Brutes du portail n°1 (5,2) → (4,2).
-  pas 2 : Brutes du portail n°1 sont au contact d'Épéistes en plates : ils ne bougent plus.
+  pas 1 : les Brutes du portail n°1 (5,2) → (4,2).
+  pas 2 : les Brutes du portail n°1 sont au contact des Épéistes en plates : ils ne bougent plus.
 Tir :
-  Archers tirent sur Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 24 → 22.
+  Les Archers tirent sur les Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 24 → 22.
 Mêlée :
-  Épéistes en plates frappent Brutes du portail n°1 : 6 − 3 = 3 dégâts ; moral 22 → 19.
-  Brutes du portail n°1 frappent Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 dégâts ; moral 20 → 16.
+  Les Épéistes en plates frappent les Brutes du portail n°1 : 6 − 3 = 3 dégâts ; moral 22 → 19.
+  Les Brutes du portail n°1 frappent les Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 dégâts ; moral 20 → 16.
 Fin du tour :
   Épéistes en plates en (3,2), moral 16/20
   Archers en (1,2), moral 20/20
@@ -52,12 +52,12 @@ Fin du tour :
 
 == Tour 5 ==
 Mouvement :
-  pas 1 : Brutes du portail n°1 sont au contact d'Épéistes en plates : ils ne bougent plus.
+  pas 1 : les Brutes du portail n°1 sont au contact des Épéistes en plates : ils ne bougent plus.
 Tir :
-  Archers tirent sur Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 19 → 17.
+  Les Archers tirent sur les Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 19 → 17.
 Mêlée :
-  Épéistes en plates frappent Brutes du portail n°1 : 6 − 3 = 3 dégâts ; moral 17 → 14, blessés 0 → 1 ; ils sont ébranlés.
-  Brutes du portail n°1 frappent Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 dégâts ; moral 16 → 12, blessés 0 → 1 ; ils sont ébranlés.
+  Les Épéistes en plates frappent les Brutes du portail n°1 : 6 − 3 = 3 dégâts ; moral 17 → 14, blessés 0 → 1 ; les Brutes du portail n°1 sont ébranlés.
+  Les Brutes du portail n°1 frappent les Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 dégâts ; moral 16 → 12, blessés 0 → 1 ; les Épéistes en plates sont ébranlés.
 Fin du tour :
   Épéistes en plates en (3,2), moral 12/20, 1 blessé
   Archers en (1,2), moral 20/20
@@ -65,12 +65,12 @@ Fin du tour :
 
 == Tour 6 ==
 Mouvement :
-  pas 1 : Brutes du portail n°1 sont au contact d'Épéistes en plates : ils ne bougent plus.
+  pas 1 : les Brutes du portail n°1 sont au contact des Épéistes en plates : ils ne bougent plus.
 Tir :
-  Archers tirent sur Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 14 → 12, blessés 1 → 3.
+  Les Archers tirent sur les Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 14 → 12, blessés 1 → 3.
 Mêlée :
-  Épéistes en plates frappent Brutes du portail n°1 : 6 − 3 = 3 × 0,9 (ébranlés) × 0,95 (1 blessé sur 20) = 2,57 → 3 dégâts ; moral 12 → 9, blessés 3 → 6.
-  Brutes du portail n°1 frappent Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 3,06 → 3 dégâts ; moral 12 → 9, blessés 1 → 4.
+  Les Épéistes en plates frappent les Brutes du portail n°1 : 6 − 3 = 3 × 0,9 (ébranlés) × 0,95 (1 blessé sur 20) = 2,57 → 3 dégâts ; moral 12 → 9, blessés 3 → 6.
+  Les Brutes du portail n°1 frappent les Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 3,06 → 3 dégâts ; moral 12 → 9, blessés 1 → 4.
 Fin du tour :
   Épéistes en plates en (3,2), moral 9/20, 4 blessés
   Archers en (1,2), moral 20/20
@@ -78,12 +78,12 @@ Fin du tour :
 
 == Tour 7 ==
 Mouvement :
-  pas 1 : Brutes du portail n°1 sont au contact d'Épéistes en plates : ils ne bougent plus.
+  pas 1 : les Brutes du portail n°1 sont au contact des Épéistes en plates : ils ne bougent plus.
 Tir :
-  Archers tirent sur Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 9 → 7, blessés 6 → 8 ; ils sont vacillants.
+  Les Archers tirent sur les Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 9 → 7, blessés 6 → 8 ; les Brutes du portail n°1 sont vacillants.
 Mêlée :
-  Épéistes en plates frappent Brutes du portail n°1 : 6 − 3 = 3 × 0,9 (ébranlés) × 0,8 (4 blessés sur 20) = 2,16 → 2 dégâts ; moral 7 → 5, blessés 8 → 10.
-  Brutes du portail n°1 frappent Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = 1,92 → 2 dégâts ; moral 9 → 7, blessés 4 → 6.
+  Les Épéistes en plates frappent les Brutes du portail n°1 : 6 − 3 = 3 × 0,9 (ébranlés) × 0,8 (4 blessés sur 20) = 2,16 → 2 dégâts ; moral 7 → 5, blessés 8 → 10.
+  Les Brutes du portail n°1 frappent les Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = 1,92 → 2 dégâts ; moral 9 → 7, blessés 4 → 6.
 Fin du tour :
   Épéistes en plates en (3,2), moral 7/20, 6 blessés
   Archers en (1,2), moral 20/20
@@ -91,12 +91,12 @@ Fin du tour :
 
 == Tour 8 ==
 Mouvement :
-  pas 1 : Brutes du portail n°1 sont au contact d'Épéistes en plates : ils ne bougent plus.
+  pas 1 : les Brutes du portail n°1 sont au contact des Épéistes en plates : ils ne bougent plus.
 Tir :
-  Archers tirent sur Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 5 → 3, blessés 10 → 12.
+  Les Archers tirent sur les Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 5 → 3, blessés 10 → 12.
 Mêlée :
-  Épéistes en plates frappent Brutes du portail n°1 : 6 − 3 = 3 × 0,9 (ébranlés) × 0,7 (6 blessés sur 20) = 1,89 → 2 dégâts ; moral 3 → 1, blessés 12 → 14.
-  Brutes du portail n°1 frappent Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 × 0,8 (vacillants) × 0,5 (12 blessés sur 20) = 1,6 → 2 dégâts ; moral 7 → 5, blessés 6 → 8 ; ils sont vacillants.
+  Les Épéistes en plates frappent les Brutes du portail n°1 : 6 − 3 = 3 × 0,9 (ébranlés) × 0,7 (6 blessés sur 20) = 1,89 → 2 dégâts ; moral 3 → 1, blessés 12 → 14.
+  Les Brutes du portail n°1 frappent les Épéistes en plates : 6 − 2 (défense 4, Perce-armure 2) = 4 × 0,8 (vacillants) × 0,5 (12 blessés sur 20) = 1,6 → 2 dégâts ; moral 7 → 5, blessés 6 → 8 ; les Épéistes en plates sont vacillants.
 Fin du tour :
   Épéistes en plates en (3,2), moral 5/20, 8 blessés
   Archers en (1,2), moral 20/20
@@ -104,10 +104,10 @@ Fin du tour :
 
 == Tour 9 ==
 Mouvement :
-  pas 1 : Brutes du portail n°1 sont au contact d'Épéistes en plates : ils ne bougent plus.
+  pas 1 : les Brutes du portail n°1 sont au contact des Épéistes en plates : ils ne bougent plus.
 Tir :
-  Archers tirent sur Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 1 → 0, blessés 14 → 15.
-  Brutes du portail n°1 sont en déroute et quittent le terrain.
+  Les Archers tirent sur les Brutes du portail n°1 à 3 cases : 5 − 3 = 2 dégâts ; moral 1 → 0, blessés 14 → 15.
+  Les Brutes du portail n°1 sont en déroute et quittent le terrain.
 Fin du tour :
   Épéistes en plates en (3,2), moral 5/20, 8 blessés
   Archers en (1,2), moral 20/20
