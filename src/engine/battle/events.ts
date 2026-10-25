@@ -14,7 +14,9 @@ export type BlockReason =
   /** Échange de cases ou rotation : personne ne bouge. */
   | { kind: 'cycle'; with: string[] }
   /** L'escouade devant, qui devait libérer la case, est elle-même bloquée. */
-  | { kind: 'chain'; ahead: string };
+  | { kind: 'chain'; ahead: string }
+  /** Une barrière debout (palissade) occupe la case. */
+  | { kind: 'fortification'; site: string };
 
 export type HaltReason =
   /** Au contact d'un ennemi au début du pas : engagée. */
@@ -47,6 +49,8 @@ export type BattleEvent =
   | { type: 'breach'; squad: string; cell: Cell; total: number }
   | { type: 'shot'; attacker: string; target: string; distance: number; damage: DamageBreakdown; applied: DamageApplied }
   | { type: 'strike'; attacker: string; target: string; damage: DamageBreakdown; applied: DamageApplied }
+  | { type: 'fortificationHit'; attacker: string; site: string; damage: DamageBreakdown; before: number; after: number }
+  | { type: 'fortificationDestroyed'; site: string }
   | { type: 'rout'; squad: string }
   | { type: 'turnEnd'; turn: number; squads: SquadSnapshot[] }
   | { type: 'battleEnd'; turn: number; outcome: Outcome; breaches: number };

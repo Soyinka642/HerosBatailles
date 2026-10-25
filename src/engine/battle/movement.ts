@@ -3,10 +3,11 @@
 // règles fixes tranchent les conflits. Une escouade contrariée s'arrête pour la fin du tour
 // (réaction par défaut) et reprend sa posture au tour suivant.
 //
-// Lot 1.2b : les fortifications sont ignorées (aucune palissade ne barre le passage).
+// Une palissade debout barre le passage des deux camps ; la tour se traverse.
 
 import type { Area, Cell, GameData } from '../data/types';
 import type { BattleEvent, BlockReason, HaltReason, MoveWhy } from './events';
+import { barrierAt, occupiedFortification } from './fortifications';
 import { ahead, isOnField, sameCell } from './hex';
 import { type BattleSquad, type BattleState, isShooter, squadAt } from './state';
 import { adjacentEnemies, enemyAheadOnRow, nearestEnemy, rangedTarget, stepToward } from './targeting';
@@ -35,11 +36,11 @@ function plannedIntent(state: BattleState, squad: BattleSquad, step: number): In
 }
 
 /** Arrêts communs à Avancer et Assaut : au contact d'un ennemi, ou tireur avec une cible à portée. */
-function postureHalt(state: BattleState, squad: BattleSquad): Intent | undefined {
+function postureHalt(data: GameData, state: BattleState, squad: BattleSquad): Intent | undefined {
   const halt = engagedHalt(state, squad);
   if (halt) return halt;
   if (!isShooter(squad)) return undefined;
-  const target = rangedTarget(state, squad);
+  const target = rangedTarget(data, state, squad);
   return target ? { kind: 'halt', reason: { kind: 'targetInRange', target: target.id } } : undefined;
 }
 
@@ -50,16 +51,19 @@ function straightIntent(data: GameData, squad: BattleSquad): Intent {
 
 /** Avancer : tout droit tant qu'un ennemi est devant sur sa rangée (ou qu'il n'y a aucun ennemi), sinon vers le plus proche. */
 function advanceIntent(data: GameData, state: BattleState, squad: BattleSquad): Intent {
-  const halt = postureHalt(state, squad);
+  const halt = postureHalt(data, state, squad);
   if (halt) return halt;
   const nearest = nearestEnemy(state, squad);
   if (!nearest || enemyAheadOnRow(state, squad)) return straightIntent(data, squad);
   return { kind: 'move', to: stepToward(data.battlefield, squad.cell, nearest.cell), why: { kind: 'deviate', toward: nearest.id } };
 }
 
-/** Assaut : tout droit sur sa rangée vers le camp adverse, sans jamais dévier. */
+/** Assaut : tout droit sur sa rangée vers le camp adverse, sans jamais dévier. Un tireur reste dans la tour où il est entré. */
 function assaultIntent(data: GameData, state: BattleState, squad: BattleSquad): Intent {
-  return postureHalt(state, squad) ?? straightIntent(data, squad);
+  const halt = postureHalt(data, state, squad);
+  if (halt) return halt;
+  if (isShooter(squad) && occupiedFortification(data, state, squad)) return { kind: 'none' };
+  return straightIntent(data, squad);
 }
 
 /** Ce que veut faire une escouade au pas `step`, d'après les positions du début du pas. */
@@ -86,13 +90,19 @@ export interface MoveRequest {
  * Tranche les déplacements d'un pas, dans l'ordre fixé par la conception :
  * case tenue par une escouade immobile, puis cycles (échanges, rotations), puis conflits de
  * case (la plus rapide, puis la première déployée), puis chaînes, répétées jusqu'à stabilité.
+ * Une barrière debout (palissade) compte comme une case tenue.
  * Rend, pour chaque escouade qui voulait bouger, la raison de son blocage (absente = elle bouge).
  */
-export function resolveStep(state: BattleState, requests: readonly MoveRequest[]): Record<string, BlockReason | undefined> {
+export function resolveStep(data: GameData, state: BattleState, requests: readonly MoveRequest[]): Record<string, BlockReason | undefined> {
   const blocked: Record<string, BlockReason | undefined> = {};
   const moverAt = (cell: Cell) => requests.find((r) => sameCell(r.squad.cell, cell));
 
   for (const r of requests) {
+    const barrier = barrierAt(data, state, r.to);
+    if (barrier) {
+      blocked[r.squad.id] = { kind: 'fortification', site: barrier.site };
+      continue;
+    }
     const occupant = squadAt(state, r.to);
     if (occupant && !moverAt(r.to)) blocked[r.squad.id] = { kind: 'occupied', by: occupant.id };
   }
@@ -170,7 +180,7 @@ function playStep(data: GameData, state: BattleState, step: number, stopped: str
   const movers = state.squads.filter((s) => s.status === 'active' && !stopped.includes(s.id));
   const intents = movers.map((squad) => ({ squad, intent: intentFor(data, state, squad, step) }));
   const requests: MoveRequest[] = intents.flatMap(({ squad, intent }) => (intent.kind === 'move' ? [{ squad, to: intent.to }] : []));
-  const blocked = resolveStep(state, requests);
+  const blocked = resolveStep(data, state, requests);
   const events: BattleEvent[] = [];
   for (const { squad, intent } of intents) {
     if (intent.kind === 'none') continue;
@@ -183,6 +193,7 @@ function playStep(data: GameData, state: BattleState, step: number, stopped: str
       const reason = blocked[squad.id];
       if (reason) {
         stopped.push(squad.id);
+        if (reason.kind === 'fortification') squad.obstacle = reason.site;
         events.push({ type: 'blocked', step, squad: squad.id, target: intent.to, reason });
       } else {
         events.push({ type: 'move', step, squad: squad.id, from: { ...squad.cell }, to: { ...intent.to }, why: intent.why });
@@ -200,6 +211,7 @@ function playStep(data: GameData, state: BattleState, step: number, stopped: str
 export function movementPhase(data: GameData, state: BattleState): BattleEvent[] {
   const active = state.squads.filter((s) => s.status === 'active');
   const steps = Math.max(0, ...active.map((s) => s.stats.speed));
+  for (const squad of state.squads) delete squad.obstacle;
   const stopped: string[] = [];
   const events: BattleEvent[] = [];
   for (let step = 1; step <= steps; step++) events.push(...playStep(data, state, step, stopped));

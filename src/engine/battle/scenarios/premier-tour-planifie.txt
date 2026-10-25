@@ -1,5 +1,6 @@
 Bataille « vague-1 » (vague).
-Fortifications ignorées (lot 1.2c).
+
+Aucune fortification bâtie.
 
 Nos escouades, dans l’ordre de déploiement :
 - Épéistes en (2,1), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.

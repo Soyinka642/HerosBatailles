@@ -1,9 +1,7 @@
 // Boucle de bataille : arrivées par le portail, puis mouvement → tir → mêlée. Les conditions
 // de fin sont vérifiées à la fin de chaque phase ; le rituel et maxTurns, à la fin du tour.
-//
-// Lot 1.2b : les fortifications du terrain sont ignorées (voir setup.ts).
 
-import type { Area, Cell, GameData } from '../data/types';
+import type { Area, Cell, GameData, Id } from '../data/types';
 import type { BattleEvent } from './events';
 import { firePhase } from './fire';
 import { meleePhase } from './melee';
@@ -102,6 +100,8 @@ export interface BattleResult {
   final: BattleState;
   events: BattleEvent[];
   outcome: Outcome;
+  /** Structure finale de chaque fortification bâtie : ses dégâts persistent après la bataille. */
+  fortifications: { site: Id; structure: number }[];
 }
 
 /** Joue toute la bataille ; même entrée, même résultat. */
@@ -114,5 +114,6 @@ export function runBattle(data: GameData, setup: BattleSetup): BattleResult {
     state = turn.state;
     events.push(...turn.events);
   }
-  return { initial, final: state, events, outcome: state.outcome };
+  const fortifications = state.fortifications.map((f) => ({ site: f.site, structure: f.structure }));
+  return { initial, final: state, events, outcome: state.outcome, fortifications };
 }

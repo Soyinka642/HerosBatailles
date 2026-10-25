@@ -7,11 +7,11 @@ import { fromTemplate } from './setup';
 import { ADVANCE, HOLD } from './test-helpers';
 
 const data = loadGameData();
-const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers', fantassins: 'Fantassins' })[id] ?? id, maxMorale: () => 16 };
+const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers', fantassins: 'Fantassins' })[id] ?? id, maxMorale: () => 16, site: (id: string) => `la palissade ${id}` };
 
 function damage(input: Partial<Parameters<typeof computeDamage>[0]>): DamageBreakdown {
   return computeDamage(
-    { attack: 6, bonuses: [], defense: 2, ignoreDefense: [], tier: 'steady', efficiency: 1, wounded: 0, soldiers: 20, ...input },
+    { attack: 6, bonuses: [], defense: 2, defenseBonuses: [], ignoreDefense: [], tier: 'steady', efficiency: 1, wounded: 0, soldiers: 20, ...input },
     data.config,
   );
 }

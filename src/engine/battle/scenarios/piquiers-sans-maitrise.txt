@@ -1,5 +1,6 @@
 Bataille « scenario » (vague).
-Fortifications ignorées (lot 1.2c).
+
+Aucune fortification bâtie.
 
 Nos escouades, dans l’ordre de déploiement :
 - Épéistes en (3,2), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.

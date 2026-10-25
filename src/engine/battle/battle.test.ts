@@ -158,3 +158,15 @@ describe('playTurn', () => {
     expect(() => playTurn(data, ended)).toThrow('terminée');
   });
 });
+
+describe('fortifications en sortie', () => {
+  it('la bataille rend la structure finale de chaque fortification bâtie', () => {
+    const result = runBattle(data, {
+      wave: wave([{ turn: 1, enemy: 'brutes-du-portail', count: 1, row: 1 }]),
+      squads: [squad(data, 'archers', { col: 3, row: 1 })],
+      fortifications: [{ site: 'palissade-centre-nord', structure: 10 }, { site: 'tour' }],
+    });
+    expect(result.fortifications.map((f) => f.site)).toEqual(['tour', 'palissade-centre-nord']);
+    expect(result.fortifications[1]!.structure).toBeLessThan(10);
+  });
+});

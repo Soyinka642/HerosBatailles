@@ -226,6 +226,12 @@ describe('références invalides', () => {
     expect(issuesAfterSet(['templates', 2, 'id'], 'archers')).toEqual(['templates.json › [2].id : id « archers » en double']);
   });
 
+  it('signale un id de site de fortification en double', () => {
+    expect(issuesAfterSet(['battlefield', 'fortificationSites', 2, 'id'], 'palissade-nord')).toEqual([
+      'battlefield.json › fortificationSites[2].id : id « palissade-nord » en double',
+    ]);
+  });
+
   it('signale des vagues mal numérotées', () => {
     const issues = issuesAfterSet(['waves', 1, 'index'], 3);
     expect(issues).toEqual(["waves.json › [1].index : les vagues doivent être numérotées 1, 2, 3… dans l'ordre : 2 attendu, reçu 3"]);

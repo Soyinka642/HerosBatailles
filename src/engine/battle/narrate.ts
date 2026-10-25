@@ -15,6 +15,8 @@ const TIER_NAMES: Record<MoraleTier, string> = { steady: 'fermes', shaken: 'ébr
 interface Names {
   name(id: string): string;
   maxMorale(id: string): number;
+  /** Nom d'un site de fortification : « la palissade (4,1) ». */
+  site(id: string): string;
 }
 
 /** Nombre à la française : virgule décimale, au plus deux décimales. */
@@ -26,6 +28,11 @@ function namesOf(data: GameData, state: BattleState): Names {
   const squads: (BattleSquad | PendingArrival)[] = [...state.squads, ...state.pending];
   const find = (id: string) => squads.find((s) => s.id === id);
   return {
+    site: (id) => {
+      const site = data.battlefield.fortificationSites.find((s) => s.id === id);
+      const name = data.fortifications.find((f) => f.id === site?.fortification)?.name ?? id;
+      return site ? `la ${name.toLowerCase()} ${formatCell(site.cell)}` : id;
+    },
     name: (id) => find(id)?.name ?? id,
     maxMorale: (id) => {
       const s = find(id);
@@ -57,12 +64,11 @@ export function formatDamage(data: GameData, names: Names, d: DamageBreakdown): 
     const source = bonus.from ? ` ${des(names.name(bonus.from))}` : '';
     text += ` + ${bonus.amount} (${keywordName(data, bonus.keyword)}${source})`;
   }
-  if (d.ignoreDefense.length > 0) {
-    const pierce = d.ignoreDefense.map((p) => `${keywordName(data, p.keyword, p.amount)}`).join(', ');
-    text += ` − ${d.effectiveDefense} (défense ${d.defense}, ${pierce})`;
-  } else {
-    text += ` − ${d.defense}`;
-  }
+  const details = [
+    ...d.defenseBonuses.map((b) => `+${b.amount} ${names.site(b.site).replace(/^la /, '')}`),
+    ...d.ignoreDefense.map((p) => keywordName(data, p.keyword, p.amount)),
+  ];
+  text += details.length > 0 ? ` − ${d.effectiveDefense} (défense ${d.defense}, ${details.join(', ')})` : ` − ${d.defense}`;
   if (data.config.damage.formula === 'percentage') text += ` (en pourcentage)`;
   text += ` = ${formatNumber(d.net)}`;
   const multiplied = d.efficiency !== 1 || d.woundedFactor !== 1;
@@ -96,6 +102,8 @@ function formatBlock(names: Names, reason: BlockReason): string {
         : `rotation avec ${reason.with.map((id) => les(names.name(id))).join(' et ')} : personne ne bouge`;
     case 'chain':
       return `${les(names.name(reason.ahead))}, qui devaient libérer la case, sont bloqués`;
+    case 'fortification':
+      return `${names.site(reason.site)} barre le passage`;
   }
 }
 
@@ -119,6 +127,10 @@ function formatOutcome(outcome: Outcome, turn: number, breaches: number): string
     maxTurns: `Issue indécise : ${turn} tours joués, la limite est atteinte.`,
   }[outcome.reason];
   return `${text}\nIncursions au cœur du campement : ${breaches}.`;
+}
+
+function capitalize(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 function step(n: number): string {
@@ -150,6 +162,10 @@ export function narrateEvent(data: GameData, names: Names, e: BattleEvent): stri
       return `  ${N(e.attacker)} tirent sur ${n(e.target)} à ${e.distance} case${e.distance > 1 ? 's' : ''} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
     case 'strike':
       return `  ${N(e.attacker)} frappent ${n(e.target)} : ${formatDamage(data, names, e.damage)} ; ${formatApplied(data, names, e.target, e.applied)}.`;
+    case 'fortificationHit':
+      return `  ${N(e.attacker)} frappent ${names.site(e.site)} : ${formatDamage(data, names, e.damage)} ; structure ${e.before} → ${e.after}.`;
+    case 'fortificationDestroyed':
+      return `  ${capitalize(names.site(e.site))} est détruite : la case est libre.`;
     case 'rout':
       return `  ${N(e.squad)} sont en déroute et quittent le terrain.`;
     case 'turnEnd':
@@ -167,7 +183,7 @@ type Phase = 'Mouvement' | 'Tir' | 'Mêlée';
 function phaseOf(e: BattleEvent): Phase | undefined {
   if (e.type === 'move' || e.type === 'wait' || e.type === 'blocked' || e.type === 'halted' || e.type === 'breach') return 'Mouvement';
   if (e.type === 'shot') return 'Tir';
-  if (e.type === 'strike') return 'Mêlée';
+  if (e.type === 'strike' || e.type === 'fortificationHit') return 'Mêlée';
   return undefined;
 }
 
@@ -204,13 +220,22 @@ function describeArrival(data: GameData, p: PendingArrival): string {
   return `- ${p.name}, tour ${p.turn}${p.row === undefined ? '' : `, rangée ${p.row}`}${stats}.`;
 }
 
-/** En-tête : la bataille, nos escouades, les ennemis annoncés. */
-function header(data: GameData, initial: BattleState): string[] {
+function describeFortifications(names: Names, state: BattleState): string[] {
+  if (state.fortifications.length === 0) return ['Aucune fortification bâtie.'];
+  return [
+    'Fortifications :',
+    ...state.fortifications.map((f) => `- ${capitalize(names.site(f.site))} : structure ${f.structure}/${f.maxStructure}.`),
+  ];
+}
+
+/** En-tête : la bataille, ses fortifications, nos escouades, les ennemis annoncés. */
+function header(data: GameData, names: Names, initial: BattleState): string[] {
   const kind = initial.kind === 'final' ? 'bataille finale' : 'vague';
   const enemies = initial.squads.filter((s) => s.side === 'enemy');
   return [
     `Bataille « ${initial.waveId} » (${kind}).`,
-    'Fortifications ignorées (lot 1.2c).',
+    '',
+    ...describeFortifications(names, initial),
     '',
     'Nos escouades, dans l’ordre de déploiement :',
     ...initial.squads.filter((s) => s.side === 'player').flatMap((s) => describeSquad(data, s)),
@@ -224,7 +249,7 @@ function header(data: GameData, initial: BattleState): string[] {
 /** Le journal complet d'une bataille, en français. */
 export function narrateBattle(data: GameData, result: BattleResult): string {
   const names = namesOf(data, result.initial);
-  const lines = header(data, result.initial);
+  const lines = header(data, names, result.initial);
   let phase: Phase | undefined;
   for (const event of result.events) {
     if (event.type === 'turnStart') phase = undefined;

@@ -6,10 +6,10 @@
   "deploymentZone": { "fromCol": 1, "toCol": 3, "fromRow": 0, "toRow": 4 },
   "portal": { "fromCol": 11, "toCol": 11, "fromRow": 0, "toRow": 4 },
   "fortificationSites": [
-    { "fortification": "tour", "cell": { "col": 2, "row": 2 } },
-    { "fortification": "palissade", "cell": { "col": 4, "row": 0 } },
-    { "fortification": "palissade", "cell": { "col": 4, "row": 1 } },
-    { "fortification": "palissade", "cell": { "col": 4, "row": 3 } },
-    { "fortification": "palissade", "cell": { "col": 4, "row": 4 } }
+    { "id": "tour", "fortification": "tour", "cell": { "col": 2, "row": 2 } },
+    { "id": "palissade-nord", "fortification": "palissade", "cell": { "col": 4, "row": 0 } },
+    { "id": "palissade-centre-nord", "fortification": "palissade", "cell": { "col": 4, "row": 1 } },
+    { "id": "palissade-centre-sud", "fortification": "palissade", "cell": { "col": 4, "row": 3 } },
+    { "id": "palissade-sud", "fortification": "palissade", "cell": { "col": 4, "row": 4 } }
   ]
 }

@@ -1,5 +1,6 @@
 Bataille « scenario » (vague).
-Fortifications ignorées (lot 1.2c).
+
+Aucune fortification bâtie.
 
 Nos escouades, dans l’ordre de déploiement :
 - Archers en (1,2), Avancer : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.

@@ -1,12 +1,10 @@
-// État initial d'une bataille : stats réelles de nos escouades, vérification du déploiement,
-// et file des ennemis annoncés.
-//
-// Lot 1.2b : le moteur IGNORE les fortifications du terrain (palissade, tour). Elles
-// arriveront au lot 1.2c ; d'ici là, battlefield.fortificationSites n'est jamais lu.
+// État initial d'une bataille : stats réelles de nos escouades, fortifications bâties,
+// vérification du déploiement, et file des ennemis annoncés.
 
 import type { Area, Cell, GameData, Id, Item, KeywordRef, StatModifiers, Wave } from '../data/types';
+import { type FortificationSetup, buildFortifications, fortificationData } from './fortifications';
 import { hexDistance, isOnField, sameCell } from './hex';
-import type { BattleSquad, BattleState, CombatStats, PendingArrival, UnmasteredWeapon } from './state';
+import type { BattleSquad, BattleState, CombatStats, FortificationState, PendingArrival, UnmasteredWeapon } from './state';
 import type { MoraleModifier, Order } from './types';
 
 /** Une de nos escouades telle que le joueur la déploie. */
@@ -27,6 +25,8 @@ export interface BattleSetup {
   squads: PlayerSquadSetup[];
   /** Déblocages obtenus ; ils comptent pour la profondeur des ordres. */
   unlocks?: Id[];
+  /** Fortifications bâties et leur structure ; un site absent n'est pas bâti. */
+  fortifications?: FortificationSetup[];
 }
 
 export class BattleSetupError extends Error {
@@ -132,7 +132,25 @@ function checkEquipment(data: GameData, squad: PlayerSquadSetup, issues: string[
   }
 }
 
-function checkPlannedTurns(data: GameData, setup: BattleSetup, squad: PlayerSquadSetup, issues: string[]): void {
+/** Une palissade debout est infranchissable ; la tour n'accueille que nos tireurs. */
+function checkFortifiedCell(data: GameData, forts: readonly FortificationState[], squad: PlayerSquadSetup, cell: Cell, where: string, issues: string[]): void {
+  const fort = forts.find((f) => f.structure > 0 && sameCell(f.cell, cell));
+  if (!fort) return;
+  const fortification = fortificationData(data, fort.fortification);
+  const at = `(${cell.col},${cell.row})`;
+  if (fortification.blocksMovement) issues.push(`${where} : ${at} est une ${fort.name.toLowerCase()}, infranchissable`);
+  const stats = computeSquadStats(data, squad.equipment, squad.masteries).stats;
+  const shooter = stats.rangedAttack > 0 && stats.range > 0;
+  if (fortification.occupants === 'ranged' && !shooter) issues.push(`${where} : ${at} est une ${fort.name.toLowerCase()}, réservée aux tireurs`);
+}
+
+function checkPlannedTurns(
+  data: GameData,
+  setup: BattleSetup,
+  forts: readonly FortificationState[],
+  squad: PlayerSquadSetup,
+  issues: string[],
+): void {
   const allowed = unlockedPlannedTurns(data, setup.unlocks ?? []);
   if (squad.order.plannedTurns.length > allowed) {
     issues.push(`${squad.id} : ${squad.order.plannedTurns.length} tours planifiés pour ${allowed} autorisé(s)`);
@@ -150,12 +168,12 @@ function checkPlannedTurns(data: GameData, setup: BattleSetup, squad: PlayerSqua
     if (!isOnField(data.battlefield, step)) issues.push(`${where} : (${step.col},${step.row}) est hors du terrain`);
     const ally = stillAllies.find((other) => sameCell(other.cell, step));
     if (ally) issues.push(`${where} : (${step.col},${step.row}) est la case de ${ally.id}, qui ne bouge pas`);
+    checkFortifiedCell(data, forts, squad, step, where, issues);
     previous = step;
   });
 }
 
-function checkPlayerSquads(data: GameData, setup: BattleSetup): string[] {
-  const issues: string[] = [];
+function checkPlayerSquads(data: GameData, setup: BattleSetup, forts: readonly FortificationState[], issues: string[]): void {
   const max = data.config.field.maxPlayerSquads;
   if (setup.squads.length > max) issues.push(`${setup.squads.length} escouades pour ${max} au plus`);
   setup.squads.forEach((squad, index) => {
@@ -169,9 +187,9 @@ function checkPlayerSquads(data: GameData, setup: BattleSetup): string[] {
     if (!posture) issues.push(`${squad.id} : posture inconnue « ${squad.order.posture} »`);
     else if (posture.enemyOnly) issues.push(`${squad.id} : la posture « ${posture.id} » est réservée aux ennemis`);
     checkEquipment(data, squad, issues);
-    checkPlannedTurns(data, setup, squad, issues);
+    checkFortifiedCell(data, forts, squad, squad.cell, squad.id, issues);
+    checkPlannedTurns(data, setup, forts, squad, issues);
   });
-  return issues;
 }
 
 function movementOf(data: GameData, postureId: Id): BattleSquad['movement'] {
@@ -252,7 +270,9 @@ export function enemySquad(data: GameData, arrival: PendingArrival, cell: Cell):
 
 /** Construit l'état initial, ou lève une BattleSetupError qui liste tous les problèmes. */
 export function createBattle(data: GameData, setup: BattleSetup): BattleState {
-  const issues = checkPlayerSquads(data, setup);
+  const issues: string[] = [];
+  const fortifications = buildFortifications(data, setup.fortifications ?? [], issues);
+  checkPlayerSquads(data, setup, fortifications, issues);
   if (issues.length > 0) throw new BattleSetupError(issues);
   return {
     waveId: setup.wave.id,
@@ -260,6 +280,7 @@ export function createBattle(data: GameData, setup: BattleSetup): BattleState {
     turn: 0,
     squads: setup.squads.map((squad, index) => playerSquad(data, squad, index)),
     pending: pendingArrivals(data, setup.wave, setup.squads.length),
+    fortifications,
     breaches: 0,
   };
 }

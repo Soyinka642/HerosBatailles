@@ -374,9 +374,13 @@ function parseFortification(ctx: Ctx, value: unknown, path: string): Fortificati
 }
 
 function parseSite(ctx: Ctx, value: unknown, path: string): FortificationSite | undefined {
-  const o = readObject(ctx, value, path, ['fortification', 'cell']);
+  const o = readObject(ctx, value, path, ['id', 'fortification', 'cell']);
   if (!o) return undefined;
-  return { fortification: readString(ctx, o, 'fortification', path), cell: parseCell(ctx, o['cell'], child(path, 'cell')) };
+  return {
+    id: readString(ctx, o, 'id', path),
+    fortification: readString(ctx, o, 'fortification', path),
+    cell: parseCell(ctx, o['cell'], child(path, 'cell')),
+  };
 }
 
 function parseBattlefield(ctx: Ctx, value: unknown, path: string): Battlefield {

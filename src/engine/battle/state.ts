@@ -3,7 +3,7 @@
 // l'ordre de déploiement, puis les ennemis dans l'ordre d'arrivée prévu. Toute itération du
 // moteur suit ce tableau, ce qui garantit le déterminisme.
 
-import type { BattleKind, Cell, Id, KeywordRef, Movement } from '../data/types';
+import type { BattleKind, Cell, FortificationKind, Id, KeywordRef, Movement } from '../data/types';
 import type { Side } from './hex';
 import type { PlannedTurn } from './types';
 
@@ -46,6 +46,20 @@ export interface BattleSquad {
   /** Tours planifiés : le tour n utilise plannedTurns[n − 1], puis la posture. */
   plannedTurns: PlannedTurn[];
   status: SquadStatus;
+  /** Fortification qui a barré son chemin pendant le mouvement de ce tour (site), remise à zéro à chaque tour. */
+  obstacle?: Id;
+}
+
+/** Une fortification bâtie sur un site du terrain. Ses dégâts persistent après la bataille. */
+export interface FortificationState {
+  site: Id;
+  fortification: Id;
+  name: string;
+  kind: FortificationKind;
+  cell: Cell;
+  /** Points de structure restants ; 0 = détruite (la case redevient libre). */
+  structure: number;
+  maxStructure: number;
 }
 
 /** Un ennemi annoncé qui n'est pas encore sorti du portail. */
@@ -70,6 +84,8 @@ export interface BattleState {
   turn: number;
   squads: BattleSquad[];
   pending: PendingArrival[];
+  /** Fortifications bâties, dans l'ordre des sites de battlefield.json. */
+  fortifications: FortificationState[];
   /** Ennemis qui ont atteint le cœur du campement. */
   breaches: number;
   outcome?: Outcome;

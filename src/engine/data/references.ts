@@ -83,6 +83,7 @@ function checkBattlefield(ctx: Ctx, field: Battlefield, fortifications: Readonly
   checkArea(ctx, field.campHeart, child(file, 'campHeart'), field);
   checkArea(ctx, field.deploymentZone, child(file, 'deploymentZone'), field);
   const occupied = new Set<string>();
+  checkUniqueIds(ctx, field.fortificationSites, child(file, 'fortificationSites'));
   field.fortificationSites.forEach((site, i) => {
     const p = child(child(file, 'fortificationSites'), i);
     const key = `${site.cell.col},${site.cell.row}`;

@@ -246,6 +246,8 @@ export interface Area {
 }
 
 export interface FortificationSite {
+  /** Identifiant du site, unique sur le terrain : l'état de la fortification s'y rattache. */
+  id: Id;
   fortification: Id;
   cell: Cell;
 }
