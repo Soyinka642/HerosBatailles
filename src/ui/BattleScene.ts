@@ -31,8 +31,8 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor(PALETTE.background);
     this.terrain = this.add.graphics();
     this.fortLayer = this.add.container();
-    this.fallenLayer = this.add.container();
     this.tokenLayer = this.add.container();
+    this.fallenLayer = this.add.container();
     this.fxLayer = this.add.container();
   }
 
@@ -123,8 +123,11 @@ export class BattleScene extends Phaser.Scene {
       g.strokeRect(-HEX_WIDTH / 2 + 8, -HEX_SIZE + 12, HEX_WIDTH - 16, 2 * HEX_SIZE - 24);
     }
     if (standing && fort.burning > 0) {
-      g.fillStyle(PALETTE.fire, 0.9);
-      g.fillTriangle(16, -12, 24, -12, 20, -26);
+      // La flamme de la fortification, dans le coin bas à droite (le jeton occupe le centre).
+      g.fillStyle(PALETTE.fire, 1);
+      g.fillTriangle(14, 26, 26, 26, 20, 8);
+      g.fillStyle(0xffd060, 1);
+      g.fillTriangle(17, 26, 23, 26, 20, 16);
     }
     const label = this.add
       .text(0, HEX_SIZE - 3, standing ? `${fort.structure}/${fort.maxStructure}` : 'détruite', {
@@ -138,20 +141,24 @@ export class BattleScene extends Phaser.Scene {
     return box;
   }
 
-  /** Les tombés : un marqueur gris avec leur nombre, et l'horloge si l'ennemi tient la case. */
+  /** Les tombés : une étiquette grise en bas de la case, avec l'horloge si l'ennemi tient la case. */
   private drawFallen(mirror: Mirror): void {
     const layer = this.fallenLayer!;
     layer.removeAll(true);
     for (const group of mirror.fallen) {
       const at = cellCenter(group.cell);
-      const x = at.x - 20;
-      const y = at.y + 20;
-      const held = group.heldTurns > 0 ? ` ${group.heldTurns}/${this.data_!.config.fallen.turnsHeldBeforeDeath}` : '';
-      const marker = this.add.circle(x, y, 7, PALETTE.fallen).setStrokeStyle(1, 0x000000);
+      const held = group.heldTurns > 0 ? ` · ${group.heldTurns}/${this.data_!.config.fallen.turnsHeldBeforeDeath}` : '';
       const text = this.add
-        .text(x, y, `${group.count}${held}`, { fontFamily: 'sans-serif', fontSize: '9px', fontStyle: 'bold', color: '#111' })
-        .setOrigin(group.heldTurns > 0 ? 0.25 : 0.5, 0.5);
-      layer.add([marker, text]);
+        .text(at.x, at.y + 27, `${group.count} à terre${held}`, {
+          fontFamily: 'sans-serif',
+          fontSize: '9px',
+          fontStyle: 'bold',
+          color: '#111111',
+          backgroundColor: '#b8b8b8',
+          padding: { x: 3, y: 1 },
+        })
+        .setOrigin(0.5);
+      layer.add(text);
     }
   }
 }

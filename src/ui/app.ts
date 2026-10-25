@@ -85,10 +85,12 @@ export class App {
     const legend = el(
       'p',
       'legend muted',
-      'Ocre : nos escouades · bleu-violet : l’ennemi. Barre de moral : vert ferme, jaune ébranlée, orange vacillante ; jeton pâle avec une flèche : en fuite. ✚ : blessés · flamme : Feu (tours restants) · rond gris : tombés.',
+      'Ocre : nos escouades · bleu-violet : l’ennemi. Barre de moral : vert ferme, jaune ébranlée, orange vacillante ; jeton pâle avec une flèche : en fuite. ✚ : blessés · flamme : Feu (tours restants) · étiquette grise : soldats à terre (et tours tenus par l’ennemi).',
     );
+    const fieldScroll = el('div', 'field-scroll');
+    fieldScroll.append(this.fieldBox);
     const main = el('div', 'battle-main');
-    main.append(this.fieldBox, controls, legend, this.outcome);
+    main.append(fieldScroll, controls, legend, this.outcome);
     const journal = el('aside', 'journal');
     journal.append(el('h3', undefined, 'Journal de bataille'), this.journal);
     const body = el('div', 'battle-body');

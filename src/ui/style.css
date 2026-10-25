@@ -37,7 +37,11 @@ button:hover { border-color: var(--accent); }
 /* Écran étroit (portable, tablette à la verticale) : tout s'empile. */
 @media (max-width: 900px) {
   .battle-body { grid-template-columns: 1fr; }
-  .journal { height: 40vh; }
+  .journal { height: 45vh; }
+  /* Le terrain garde une taille lisible ; on le fait défiler du doigt. */
+  .field-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .field { min-width: 720px; }
+  .control { padding: 6px 8px; }
 }
 
 .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
