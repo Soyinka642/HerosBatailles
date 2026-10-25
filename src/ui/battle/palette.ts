@@ -1,0 +1,35 @@
+// Couleurs provisoires de l'écran de bataille. Nous en couleurs chaudes, l'ennemi dans les
+// couleurs froides du portail (direction artistique de la conception).
+
+export const PALETTE = {
+  background: 0x0e0f14,
+  hex: 0x262a33,
+  hexLine: 0x3a3f4b,
+  deployment: 0x30363f,
+  campHeart: 0x4a3f33,
+  campHeartLine: 0x8a7457,
+  portal: 0x1d3552,
+  portalLine: 0x6fa8ff,
+  palisade: 0x7a5230,
+  palisadeDark: 0x4e3420,
+  rubble: 0x5a4a3c,
+  tower: 0x8c8a84,
+  towerDark: 0x5c5a55,
+  player: 0xd9a441,
+  playerDark: 0x7a5a1c,
+  enemy: 0x6f6ae0,
+  enemyDark: 0x2f2b7a,
+  text: '#e8dcc0',
+  textDark: '#1a1408',
+  muted: '#9aa0ab',
+  /** Barre de moral selon le palier. */
+  steady: 0x5fbf5f,
+  shaken: 0xe0c040,
+  wavering: 0xe07a30,
+  barBack: 0x1a1c22,
+  damage: '#ff6b6b',
+  structureDamage: '#c9935a',
+  fire: 0xff8c1a,
+  fireText: '#ffa040',
+  fallen: 0xb8b8b8,
+} as const;
