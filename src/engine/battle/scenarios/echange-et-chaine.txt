@@ -1,5 +1,6 @@
 Bataille « scenario » (vague).
-Fortifications ignorées (lot 1.2c).
+
+Aucune fortification bâtie.
 
 Nos escouades, dans l’ordre de déploiement :
 - Épéistes en (3,1), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
@@ -10,13 +11,13 @@ Nos escouades, dans l’ordre de déploiement :
   Tour 1 planifié : (2,1).
 
 Ennemis annoncés, dans l’ordre d’arrivée :
-- Fantassins du portail n°1, tour 3, rangée 1 : mêlée 5, tir 0, défense 2, vitesse 2, moral 16.
+- Fantassins du portail n°1, tour 3, rangée 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
 
 == Tour 1 ==
 Mouvement :
-  pas 1 : Épéistes ne peuvent pas entrer en (2,1) : échange de cases avec Piquiers : personne ne bouge. Ils s'arrêtent pour ce tour.
-  pas 1 : Piquiers ne peuvent pas entrer en (3,1) : échange de cases avec Épéistes : personne ne bouge. Ils s'arrêtent pour ce tour.
-  pas 1 : Archers ne peuvent pas entrer en (2,1) : Piquiers, qui devaient libérer la case, sont bloqués. Ils s'arrêtent pour ce tour.
+  pas 1 : les Épéistes ne peuvent pas entrer en (2,1) : échange de cases avec les Piquiers : personne ne bouge. Ils s'arrêtent pour ce tour.
+  pas 1 : les Piquiers ne peuvent pas entrer en (3,1) : échange de cases avec les Épéistes : personne ne bouge. Ils s'arrêtent pour ce tour.
+  pas 1 : les Archers ne peuvent pas entrer en (2,1) : les Piquiers, qui devaient libérer la case, sont bloqués. Ils s'arrêtent pour ce tour.
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
@@ -29,64 +30,87 @@ Fin du tour :
   Archers en (1,1), moral 20/20
 
 == Tour 3 ==
-Fantassins du portail n°1 sortent du portail en (11,1).
+Les Fantassins du portail n°1 sortent du portail en (11,1).
 Mouvement :
-  pas 1 : Fantassins du portail n°1 (11,1) → (10,1).
-  pas 2 : Fantassins du portail n°1 (10,1) → (9,1).
+  pas 1 : les Fantassins du portail n°1 (11,1) → (10,1).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,1), moral 20/20
+  Fantassins du portail n°1 en (10,1), moral 16/16
+
+== Tour 4 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (10,1) → (9,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
   Fantassins du portail n°1 en (9,1), moral 16/16
 
-== Tour 4 ==
+== Tour 5 ==
 Mouvement :
-  pas 1 : Fantassins du portail n°1 (9,1) → (8,1).
-  pas 2 : Fantassins du portail n°1 (8,1) → (7,1).
+  pas 1 : les Fantassins du portail n°1 (9,1) → (8,1).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,1), moral 20/20
+  Fantassins du portail n°1 en (8,1), moral 16/16
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (8,1) → (7,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
   Fantassins du portail n°1 en (7,1), moral 16/16
 
-== Tour 5 ==
+== Tour 7 ==
 Mouvement :
-  pas 1 : Fantassins du portail n°1 (7,1) → (6,1).
-  pas 2 : Fantassins du portail n°1 (6,1) → (5,1).
+  pas 1 : les Fantassins du portail n°1 (7,1) → (6,1).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Piquiers en (2,1), moral 20/20
+  Archers en (1,1), moral 20/20
+  Fantassins du portail n°1 en (6,1), moral 16/16
+
+== Tour 8 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (6,1) → (5,1).
 Fin du tour :
   Épéistes en (3,1), moral 20/20
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
   Fantassins du portail n°1 en (5,1), moral 16/16
 
-== Tour 6 ==
+== Tour 9 ==
 Mouvement :
-  pas 1 : Fantassins du portail n°1 (5,1) → (4,1).
-  pas 2 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
+  pas 1 : les Fantassins du portail n°1 (5,1) → (4,1).
 Tir :
-  Archers tirent sur Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
+  Les Archers tirent sur les Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
 Mêlée :
-  Épéistes frappent Fantassins du portail n°1 : 6 + 2 (Soutien de Piquiers) − 2 = 6 dégâts ; moral 13 → 7, blessés 0 → 3 ; ils sont ébranlés.
-  Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 dégâts ; moral 20 → 17.
+  Les Épéistes frappent les Fantassins du portail n°1 : 6 + 2 (Soutien des Piquiers) − 2 = 6 dégâts ; moral 13 → 7, blessés 0 → 3 ; les Fantassins du portail n°1 sont ébranlés.
+  Les Fantassins du portail n°1 frappent les Épéistes : 5 − 2 = 3 dégâts ; moral 20 → 17.
 Fin du tour :
   Épéistes en (3,1), moral 17/20
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
   Fantassins du portail n°1 en (4,1), moral 7/16, 3 blessés
 
-== Tour 7 ==
+== Tour 10 ==
 Mouvement :
-  pas 1 : Fantassins du portail n°1 sont au contact d'Épéistes : ils ne bougent plus.
+  pas 1 : les Fantassins du portail n°1 sont au contact des Épéistes : ils ne bougent plus.
 Tir :
-  Archers tirent sur Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 7 → 4, blessés 3 → 6 ; ils sont vacillants.
+  Les Archers tirent sur les Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 7 → 4, blessés 3 → 6 ; les Fantassins du portail n°1 sont vacillants.
 Mêlée :
-  Épéistes frappent Fantassins du portail n°1 : 6 + 2 (Soutien de Piquiers) − 2 = 6 dégâts ; moral 4 → 0, blessés 6 → 10.
-  Fantassins du portail n°1 frappent Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 1,68 → 2 dégâts ; moral 17 → 15.
-  Fantassins du portail n°1 sont en déroute et quittent le terrain.
+  Les Épéistes frappent les Fantassins du portail n°1 : 6 + 2 (Soutien des Piquiers) − 2 = 6 dégâts ; moral 4 → 0, blessés 6 → 10.
+  Les Fantassins du portail n°1 frappent les Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 1,68 → 2 dégâts ; moral 17 → 15.
+  Les Fantassins du portail n°1 sont en déroute et quittent le terrain.
 Fin du tour :
   Épéistes en (3,1), moral 15/20
   Piquiers en (2,1), moral 20/20
   Archers en (1,1), moral 20/20
 
-Victoire au tour 7 : plus aucun ennemi sur le terrain ni à venir.
+Victoire au tour 10 : plus aucun ennemi sur le terrain ni à venir.
 Incursions au cœur du campement : 0.

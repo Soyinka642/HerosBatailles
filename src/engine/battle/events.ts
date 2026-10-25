@@ -3,7 +3,7 @@
 
 import type { Cell } from '../data/types';
 import type { DamageApplied, DamageBreakdown } from './damage';
-import type { Outcome } from './state';
+import type { Burning, Outcome } from './state';
 
 /** Pourquoi un déplacement n'a pas eu lieu : l'escouade s'arrête pour la fin du tour. */
 export type BlockReason =
@@ -14,7 +14,9 @@ export type BlockReason =
   /** Échange de cases ou rotation : personne ne bouge. */
   | { kind: 'cycle'; with: string[] }
   /** L'escouade devant, qui devait libérer la case, est elle-même bloquée. */
-  | { kind: 'chain'; ahead: string };
+  | { kind: 'chain'; ahead: string }
+  /** Une barrière debout (palissade) occupe la case. */
+  | { kind: 'fortification'; site: string };
 
 export type HaltReason =
   /** Au contact d'un ennemi au début du pas : engagée. */
@@ -27,6 +29,13 @@ export type MoveWhy =
   | { kind: 'straight' }
   /** Avancer : aucun ennemi devant sur sa rangée, l'escouade dévie vers le plus proche. */
   | { kind: 'deviate'; toward: string };
+
+/** Choix du Feu pour une volée : enflammée, ou normale et pourquoi. */
+export type FireDecision = { keyword: string; consumable?: string } & (
+  | { used: true }
+  | { used: false; why: 'noConsumable' | 'alreadyBurning' }
+  | { used: false; why: 'lowDefense'; defense: number }
+);
 
 export interface SquadSnapshot {
   id: string;
@@ -45,8 +54,32 @@ export type BattleEvent =
   | { type: 'blocked'; step: number; squad: string; target: Cell; reason: BlockReason }
   | { type: 'halted'; step: number; squad: string; reason: HaltReason }
   | { type: 'breach'; squad: string; cell: Cell; total: number }
-  | { type: 'shot'; attacker: string; target: string; distance: number; damage: DamageBreakdown; applied: DamageApplied }
+  | {
+      type: 'shot';
+      attacker: string;
+      target: string;
+      distance: number;
+      damage: DamageBreakdown;
+      applied: DamageApplied;
+      fire?: FireDecision;
+    }
+  | {
+      type: 'ignite';
+      attacker: string;
+      target: string;
+      keyword: string;
+      moraleBefore: number;
+      moraleAfter: number;
+      burn?: Burning;
+      /** La fortification où se tenait la cible, qui brûle aussi. */
+      site?: string;
+      consumed?: { consumable: string; left: number };
+    }
+  | { type: 'burn'; squad: string; amount: number; applied: DamageApplied; turnsLeft: number }
+  | { type: 'fortificationBurn'; site: string; amount: number; before: number; after: number; turnsLeft: number }
   | { type: 'strike'; attacker: string; target: string; damage: DamageBreakdown; applied: DamageApplied }
+  | { type: 'fortificationHit'; attacker: string; site: string; damage: DamageBreakdown; before: number; after: number }
+  | { type: 'fortificationDestroyed'; site: string }
   | { type: 'rout'; squad: string }
   | { type: 'turnEnd'; turn: number; squads: SquadSnapshot[] }
   | { type: 'battleEnd'; turn: number; outcome: Outcome; breaches: number };

@@ -44,7 +44,7 @@ describe('contenu livré', () => {
     const data = loadGameData();
     expect(data.templates.map((t) => t.id)).toEqual(['epeistes', 'archers', 'piquiers']);
     expect(data.masteries.map((m) => m.id)).toEqual(['maitrise-epee', 'maitrise-arc', 'maitrise-pique']);
-    expect(data.postures.map((p) => p.id)).toEqual(['tenir', 'avancer']);
+    expect(data.postures.map((p) => p.id)).toEqual(['tenir', 'avancer', 'assaut']);
     expect(data.keywords.map((k) => k.id)).toEqual(['perce-armure', 'feu', 'charge', 'soutien']);
     expect(data.fortifications.map((f) => f.id)).toEqual(['palissade', 'tour']);
     expect(data.waves.map((w) => w.kind)).toEqual(['wave', 'wave', 'wave', 'wave', 'final']);
@@ -97,7 +97,7 @@ describe('forme invalide', () => {
 
   it('signale une valeur hors liste', () => {
     const issues = issuesAfterSet(['postures', 1, 'movement'], 'charge');
-    expect(issues).toEqual(['postures.json › [1].movement : valeur attendue parmi hold, advance, reçu la chaîne « charge »']);
+    expect(issues).toEqual(['postures.json › [1].movement : valeur attendue parmi hold, advance, assault, reçu la chaîne « charge »']);
   });
 
   it("signale un fichier qui n'est pas une liste", () => {
@@ -224,6 +224,12 @@ describe('références invalides', () => {
 
   it('signale un id en double', () => {
     expect(issuesAfterSet(['templates', 2, 'id'], 'archers')).toEqual(['templates.json › [2].id : id « archers » en double']);
+  });
+
+  it('signale un id de site de fortification en double', () => {
+    expect(issuesAfterSet(['battlefield', 'fortificationSites', 2, 'id'], 'palissade-nord')).toEqual([
+      'battlefield.json › fortificationSites[2].id : id « palissade-nord » en double',
+    ]);
   });
 
   it('signale des vagues mal numérotées', () => {

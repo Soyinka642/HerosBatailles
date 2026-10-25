@@ -1,15 +1,17 @@
 // Boucle de bataille : arrivées par le portail, puis mouvement → tir → mêlée. Les conditions
 // de fin sont vérifiées à la fin de chaque phase ; le rituel et maxTurns, à la fin du tour.
-//
-// Lot 1.2b : les fortifications du terrain sont ignorées (voir setup.ts).
 
-import type { Area, Cell, GameData } from '../data/types';
+import type { Area, Cell, GameData, Id } from '../data/types';
+import { burnPhase } from './burn';
+import { destroyedSince, routBroken } from './combat';
 import type { BattleEvent } from './events';
+import { isStanding } from './fortifications';
 import { firePhase } from './fire';
 import { meleePhase } from './melee';
 import { movementPhase } from './movement';
 import { type BattleSetup, createBattle, enemySquad } from './setup';
 import { type BattleState, type Outcome, squadAt } from './state';
+import type { Carried } from './types';
 
 /** Rangées du portail dans l'ordre d'apparition : le centre, puis en alternant nord et sud. */
 export function portalRows(area: Area): number[] {
@@ -53,11 +55,13 @@ function arrivals(data: GameData, state: BattleState): BattleEvent[] {
   return events;
 }
 
-/** Fin de bataille après une phase : défaite si nous n'avons plus personne (même si l'ennemi non plus). */
+/** Fin de bataille après une phase : victoire s'il ne reste aucun ennemi, ni sur le terrain ni à venir ; sinon défaite si nous n'avons plus personne. */
 function phaseOutcome(state: BattleState): Outcome | undefined {
   const active = state.squads.filter((s) => s.status === 'active');
-  if (!active.some((s) => s.side === 'player')) return { kind: 'defeat', reason: 'allSquadsRouted' };
+  // Victoire d'abord : si les derniers ennemis partent à la même phase que nos dernières escouades,
+  // et qu'aucune arrivée ne reste, la bataille est gagnée.
   if (state.pending.length === 0 && !active.some((s) => s.side === 'enemy')) return { kind: 'victory', reason: 'noEnemiesLeft' };
+  if (!active.some((s) => s.side === 'player')) return { kind: 'defeat', reason: 'allSquadsRouted' };
   return undefined;
 }
 
@@ -86,7 +90,10 @@ export function playTurn(data: GameData, previous: BattleState): { state: Battle
   const state = structuredClone(previous);
   state.turn += 1;
   const events: BattleEvent[] = [{ type: 'turnStart', turn: state.turn }, ...arrivals(data, state)];
-  for (const phase of PHASES) {
+  const standing = state.fortifications.filter(isStanding);
+  events.push(...burnPhase(data, state), ...destroyedSince(standing), ...routBroken(state));
+  state.outcome = phaseOutcome(state);
+  for (const phase of state.outcome ? [] : PHASES) {
     events.push(...phase(data, state));
     state.outcome = phaseOutcome(state);
     if (state.outcome) break;
@@ -97,11 +104,21 @@ export function playTurn(data: GameData, previous: BattleState): { state: Battle
   return { state, events };
 }
 
+/** Ce qui reste des consommables d'une de nos escouades. */
+export interface CarriedLeft {
+  squad: string;
+  carried: Carried;
+}
+
 export interface BattleResult {
   initial: BattleState;
   final: BattleState;
   events: BattleEvent[];
   outcome: Outcome;
+  /** Structure finale de chaque fortification bâtie : ses dégâts persistent après la bataille. */
+  fortifications: { site: Id; structure: number }[];
+  /** Consommables restants de chacune de nos escouades (une escouade en déroute garde sa part). */
+  carried: CarriedLeft[];
 }
 
 /** Joue toute la bataille ; même entrée, même résultat. */
@@ -114,5 +131,7 @@ export function runBattle(data: GameData, setup: BattleSetup): BattleResult {
     state = turn.state;
     events.push(...turn.events);
   }
-  return { initial, final: state, events, outcome: state.outcome };
+  const fortifications = state.fortifications.map((f) => ({ site: f.site, structure: f.structure }));
+  const carried = state.squads.filter((s) => s.side === 'player').map((s) => ({ squad: s.id, carried: { ...s.carried } }));
+  return { initial, final: state, events, outcome: state.outcome, fortifications, carried };
 }

@@ -315,7 +315,7 @@ function parseTemplate(ctx: Ctx, value: unknown, path: string): SquadTemplate | 
 }
 
 function parseEnemy(ctx: Ctx, value: unknown, path: string): Enemy | undefined {
-  const o = readObject(ctx, value, path, ['id', 'name', 'provisional', 'stats', 'keywords', 'posture']);
+  const o = readObject(ctx, value, path, ['id', 'name', 'provisional', 'stats', 'keywords', 'feminine', 'posture']);
   if (!o) return undefined;
   const enemy: Enemy = {
     id: readString(ctx, o, 'id', path),
@@ -324,12 +324,14 @@ function parseEnemy(ctx: Ctx, value: unknown, path: string): Enemy | undefined {
     keywords: readArray(ctx, o, 'keywords', path, (v, p) => parseKeywordRef(ctx, v, p)),
     posture: readString(ctx, o, 'posture', path),
   };
+  const feminine = readOptionalBoolean(ctx, o, 'feminine', path);
+  if (feminine !== undefined) enemy.feminine = feminine;
   setProvisional(ctx, o, path, enemy);
   return enemy;
 }
 
 function parsePosture(ctx: Ctx, value: unknown, path: string): Posture | undefined {
-  const o = readObject(ctx, value, path, ['id', 'name', 'description', 'movement', 'unlockedBy']);
+  const o = readObject(ctx, value, path, ['id', 'name', 'description', 'movement', 'unlockedBy', 'enemyOnly']);
   if (!o) return undefined;
   const posture: Posture = {
     id: readString(ctx, o, 'id', path),
@@ -337,6 +339,8 @@ function parsePosture(ctx: Ctx, value: unknown, path: string): Posture | undefin
     description: readString(ctx, o, 'description', path),
     movement: readEnum(ctx, o, 'movement', path, MOVEMENTS),
   };
+  const enemyOnly = readOptionalBoolean(ctx, o, 'enemyOnly', path);
+  if (enemyOnly !== undefined) posture.enemyOnly = enemyOnly;
   setUnlockedBy(ctx, o, path, posture);
   return posture;
 }
@@ -372,9 +376,13 @@ function parseFortification(ctx: Ctx, value: unknown, path: string): Fortificati
 }
 
 function parseSite(ctx: Ctx, value: unknown, path: string): FortificationSite | undefined {
-  const o = readObject(ctx, value, path, ['fortification', 'cell']);
+  const o = readObject(ctx, value, path, ['id', 'fortification', 'cell']);
   if (!o) return undefined;
-  return { fortification: readString(ctx, o, 'fortification', path), cell: parseCell(ctx, o['cell'], child(path, 'cell')) };
+  return {
+    id: readString(ctx, o, 'id', path),
+    fortification: readString(ctx, o, 'fortification', path),
+    cell: parseCell(ctx, o['cell'], child(path, 'cell')),
+  };
 }
 
 function parseBattlefield(ctx: Ctx, value: unknown, path: string): Battlefield {

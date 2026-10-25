@@ -2,16 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { loadGameData } from '../data/load';
 import { runBattle } from './battle';
 import { type DamageBreakdown, computeDamage } from './damage';
-import { formatDamage, formatNumber, narrateBattle, narrateEvent, of } from './narrate';
+import { formatDamage, formatNumber, narrateBattle, narrateEvent } from './narrate';
 import { fromTemplate } from './setup';
 import { ADVANCE, HOLD } from './test-helpers';
 
 const data = loadGameData();
-const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers' })[id] ?? id, maxMorale: () => 16 };
+const names = { name: (id: string) => ({ epeistes: 'Épéistes', piquiers: 'Piquiers', fantassins: 'Fantassins' })[id] ?? id, maxMorale: () => 16, site: (id: string) => `la palissade ${id}`, feminine: () => false };
 
 function damage(input: Partial<Parameters<typeof computeDamage>[0]>): DamageBreakdown {
   return computeDamage(
-    { attack: 6, bonuses: [], defense: 2, ignoreDefense: [], tier: 'steady', efficiency: 1, wounded: 0, soldiers: 20, ...input },
+    { attack: 6, bonuses: [], defense: 2, defenseBonuses: [], ignoreDefense: [], tier: 'steady', efficiency: 1, wounded: 0, soldiers: 20, ...input },
     data.config,
   );
 }
@@ -23,19 +23,13 @@ describe('texte des dégâts', () => {
     expect(formatNumber(-3)).toBe('−3');
   });
 
-  it('élision devant une voyelle', () => {
-    expect(of('Épéistes')).toBe("d'Épéistes");
-    expect(of('Archers')).toBe("d'Archers");
-    expect(of('Piquiers')).toBe('de Piquiers');
-  });
-
   it('soustraction simple', () => {
     expect(formatDamage(data, names, damage({}))).toBe('6 − 2 = 4 dégâts');
   });
 
   it('bonus, moral, blessés et arrondi', () => {
     const d = damage({ bonuses: [{ keyword: 'soutien', from: 'piquiers', amount: 2 }], tier: 'shaken', efficiency: 0.9, wounded: 2 });
-    expect(formatDamage(data, names, d)).toBe('6 + 2 (Soutien de Piquiers) − 2 = 6 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 4,86 → 5 dégâts');
+    expect(formatDamage(data, names, d)).toBe('6 + 2 (Soutien des Piquiers) − 2 = 6 × 0,9 (ébranlés) × 0,9 (2 blessés sur 20) = 4,86 → 5 dégâts');
     const one = damage({ wounded: 1 });
     expect(formatDamage(data, names, one)).toBe('6 − 2 = 4 × 0,95 (1 blessé sur 20) = 3,8 → 4 dégâts');
   });
@@ -55,7 +49,20 @@ describe('texte des dégâts', () => {
       damage: damage({}),
       applied: { amount: 4, moraleBefore: 12, moraleAfter: 8, woundedBefore: 0, woundedAfter: 2 },
     });
-    expect(line).toBe('  Épéistes frappent fantassins : 6 − 2 = 4 dégâts ; moral 12 → 8, blessés 0 → 2 ; ils sont ébranlés.');
+    expect(line).toBe('  Les Épéistes frappent les Fantassins : 6 − 2 = 4 dégâts ; moral 12 → 8, blessés 0 → 2 ; les Fantassins sont ébranlés.');
+  });
+});
+
+describe('accord', () => {
+  it('les Brutes sont ébranlées, et elles ne bougent plus', () => {
+    const f = { ...names, name: (id: string) => (id === 'brutes' ? 'Brutes' : 'Épéistes'), feminine: (id: string) => id === 'brutes' };
+    const applied = { amount: 2, moraleBefore: 12, moraleAfter: 10, woundedBefore: 0, woundedAfter: 0 };
+    expect(narrateEvent(data, f, { type: 'strike', attacker: 'epeistes', target: 'brutes', damage: damage({}), applied })).toContain(
+      'les Brutes sont ébranlées',
+    );
+    expect(narrateEvent(data, f, { type: 'halted', step: 1, squad: 'brutes', reason: { kind: 'engaged', by: 'epeistes' } })).toBe(
+      '  pas 1 : les Brutes sont au contact des Épéistes : elles ne bougent plus.',
+    );
   });
 });
 

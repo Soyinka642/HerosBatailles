@@ -179,13 +179,15 @@ export interface Enemy {
   provisional?: boolean;
   stats: EnemyStats;
   keywords: KeywordRef[];
+  /** Nom féminin (« les Brutes »), pour accorder le journal ; absent = masculin. */
+  feminine?: boolean;
   /** Comportement fixe, connu du joueur : une posture de postures.json. */
   posture: Id;
 }
 
 // --- Postures et ordres ---
 
-export const MOVEMENTS = ['hold', 'advance'] as const;
+export const MOVEMENTS = ['hold', 'advance', 'assault'] as const;
 export type Movement = (typeof MOVEMENTS)[number];
 
 /** Posture : la donnée choisit un comportement dans la liste fermée MOVEMENTS. */
@@ -194,6 +196,8 @@ export interface Posture extends Lockable {
   name: string;
   description: string;
   movement: Movement;
+  /** Réservée aux ennemis : nos escouades ne peuvent pas la prendre. */
+  enemyOnly?: boolean;
 }
 
 /** Profondeur des ordres : un ordre compte au plus autant de tours planifiés que d'emplacements débloqués. */
@@ -244,6 +248,8 @@ export interface Area {
 }
 
 export interface FortificationSite {
+  /** Identifiant du site, unique sur le terrain : l'état de la fortification s'y rattache. */
+  id: Id;
   fortification: Id;
   cell: Cell;
 }

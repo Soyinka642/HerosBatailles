@@ -1,0 +1,302 @@
+Bataille « scenario » (vague).
+
+Fortifications :
+- La tour (2,2) : structure 30/30.
+- La palissade (4,0) : structure 36/36.
+- La palissade (4,1) : structure 36/36.
+- La palissade (4,3) : structure 36/36.
+- La palissade (4,4) : structure 36/36.
+
+Nos escouades, dans l’ordre de déploiement :
+- Épéistes en (3,2), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
+  Tour 1 planifié : (4,2).
+- Piquiers en (3,1), Tenir : mêlée 5, tir 0, défense 1, vitesse 2, moral 20, 20 soldats ; Soutien.
+  Tour 1 planifié : (3,2).
+- Archers en (2,2), Tenir : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats ; Feu.
+  Dans la tour (2,2) : portée 4, défense 3.
+  Porte 2 pâte incendiaire.
+
+Ennemis annoncés, dans l’ordre d’arrivée :
+- Brutes du portail n°1, tour 1, rangée 1 : mêlée 6, tir 0, défense 3, vitesse 2, moral 24 ; Perce-armure 2.
+- Brutes du portail n°2, tour 1, rangée 2 : mêlée 6, tir 0, défense 3, vitesse 2, moral 24 ; Perce-armure 2.
+- Brutes du portail n°3, tour 1, rangée 3 : mêlée 6, tir 0, défense 3, vitesse 2, moral 24 ; Perce-armure 2.
+
+== Tour 1 ==
+Les Brutes du portail n°1 sortent du portail en (11,1).
+Les Brutes du portail n°2 sortent du portail en (11,2).
+Les Brutes du portail n°3 sortent du portail en (11,3).
+Mouvement :
+  pas 1 : les Épéistes (3,2) → (4,2) (tour planifié).
+  pas 1 : les Piquiers (3,1) → (3,2) (tour planifié).
+  pas 1 : les Brutes du portail n°1 (11,1) → (10,1).
+  pas 1 : les Brutes du portail n°2 (11,2) → (10,2).
+  pas 1 : les Brutes du portail n°3 (11,3) → (10,3).
+  pas 2 : les Brutes du portail n°1 (10,1) → (9,1).
+  pas 2 : les Brutes du portail n°2 (10,2) → (9,2).
+  pas 2 : les Brutes du portail n°3 (10,3) → (9,3).
+Fin du tour :
+  Épéistes en (4,2), moral 20/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (9,1), moral 24/24
+  Brutes du portail n°2 en (9,2), moral 24/24
+  Brutes du portail n°3 en (9,3), moral 24/24
+
+== Tour 2 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (9,1) → (8,1).
+  pas 1 : les Brutes du portail n°2 (9,2) → (8,2).
+  pas 1 : les Brutes du portail n°3 (9,3) → (8,3).
+  pas 2 : les Brutes du portail n°1 (8,1) → (7,1).
+  pas 2 : les Brutes du portail n°2 (8,2) → (7,2).
+  pas 2 : les Brutes du portail n°3 (8,3) → (7,3).
+Fin du tour :
+  Épéistes en (4,2), moral 20/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (7,1), moral 24/24
+  Brutes du portail n°2 en (7,2), moral 24/24
+  Brutes du portail n°3 en (7,3), moral 24/24
+
+== Tour 3 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (7,1) → (6,1).
+  pas 1 : les Brutes du portail n°2 (7,2) → (6,2).
+  pas 1 : les Brutes du portail n°3 (7,3) → (6,3).
+  pas 2 : les Brutes du portail n°1 (6,1) → (5,1).
+  pas 2 : les Brutes du portail n°2 (6,2) → (5,2).
+  pas 2 : les Brutes du portail n°3 (6,3) → (5,3).
+Tir :
+  Les Archers tirent sur les Brutes du portail n°2 à 3 cases, volée enflammée (Feu) : 5 − 3 = 2 dégâts ; moral 24 → 22.
+    Feu : les Brutes du portail n°2 perdent 2 de moral (moral 22 → 20) et brûleront 2 tours (2 dégâts par tour). Pâte incendiaire restante : 1.
+Mêlée :
+  Les Épéistes frappent les Brutes du portail n°2 : 6 + 2 (Soutien des Piquiers) − 3 = 5 dégâts ; moral 20 → 15 ; les Brutes du portail n°2 sont ébranlées.
+  Les Brutes du portail n°2 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 dégâts ; moral 20 → 14.
+Fin du tour :
+  Épéistes en (4,2), moral 14/20
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (5,1), moral 24/24
+  Brutes du portail n°2 en (5,2), moral 15/24
+  Brutes du portail n°3 en (5,3), moral 24/24
+
+== Tour 4 ==
+Feu :
+  Les Brutes du portail n°2 brûlent : 2 dégâts qui ignorent la défense ; moral 15 → 13, blessés 0 → 2. Encore 1 tour.
+Mouvement :
+  pas 1 : les Brutes du portail n°1 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Elles s'arrêtent pour ce tour.
+  pas 1 : les Brutes du portail n°2 sont au contact des Épéistes : elles ne bougent plus.
+  pas 1 : les Brutes du portail n°3 ne peuvent pas entrer en (4,3) : la palissade (4,3) barre le passage. Elles s'arrêtent pour ce tour.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°2 à 3 cases, volée normale (la cible brûle déjà) : 5 − 3 = 2 dégâts ; moral 13 → 11, blessés 2 → 4.
+Mêlée :
+  Les Épéistes frappent les Brutes du portail n°2 : 6 + 2 (Soutien des Piquiers) − 3 = 5 dégâts ; moral 11 → 6, blessés 4 → 9 ; les Brutes du portail n°2 sont vacillantes.
+  Les Brutes du portail n°2 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 × 0,9 (ébranlées) × 0,8 (4 blessés sur 20) = 4,32 → 4 dégâts ; moral 14 → 10, blessés 0 → 3 ; les Épéistes sont ébranlés.
+  Les Brutes du portail n°1 frappent la palissade (4,1) : 6 − 0 = 6 dégâts ; structure 36 → 30.
+  Les Brutes du portail n°3 frappent la palissade (4,3) : 6 − 0 = 6 dégâts ; structure 36 → 30.
+Fin du tour :
+  Épéistes en (4,2), moral 10/20, 3 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (5,1), moral 24/24
+  Brutes du portail n°2 en (5,2), moral 6/24, 9 blessés
+  Brutes du portail n°3 en (5,3), moral 24/24
+
+== Tour 5 ==
+Feu :
+  Les Brutes du portail n°2 brûlent : 2 dégâts qui ignorent la défense ; moral 6 → 4, blessés 9 → 11. Le feu s'éteint.
+Mouvement :
+  pas 1 : les Brutes du portail n°1 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Elles s'arrêtent pour ce tour.
+  pas 1 : les Brutes du portail n°2 sont au contact des Épéistes : elles ne bougent plus.
+  pas 1 : les Brutes du portail n°3 ne peuvent pas entrer en (4,3) : la palissade (4,3) barre le passage. Elles s'arrêtent pour ce tour.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°2 à 3 cases, volée enflammée (Feu) : 5 − 3 = 2 dégâts ; moral 4 → 2, blessés 11 → 13.
+    Feu : les Brutes du portail n°2 perdent 2 de moral (moral 2 → 0) et brûleront 2 tours (2 dégâts par tour). Pâte incendiaire restante : 0.
+  Les Brutes du portail n°2 sont en déroute et quittent le terrain.
+Mêlée :
+  Les Brutes du portail n°1 frappent la palissade (4,1) : 6 − 0 = 6 dégâts ; structure 30 → 24.
+  Les Brutes du portail n°3 frappent la palissade (4,3) : 6 − 0 = 6 dégâts ; structure 30 → 24.
+Fin du tour :
+  Épéistes en (4,2), moral 10/20, 3 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (5,1), moral 24/24
+  Brutes du portail n°3 en (5,3), moral 24/24
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Elles s'arrêtent pour ce tour.
+  pas 1 : les Brutes du portail n°3 ne peuvent pas entrer en (4,3) : la palissade (4,3) barre le passage. Elles s'arrêtent pour ce tour.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 4 cases, volée normale (plus de pâte incendiaire) : 5 − 3 = 2 dégâts ; moral 24 → 22.
+Mêlée :
+  Les Brutes du portail n°1 frappent la palissade (4,1) : 6 − 0 = 6 dégâts ; structure 24 → 18.
+  Les Brutes du portail n°3 frappent la palissade (4,3) : 6 − 0 = 6 dégâts ; structure 24 → 18.
+Fin du tour :
+  Épéistes en (4,2), moral 10/20, 3 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (5,1), moral 22/24
+  Brutes du portail n°3 en (5,3), moral 24/24
+
+== Tour 7 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Elles s'arrêtent pour ce tour.
+  pas 1 : les Brutes du portail n°3 ne peuvent pas entrer en (4,3) : la palissade (4,3) barre le passage. Elles s'arrêtent pour ce tour.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 4 cases, volée normale (plus de pâte incendiaire) : 5 − 3 = 2 dégâts ; moral 22 → 20.
+Mêlée :
+  Les Brutes du portail n°1 frappent la palissade (4,1) : 6 − 0 = 6 dégâts ; structure 18 → 12.
+  Les Brutes du portail n°3 frappent la palissade (4,3) : 6 − 0 = 6 dégâts ; structure 18 → 12.
+Fin du tour :
+  Épéistes en (4,2), moral 10/20, 3 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (5,1), moral 20/24
+  Brutes du portail n°3 en (5,3), moral 24/24
+
+== Tour 8 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Elles s'arrêtent pour ce tour.
+  pas 1 : les Brutes du portail n°3 ne peuvent pas entrer en (4,3) : la palissade (4,3) barre le passage. Elles s'arrêtent pour ce tour.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 4 cases, volée normale (plus de pâte incendiaire) : 5 − 3 = 2 dégâts ; moral 20 → 18.
+Mêlée :
+  Les Brutes du portail n°1 frappent la palissade (4,1) : 6 − 0 = 6 dégâts ; structure 12 → 6.
+  Les Brutes du portail n°3 frappent la palissade (4,3) : 6 − 0 = 6 dégâts ; structure 12 → 6.
+Fin du tour :
+  Épéistes en (4,2), moral 10/20, 3 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (5,1), moral 18/24
+  Brutes du portail n°3 en (5,3), moral 24/24
+
+== Tour 9 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Elles s'arrêtent pour ce tour.
+  pas 1 : les Brutes du portail n°3 ne peuvent pas entrer en (4,3) : la palissade (4,3) barre le passage. Elles s'arrêtent pour ce tour.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 4 cases, volée normale (plus de pâte incendiaire) : 5 − 3 = 2 dégâts ; moral 18 → 16.
+Mêlée :
+  Les Brutes du portail n°1 frappent la palissade (4,1) : 6 − 0 = 6 dégâts ; structure 6 → 0.
+  Les Brutes du portail n°3 frappent la palissade (4,3) : 6 − 0 = 6 dégâts ; structure 6 → 0.
+  La palissade (4,1) est détruite : la case est libre.
+  La palissade (4,3) est détruite : la case est libre.
+Fin du tour :
+  Épéistes en (4,2), moral 10/20, 3 blessés
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (5,1), moral 16/24
+  Brutes du portail n°3 en (5,3), moral 24/24
+
+== Tour 10 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (5,1) → (4,1).
+  pas 1 : les Brutes du portail n°3 (5,3) → (4,3).
+  pas 2 : les Brutes du portail n°1 sont au contact des Épéistes : elles ne bougent plus.
+  pas 2 : les Brutes du portail n°3 sont au contact des Épéistes : elles ne bougent plus.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 3 cases, volée normale (plus de pâte incendiaire) : 5 − 3 = 2 dégâts ; moral 16 → 14, blessés 0 → 1 ; les Brutes du portail n°1 sont ébranlées.
+Mêlée :
+  Les Épéistes frappent les Brutes du portail n°1 : 6 + 2 (Soutien des Piquiers) − 3 = 5 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 3,83 → 4 dégâts ; moral 14 → 10, blessés 1 → 5.
+  Les Brutes du portail n°1 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 × 0,9 (ébranlées) × 0,95 (1 blessé sur 20) = 5,13 → 5 dégâts ; moral 10 → 5, blessés 3 → 8 ; les Épéistes sont vacillants.
+  Les Brutes du portail n°3 frappent les Épéistes : 6 − 0 (défense 2, Perce-armure 2) = 6 dégâts ; moral 5 → 0, blessés 8 → 13.
+  Les Épéistes sont en déroute et quittent le terrain.
+Fin du tour :
+  Piquiers en (3,2), moral 20/20
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (4,1), moral 10/24, 5 blessés
+  Brutes du portail n°3 en (4,3), moral 24/24
+
+== Tour 11 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 (4,1) → (3,1).
+  pas 1 : les Brutes du portail n°3 (4,3) → (3,3).
+  pas 2 : les Brutes du portail n°1 sont au contact des Piquiers : elles ne bougent plus.
+  pas 2 : les Brutes du portail n°3 sont au contact des Piquiers : elles ne bougent plus.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 2 cases, volée normale (plus de pâte incendiaire) : 5 − 3 = 2 dégâts ; moral 10 → 8, blessés 5 → 7.
+Mêlée :
+  Les Piquiers frappent les Brutes du portail n°1 : 5 − 3 = 2 dégâts ; moral 8 → 6, blessés 7 → 9 ; les Brutes du portail n°1 sont vacillantes.
+  Les Brutes du portail n°1 frappent les Piquiers : 6 − 0 (défense 1, Perce-armure 2) = 6 × 0,9 (ébranlées) × 0,65 (7 blessés sur 20) = 3,51 → 4 dégâts ; moral 20 → 16.
+  Les Brutes du portail n°3 frappent les Piquiers : 6 − 0 (défense 1, Perce-armure 2) = 6 dégâts ; moral 16 → 10, blessés 0 → 3 ; les Piquiers sont ébranlés.
+Fin du tour :
+  Piquiers en (3,2), moral 10/20, 3 blessés
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (3,1), moral 6/24, 9 blessés
+  Brutes du portail n°3 en (3,3), moral 24/24
+
+== Tour 12 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 sont au contact des Piquiers : elles ne bougent plus.
+  pas 1 : les Brutes du portail n°3 sont au contact des Piquiers : elles ne bougent plus.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 2 cases, volée normale (plus de pâte incendiaire) : 5 − 3 = 2 dégâts ; moral 6 → 4, blessés 9 → 11.
+Mêlée :
+  Les Piquiers frappent les Brutes du portail n°1 : 5 − 3 = 2 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 1,53 → 2 dégâts ; moral 4 → 2, blessés 11 → 13.
+  Les Brutes du portail n°1 frappent les Piquiers : 6 − 0 (défense 1, Perce-armure 2) = 6 × 0,8 (vacillantes) × 0,5 (11 blessés sur 20) = 2,4 → 2 dégâts ; moral 10 → 8, blessés 3 → 5.
+  Les Brutes du portail n°3 frappent les Piquiers : 6 − 0 (défense 1, Perce-armure 2) = 6 dégâts ; moral 8 → 2, blessés 5 → 11 ; les Piquiers sont vacillants.
+Fin du tour :
+  Piquiers en (3,2), moral 2/20, 11 blessés
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°1 en (3,1), moral 2/24, 13 blessés
+  Brutes du portail n°3 en (3,3), moral 24/24
+
+== Tour 13 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°1 sont au contact des Piquiers : elles ne bougent plus.
+  pas 1 : les Brutes du portail n°3 sont au contact des Piquiers : elles ne bougent plus.
+Tir :
+  Les Archers tirent sur les Brutes du portail n°1 à 2 cases, volée normale (plus de pâte incendiaire) : 5 − 3 = 2 dégâts ; moral 2 → 0, blessés 13 → 15.
+  Les Brutes du portail n°1 sont en déroute et quittent le terrain.
+Mêlée :
+  Les Piquiers frappent les Brutes du portail n°3 : 5 − 3 = 2 × 0,8 (vacillants) × 0,5 (11 blessés sur 20) = 0,8 → 1 dégât ; moral 24 → 23.
+  Les Brutes du portail n°3 frappent les Piquiers : 6 − 0 (défense 1, Perce-armure 2) = 6 dégâts ; moral 2 → 0, blessés 11 → 13.
+  Les Piquiers sont en déroute et quittent le terrain.
+Fin du tour :
+  Archers en (2,2), moral 20/20
+  Brutes du portail n°3 en (3,3), moral 23/24
+
+== Tour 14 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°3 (3,3) → (2,3).
+  pas 2 : les Brutes du portail n°3 sont au contact des Archers : elles ne bougent plus.
+Mêlée :
+  Les Archers frappent les Brutes du portail n°3 : 2 − 3 = −1 → minimum 1 dégât ; moral 23 → 22.
+  Les Brutes du portail n°3 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 20 → 15.
+Fin du tour :
+  Archers en (2,2), moral 15/20
+  Brutes du portail n°3 en (2,3), moral 22/24
+
+== Tour 15 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°3 sont au contact des Archers : elles ne bougent plus.
+Mêlée :
+  Les Archers frappent les Brutes du portail n°3 : 2 − 3 = −1 → minimum 1 dégât ; moral 22 → 21.
+  Les Brutes du portail n°3 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 15 → 10, blessés 0 → 3 ; les Archers sont ébranlés.
+Fin du tour :
+  Archers en (2,2), moral 10/20, 3 blessés
+  Brutes du portail n°3 en (2,3), moral 21/24
+
+== Tour 16 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°3 sont au contact des Archers : elles ne bougent plus.
+Mêlée :
+  Les Archers frappent les Brutes du portail n°3 : 2 − 3 = −1 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = −0,76 → minimum 1 dégât ; moral 21 → 20.
+  Les Brutes du portail n°3 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 10 → 5, blessés 3 → 8 ; les Archers sont vacillants.
+Fin du tour :
+  Archers en (2,2), moral 5/20, 8 blessés
+  Brutes du portail n°3 en (2,3), moral 20/24
+
+== Tour 17 ==
+Mouvement :
+  pas 1 : les Brutes du portail n°3 sont au contact des Archers : elles ne bougent plus.
+Mêlée :
+  Les Archers frappent les Brutes du portail n°3 : 2 − 3 = −1 × 0,8 (vacillants) × 0,6 (8 blessés sur 20) = −0,48 → minimum 1 dégât ; moral 20 → 19.
+  Les Brutes du portail n°3 frappent les Archers : 6 − 1 (défense 1, +2 tour (2,2), Perce-armure 2) = 5 dégâts ; moral 5 → 0, blessés 8 → 13.
+  Les Archers sont en déroute et quittent le terrain.
+Fin du tour :
+  Brutes du portail n°3 en (2,3), moral 19/24
+
+Défaite au tour 17 : toutes nos escouades sont en déroute.
+Incursions au cœur du campement : 0.

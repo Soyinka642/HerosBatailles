@@ -10,6 +10,7 @@ import type { Order, PlannedStep } from './types';
 
 const data = loadGameData();
 const FANTASSINS = 'fantassins-du-portail';
+const BRUTES = 'brutes-du-portail';
 
 function cellOf(state: BattleState, id: string): Cell {
   return findSquad(state, id).cell;
@@ -28,7 +29,8 @@ describe('Avancer', () => {
     const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 }, ADVANCE)], [{ enemy: FANTASSINS, cell: { col: 11, row: 2 } }]);
     movementPhase(data, state);
     expect(cellOf(state, 'epeistes')).toEqual({ col: 5, row: 2 });
-    expect(cellOf(state, 'fantassins-du-portail#1')).toEqual({ col: 9, row: 2 });
+    // Les fantassins, en Assaut et de vitesse 1, ne font qu'un pas.
+    expect(cellOf(state, 'fantassins-du-portail#1')).toEqual({ col: 10, row: 2 });
   });
 
   it('va tout droit quand il n’y a aucun ennemi', () => {
@@ -60,10 +62,32 @@ describe('Avancer', () => {
     expect(events[1]).toEqual({ type: 'halted', step: 2, squad: 'archers', reason: { kind: 'targetInRange', target: 'fantassins-du-portail#1' } });
   });
 
-  it('l’ennemi avance vers le campement', () => {
-    const state = stateWith(data, [squad(data, 'epeistes', { col: 1, row: 2 })], [{ enemy: FANTASSINS, cell: { col: 11, row: 2 } }]);
+  it('nos escouades ne peuvent pas prendre Assaut', () => {
+    expect(() => stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 }, { plannedTurns: [], posture: 'assaut' })])).toThrow(
+      'la posture « assaut » est réservée aux ennemis',
+    );
+  });
+});
+
+describe('Assaut', () => {
+  it('l’ennemi marche tout droit vers le campement', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 1, row: 2 })], [{ enemy: BRUTES, cell: { col: 11, row: 2 } }]);
     movementPhase(data, state);
-    expect(cellOf(state, 'fantassins-du-portail#1')).toEqual({ col: 9, row: 2 });
+    expect(cellOf(state, 'brutes-du-portail#1')).toEqual({ col: 9, row: 2 });
+  });
+
+  it('ne dévie jamais, même si notre escouade est sur une autre rangée', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 1, row: 0 })], [{ enemy: BRUTES, cell: { col: 11, row: 4 } }]);
+    const events = movementPhase(data, state);
+    expect(cellOf(state, 'brutes-du-portail#1')).toEqual({ col: 9, row: 4 });
+    expect(events.every((e) => e.type !== 'move' || e.why.kind === 'straight')).toBe(true);
+  });
+
+  it('un tireur ennemi s’arrête dès qu’une cible est à portée', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 0 })], [{ enemy: 'tireurs-du-portail', cell: { col: 7, row: 0 } }]);
+    const events = movementPhase(data, state);
+    expect(cellOf(state, 'tireurs-du-portail#1')).toEqual({ col: 6, row: 0 });
+    expect(events.at(-1)).toMatchObject({ type: 'halted', reason: { kind: 'targetInRange', target: 'epeistes' } });
   });
 });
 
@@ -112,15 +136,15 @@ describe('contact', () => {
 
 describe('conflits de mouvement', () => {
   it('même case visée, même vitesse : la première déployée entre (nous avant l’ennemi)', () => {
-    const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 }, ADVANCE)], [{ enemy: FANTASSINS, cell: { col: 5, row: 2 } }]);
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 }, ADVANCE)], [{ enemy: BRUTES, cell: { col: 5, row: 2 } }]);
     const events = movementPhase(data, state);
     expect(cellOf(state, 'epeistes')).toEqual({ col: 4, row: 2 });
-    expect(cellOf(state, 'fantassins-du-portail#1')).toEqual({ col: 5, row: 2 });
+    expect(cellOf(state, 'brutes-du-portail#1')).toEqual({ col: 5, row: 2 });
     expect(eventsOf(events, 'blocked')).toEqual([
       {
         type: 'blocked',
         step: 1,
-        squad: 'fantassins-du-portail#1',
+        squad: 'brutes-du-portail#1',
         target: { col: 4, row: 2 },
         reason: { kind: 'conflict', winner: 'epeistes', why: 'deployedFirst' },
       },
@@ -130,10 +154,10 @@ describe('conflits de mouvement', () => {
   it('même case visée : la plus rapide entre', () => {
     const slow = squad(data, 'epeistes', { col: 3, row: 2 }, ADVANCE);
     slow.equipment.armure = 'plates';
-    const state = stateWith(data, [slow], [{ enemy: FANTASSINS, cell: { col: 5, row: 2 } }]);
+    const state = stateWith(data, [slow], [{ enemy: BRUTES, cell: { col: 5, row: 2 } }]);
     const events = movementPhase(data, state);
-    expect(cellOf(state, 'fantassins-du-portail#1')).toEqual({ col: 4, row: 2 });
-    expect(eventsOf(events, 'blocked')[0]).toMatchObject({ squad: 'epeistes', reason: { kind: 'conflict', winner: 'fantassins-du-portail#1', why: 'faster' } });
+    expect(cellOf(state, 'brutes-du-portail#1')).toEqual({ col: 4, row: 2 });
+    expect(eventsOf(events, 'blocked')[0]).toMatchObject({ squad: 'epeistes', reason: { kind: 'conflict', winner: 'brutes-du-portail#1', why: 'faster' } });
   });
 
   it('un échange de cases ne se fait pas', () => {

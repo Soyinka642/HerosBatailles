@@ -10,5 +10,12 @@
     "name": "Avancer",
     "description": "L'escouade va tout droit sur sa rangée ; si un ennemi s'y trouve, elle dévie vers le plus proche. Un tireur s'arrête dès qu'une cible est à portée.",
     "movement": "advance"
+  },
+  {
+    "id": "assaut",
+    "name": "Assaut",
+    "description": "L'escouade marche tout droit sur sa rangée vers le cœur du campement, sans jamais dévier. Un tireur s'arrête dès qu'une cible est à portée, et reste dans une tour libre où il entre.",
+    "movement": "assault",
+    "enemyOnly": true
   }
 ]

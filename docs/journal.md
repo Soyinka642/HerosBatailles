@@ -262,3 +262,126 @@ Tous marqués `"provisional": true`, acceptés comme point de départ et à retr
 - La fuite des escouades en déroute sera revue en 1.2c, avec les soldats tombés.
 
 **Prochaine étape** : lot 1.2c (fortifications, Feu et consommables, tir de passage, flanc, recul, soldats tombés, encerclement, Charge), ou d'abord trancher la question des incursions.
+
+## 2026-10-25 — Lot 1.2c : comportement des ennemis, fortifications, Feu et pâte
+
+### Ce qui a été fait
+
+- **Assaut** (`postures.json`, `movement: "assault"`, `enemyOnly: true`) : tout droit sur sa rangée vers le cœur du campement, sans dévier ; un tireur s'arrête dès qu'une cible est à portée et reste dans une tour libre où il entre. Tous les ennemis l'utilisent. Le déploiement la refuse pour nos escouades.
+- **Fantassins du portail : vitesse 1** (aucun autre chiffre changé).
+- **Journal** : articles partout (« Les Épéistes frappent les Fantassins du portail n°1 ») ; l'escouade est nommée à chaque changement d'état (« les Brutes du portail n°1 sont ébranlées ») ; accord au féminin grâce à un champ facultatif `feminine` des ennemis (les Brutes) ; en-tête avec les fortifications, les consommables portés, la portée et la défense réelles dans la tour.
+- **Fortifications** (`fortifications.ts`) : chaque site de `battlefield.json` a un `id` ; la bataille reçoit `fortifications: [{ site, structure? }]` (un site absent n'est pas bâti) et rend la structure finale de chacune.
+  - Palissade : bloque le passage des deux camps ; l'ennemi dont elle barre la route, sans escouade au contact, la frappe à la mêlée (formule unique, défense 0) ; détruite, la case est libre ; +2 en défense contre les tirs pour l'escouade juste derrière.
+  - Tour : +1 portée et +2 défense pour un tireur (contre le tir et la mêlée) ; tout le monde la traverse ; un tireur ennemi en Assaut qui y entre y reste ; on ne déploie que nos tireurs dans la tour.
+- **Feu et pâte** (`burn.ts`) : `upgrades` (flèches enflammées dans le sous-emplacement `fleches` de l'arc, verrouillé par le forgeron) et `carried` (consommables portés) en entrée ; `carried` restant en sortie. Règle par défaut : défense réelle contre les tirs (fortifications comprises) au moins égale au seuil, cible qui ne brûle pas déjà, une unité par volée. Impact : dégâts, puis perte de moral pure, puis brûlure rafraîchie sans cumul ; une cible sur une fortification la fait brûler aussi. La brûlure tombe au début du tour, après les arrivées et avant le mouvement.
+- **Scénarios** : onze nouveaux journaux (`scenarios/fortifications.test.ts`), dont la vague 1 derrière la palissade et les vagues 2, 3, 4 et finale complètes avec le déploiement sensé (`scenarios/deployment.ts`) ; les douze du lot 1.2b sont regénérés.
+- Tests : 216 (y compris `CI=true`). `typecheck`, `test` et `build` passent.
+- Commits poussés sur la branche de travail, étape par étape (nouvelle règle de `CLAUDE.md`).
+
+### Décisions de règle de ce lot
+
+1. Posture « Assaut », réservée aux ennemis : tout droit vers le cœur du campement, sans dévier ; le contact engage ; un tireur s'arrête dès qu'une cible est à portée ; un tireur qui entre dans une tour libre y reste.
+2. Fantassins du portail : vitesse 1.
+3. Rangées d'apparition : chaque arrivée recevra sa rangée dans `waves.json` (proposition ci-dessous, non appliquée) ; l'ordre centre-nord-sud reste le secours.
+4. Nos escouades ne frappent jamais la palissade.
+5. Dégâts sur une palissade : la formule unique avec une défense de 0 (moral et blessés de l'attaquant comptent).
+6. L'ennemi frappe la palissade si elle lui a barré la route pendant le mouvement de ce tour et qu'aucune de nos escouades n'est à son contact ; sinon il frappe l'escouade.
+7. Les tireurs ne visent pas une palissade.
+8. Palissade détruite : la case est libre aussitôt, la structure reste à 0 dans l'état rendu.
+9. La tour ne perd de structure que par le Feu ; à 0, elle est détruite et l'occupant reste sans bonus.
+10. Tout le monde traverse la tour vide ; seuls les tireurs y gagnent les bonus ; nous n'y déployons que des tireurs.
+11. Bonus de la tour (+1 portée, +2 défense) contre toutes les attaques.
+12. Feu : perte de moral pure à l'impact, appliquée après les dégâts de la volée.
+13. Brûlure au début du tour, après les arrivées, avant le mouvement ; déroute et fin de bataille vérifiées juste après.
+14. Seuil des flèches enflammées : défense réelle (bonus des fortifications compris).
+15. La règle par défaut s'applique aussi à un ennemi abrité dans notre tour : la tour brûle aussi.
+16. Brûlure d'une fortification : les mêmes chiffres que celle d'une escouade (2 par tour, 2 tours), même si l'occupant part.
+17. Format : `upgrades` (emplacement → sous-emplacement → objet) et `fortifications: [{ site, structure }]` avec des ids de sites.
+
+### Choix techniques de ce lot (sans règle de jeu nouvelle)
+
+- Les effets du Feu des flèches ne portent que sur les tirs : des archers en mêlée ne brûlent rien.
+- Deux volées enflammées sur la même cible au même tour coûtent chacune une unité (le tir est simultané) ; la seconde rafraîchit la brûlure.
+- Le champ `feminine` des ennemis ne sert qu'au journal.
+
+### Intentions des batailles (Q24, confirmées)
+
+- Vague 1 : prise en main, sans perte grave.
+- Vague 2 : première pression à distance (les tireurs).
+- Vague 3 : la brute qui teste la palissade.
+- Vague 4 : deux fronts, la palissade entamée.
+- Finale : tenir 12 tours, au moins une palissade brisée, la victoire arrachée.
+
+### Bilan d'équilibrage (déploiement sensé, trois escouades, chiffres actuels)
+
+| Bataille | Issue | Tours | Nos escouades à la fin | Volées (enflammées) | Palissades N / CN / CS / S |
+| --- | --- | --- | --- | --- | --- |
+| Vague 1 | victoire | 13 | Épéistes 16/20, Piquiers 20/20, Archers 20/20 | 9 (0) | 24 / 0 / 24 / 24 |
+| Vague 2 | victoire | 17 | Épéistes en déroute, Piquiers 7/20, Archers 20/20 | 13 (0) | 24 / 0 / 24 / 24 |
+| Vague 3 | défaite | 30 | les trois en déroute | 16 (2) | 24 / 0 / 0 / 24 |
+| Vague 4 | défaite | 18 | les trois en déroute | 8 (2) | 24 / 0 / 12 / 24 |
+| Finale | victoire (rituel) | 12 | Épéistes et Piquiers en déroute, Archers 20/20 | 8 (2) | 22 / 0 / 0 / 24 |
+
+Aucune incursion. La tour n'est jamais touchée.
+
+Comparaison avec les intentions :
+- Vague 1 : conforme, mais un seul escadron de fantassins abat une palissade (24) en six tours.
+- Vague 2 : la pression à distance est réelle (13 tirs ennemis), mais les Épéistes partent en déroute : plus dur que prévu.
+- Vague 3 : la brute passe par la brèche (rangée 2, apparition « centre d'abord ») au lieu de tester la palissade ; défaite.
+- Vague 4 : défaite nette.
+- Finale : « arrachée » au sens strict (deux escouades en déroute, deux palissades brisées), mais le rituel finit avant l'ennemi.
+
+Ce qui pèse le plus : les Tireurs du portail s'arrêtent à 3 cases des Épéistes, en avant dans la brèche, hors de portée utile de nos Archers (qui visent le plus proche), et les usent 2 points par tour ; puis tout ce qui vient sur la rangée 2 tombe sur les mêmes Épéistes.
+
+### Questions apparues
+
+- **Un tireur ennemi ne peut presque jamais occuper la tour** : il s'arrête dès qu'une de nos escouades est à 3 cases, et toute case de la zone de déploiement est à 3 cases ou moins de la rangée 2 en colonne 3. Le scénario « Feu sur un ennemi abrité dans la tour » utilise donc une Brute arrêtée dans la tour par nos Épéistes.
+- **Les flèches enflammées ne visent au prototype que les Brutes** (défense 3) : fantassins (2) et tireurs (1) sont sous le seuil de 3, sauf un tireur dans la tour.
+- **Une égalité tardive** : en vague 3, Archers et Tireurs se mettent en déroute à la même phase au tour 30, ce qui donne une défaite (règle d'égalité) alors que tous les ennemis sont en déroute.
+- **Avec trois escouades, la vague 4 est perdue** quels que soient les réglages essayés ; avec une 4ᵉ escouade (le civil recruté), elle se gagne. Faut-il caler la vague 4 sur quatre escouades ?
+
+### Idées notées pour plus tard (non codées)
+
+- Futur dépliage « archers prudents » : la règle par défaut épargne nos propres fortifications.
+- Arme d'allonge qui frappe par-dessus la palissade.
+- Priorité de cible modifiable (déjà notée) : viser les tireurs ennemis d'abord changerait beaucoup les vagues 2 à 4.
+
+**Prochaine étape** : trancher les rangées d'apparition et les ajustements de chiffres proposés, puis lot 1.2d (tir de passage, flanc, recul, soldats tombés, encerclement, fuite des escouades en déroute).
+
+## 2026-10-25 — Lot 1.2c (suite) : ajustements appliqués, règle d'égalité
+
+### Ce qui a été fait
+
+- Ajustements acceptés par l'auteur et appliqués :
+  1. rangées d'apparition dans `waves.json`, une arrivée par rangée (`count: 1`) :
+     - V1 : fantassins 2, 1 ;
+     - V2 : fantassins 2, 3 ; tireurs 0 ;
+     - V3 : fantassins 2, 4 ; tireurs 0 ; brute 1 ;
+     - V4 : fantassins 2, 1 ; tireurs 4 ; brute 3 ; fantassins du tour 5 en 2, 0 ;
+     - finale : fantassins 2, 1, 3 ; tireurs 0 ; brute 1 ; tireurs 4 ; fantassins du tour 5 en 2, 0 ; brute 3 ; fantassins du tour 7 en 2, 4 ;
+  2. palissade : structure 24 → 36 ;
+  3. Tireurs du portail : tir 4 → 3 ;
+  4. vague 4 et finale calibrées sur quatre escouades : dans les scénarios, des Archers en renfort en (3,0), derrière la palissade nord.
+- Règle d'égalité changée (Q23) : si nos dernières escouades et les derniers ennemis partent en déroute à la même phase, et qu'aucune arrivée ne reste, c'est une victoire (avant : défaite).
+- `docs/conception.md` reprend les règles du lot 1.2c (Assaut, palissade, tour, Feu) et la nouvelle règle d'égalité.
+- Scénarios regénérés ; tests adaptés aux nouveaux chiffres. `typecheck`, `test` et `build` passent.
+
+### Bilan final (déploiement sensé, chiffres appliqués)
+
+| Bataille | Issue | Tours | Nos escouades à la fin | Volées (enflammées) | Pâte restante | Palissades N / CN / CS / S |
+| --- | --- | --- | --- | --- | --- | --- |
+| Vague 1 | victoire | 13 | Épéistes 16/20, Piquiers 20/20, Archers 20/20 | 9 (0) | — | 36 / 12 / 36 / 36 |
+| Vague 2 | victoire | 24 | Épéistes en déroute, Piquiers 13/20, Archers 20/20 | 13 (0) | — | 36 / 36 / 12 / 36 |
+| Vague 3 | victoire | 22 | Épéistes en déroute, Piquiers 13/20, Archers 20/20 | 18 (3) | 1 | 36 / 10 / 36 / 0 |
+| Vague 4 (4 escouades) | victoire | 20 | Épéistes et Piquiers en déroute, Archers 20/20, Archers en renfort 20/20 | 26 (2) | 2 | 27 / 16 / 0 / 29 |
+| Finale (4 escouades) | victoire (rituel) | 12 | Épéistes 3/20 (10 blessés), Piquiers 20/20, Archers 20/20, Archers en renfort 16/20 | 18 (0) | 4 | 29 / 15 / 6 / 36 |
+
+Aucune incursion ; la tour n'est jamais touchée. Les intentions de Q24 sont tenues : prise en main (V1), pression à distance (V2), la brute qui brise une palissade (V3), deux fronts et une palissade brisée (V4), victoire arrachée (finale).
+
+### Points à réexaminer
+
+- **Le recrutement devient quasi obligatoire avant la vague 4** : avec trois escouades, la vague 4 est perdue. À réexaminer au lot 1.5 (campement, civils, recrutement).
+- **Objectif de durée, à viser plus tard** : une bataille en 10 à 15 tours environ. Aujourd'hui, les vagues 2 à 4 durent 20 à 24 tours (fantassins lents, palissade solide, duels d'escouades affaiblies).
+- Les Épéistes de la brèche partent en déroute dans presque toutes les batailles : c'est le poste le plus exposé.
+
+**Prochaine étape** : fusion du lot 1.2c dans `main` (accord donné si le bilan correspond à l'annonce), puis lot 1.2d.

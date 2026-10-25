@@ -10,6 +10,7 @@ function input(overrides: Partial<DamageInput>): DamageInput {
     attack: 6,
     bonuses: [],
     defense: 2,
+    defenseBonuses: [],
     ignoreDefense: [],
     tier: 'steady',
     efficiency: 1,

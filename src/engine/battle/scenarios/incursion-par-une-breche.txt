@@ -1,0 +1,134 @@
+Bataille « scenario » (vague).
+
+Fortifications :
+- La tour (2,2) : structure 30/30.
+- La palissade (4,0) : structure 36/36.
+- La palissade (4,1) : structure 36/36.
+- La palissade (4,3) : structure 6/36.
+- La palissade (4,4) : structure 36/36.
+
+Nos escouades, dans l’ordre de déploiement :
+- Épéistes en (3,1), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
+- Archers en (2,0), Tenir : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.
+
+Ennemis annoncés, dans l’ordre d’arrivée :
+- Fantassins du portail n°1, tour 1, rangée 3 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+
+== Tour 1 ==
+Les Fantassins du portail n°1 sortent du portail en (11,3).
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (11,3) → (10,3).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (10,3), moral 16/16
+
+== Tour 2 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (10,3) → (9,3).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (9,3), moral 16/16
+
+== Tour 3 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (9,3) → (8,3).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (8,3), moral 16/16
+
+== Tour 4 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (8,3) → (7,3).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (7,3), moral 16/16
+
+== Tour 5 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (7,3) → (6,3).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (6,3), moral 16/16
+
+== Tour 6 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (6,3) → (5,3).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (5,3), moral 16/16
+
+== Tour 7 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 ne peuvent pas entrer en (4,3) : la palissade (4,3) barre le passage. Ils s'arrêtent pour ce tour.
+Mêlée :
+  Les Fantassins du portail n°1 frappent la palissade (4,3) : 5 − 0 = 5 dégâts ; structure 6 → 1.
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (5,3), moral 16/16
+
+== Tour 8 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 ne peuvent pas entrer en (4,3) : la palissade (4,3) barre le passage. Ils s'arrêtent pour ce tour.
+Mêlée :
+  Les Fantassins du portail n°1 frappent la palissade (4,3) : 5 − 0 = 5 dégâts ; structure 1 → 0.
+  La palissade (4,3) est détruite : la case est libre.
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (5,3), moral 16/16
+
+== Tour 9 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (5,3) → (4,3).
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (4,3), moral 16/16
+
+== Tour 10 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (4,3) → (3,3).
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (3,3), moral 13/16
+
+== Tour 11 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (3,3) → (2,3).
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 13 → 10 ; les Fantassins du portail n°1 sont ébranlés.
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (2,3), moral 10/16
+
+== Tour 12 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (2,3) → (1,3).
+Tir :
+  Les Archers tirent sur les Fantassins du portail n°1 à 3 cases : 5 − 2 = 3 dégâts ; moral 10 → 7, blessés 0 → 3.
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+  Fantassins du portail n°1 en (1,3), moral 7/16, 3 blessés
+
+== Tour 13 ==
+Mouvement :
+  pas 1 : les Fantassins du portail n°1 (1,3) → (0,3).
+  Les Fantassins du portail n°1 atteignent le cœur du campement en (0,3) : incursion n°1. Ils quittent la bataille.
+Fin du tour :
+  Épéistes en (3,1), moral 20/20
+  Archers en (2,0), moral 20/20
+
+Victoire au tour 13 : plus aucun ennemi sur le terrain ni à venir.
+Incursions au cœur du campement : 1.

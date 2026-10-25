@@ -1,13 +1,11 @@
-// État initial d'une bataille : stats réelles de nos escouades, vérification du déploiement,
-// et file des ennemis annoncés.
-//
-// Lot 1.2b : le moteur IGNORE les fortifications du terrain (palissade, tour). Elles
-// arriveront au lot 1.2c ; d'ici là, battlefield.fortificationSites n'est jamais lu.
+// État initial d'une bataille : stats réelles de nos escouades, fortifications bâties,
+// vérification du déploiement, et file des ennemis annoncés.
 
 import type { Area, Cell, GameData, Id, Item, KeywordRef, StatModifiers, Wave } from '../data/types';
+import { type FortificationSetup, buildFortifications, fortificationData } from './fortifications';
 import { hexDistance, isOnField, sameCell } from './hex';
-import type { BattleSquad, BattleState, CombatStats, PendingArrival, UnmasteredWeapon } from './state';
-import type { MoraleModifier, Order } from './types';
+import type { BattleSquad, BattleState, CombatStats, FortificationState, PendingArrival, UnmasteredWeapon } from './state';
+import type { Carried, MoraleModifier, Order } from './types';
 
 /** Une de nos escouades telle que le joueur la déploie. */
 export interface PlayerSquadSetup {
@@ -19,7 +17,13 @@ export interface PlayerSquadSetup {
   cell: Cell;
   order: Order;
   moraleModifiers?: MoraleModifier[];
+  /** Améliorations : id d'emplacement → id de sous-emplacement → id d'objet (les flèches enflammées sur l'arc). */
+  upgrades?: Upgrades;
+  /** Consommables portés (la pâte incendiaire…). */
+  carried?: Carried;
 }
+
+export type Upgrades = Record<Id, Record<Id, Id>>;
 
 export interface BattleSetup {
   wave: Wave;
@@ -27,6 +31,8 @@ export interface BattleSetup {
   squads: PlayerSquadSetup[];
   /** Déblocages obtenus ; ils comptent pour la profondeur des ordres. */
   unlocks?: Id[];
+  /** Fortifications bâties et leur structure ; un site absent n'est pas bâti. */
+  fortifications?: FortificationSetup[];
 }
 
 export class BattleSetupError extends Error {
@@ -66,15 +72,30 @@ export interface SquadProfile {
   unmastered: UnmasteredWeapon[];
 }
 
+/** Améliorations posées, dans l'ordre des emplacements de squad.json puis des sous-emplacements de l'objet. */
+function upgradeItems(data: GameData, equipment: Record<Id, Id>, upgrades: Upgrades): Item[] {
+  return data.squad.slots.flatMap((slot) => {
+    const itemId = equipment[slot.id];
+    const chosen = upgrades[slot.id];
+    if (itemId === undefined || chosen === undefined) return [];
+    return itemById(data, itemId).upgradeSlots.flatMap((sub) => {
+      const upgradeId = chosen[sub.id];
+      return upgradeId === undefined ? [] : [itemById(data, upgradeId)];
+    });
+  });
+}
+
 /**
- * Stats réelles d'une de nos escouades : base commune + équipement ; une arme non maîtrisée
- * perd ses capacités et donne un malus ; moral maximum = base + modificateurs.
+ * Stats réelles d'une de nos escouades : base commune + équipement + améliorations ; une arme
+ * non maîtrisée perd ses capacités et donne un malus (les capacités d'une amélioration ne
+ * dépendent pas de la maîtrise) ; moral maximum = base + modificateurs.
  */
 export function computeSquadStats(
   data: GameData,
   equipment: Record<Id, Id>,
   masteries: readonly Id[],
   moraleModifiers: readonly MoraleModifier[] = [],
+  upgrades: Upgrades = {},
 ): SquadProfile {
   const base = data.squad.stats;
   const stats: CombatStats = {
@@ -97,6 +118,10 @@ export function computeSquadStats(
       unmastered.push({ item: item.id, penalty, lostKeywords: item.keywords.map((k) => k.id) });
     }
   }
+  for (const upgrade of upgradeItems(data, equipment, upgrades)) {
+    for (const key of STAT_KEYS) stats[key] += upgrade.stats[key] ?? 0;
+    keywords.push(...upgrade.keywords);
+  }
   stats.speed = Math.max(0, stats.speed);
   return { stats, keywords, unmastered };
 }
@@ -116,7 +141,24 @@ function staysStillOnTurnOne(data: GameData, squad: PlayerSquadSetup): boolean {
   return data.postures.find((p) => p.id === squad.order.posture)?.movement === 'hold';
 }
 
-function checkEquipment(data: GameData, squad: PlayerSquadSetup, issues: string[]): void {
+/** Une amélioration va dans un sous-emplacement de l'objet porté, débloqué, qui accepte sa catégorie. */
+function checkUpgrades(data: GameData, setup: BattleSetup, squad: PlayerSquadSetup, issues: string[]): void {
+  for (const [slotId, chosen] of Object.entries(squad.upgrades ?? {}).sort(([a], [b]) => a.localeCompare(b))) {
+    const itemId = squad.equipment[slotId];
+    const item = itemId === undefined ? undefined : data.items.find((i) => i.id === itemId);
+    for (const [subId, upgradeId] of Object.entries(chosen).sort(([a], [b]) => a.localeCompare(b))) {
+      const where = `${squad.id} : amélioration ${slotId}.${subId}`;
+      const sub = item?.upgradeSlots.find((s) => s.id === subId);
+      const upgrade = data.items.find((i) => i.id === upgradeId);
+      if (!sub) issues.push(`${where} : aucun sous-emplacement « ${subId} » sur l'objet porté`);
+      else if (sub.unlockedBy !== undefined && !(setup.unlocks ?? []).includes(sub.unlockedBy)) issues.push(`${where} : verrouillé (${sub.unlockedBy})`);
+      if (!upgrade) issues.push(`${where} : objet inconnu « ${upgradeId} »`);
+      else if (sub && !sub.accepts.includes(upgrade.category)) issues.push(`${where} : « ${upgradeId} » ne va pas dans ce sous-emplacement`);
+    }
+  }
+}
+
+function checkEquipment(data: GameData, setup: BattleSetup, squad: PlayerSquadSetup, issues: string[]): void {
   for (const slot of data.squad.slots) {
     const itemId = squad.equipment[slot.id];
     if (itemId === undefined) continue;
@@ -127,17 +169,40 @@ function checkEquipment(data: GameData, squad: PlayerSquadSetup, issues: string[
   for (const slotId of Object.keys(squad.equipment).sort()) {
     if (!data.squad.slots.some((s) => s.id === slotId)) issues.push(`${squad.id} : emplacement inconnu « ${slotId} »`);
   }
+  checkUpgrades(data, setup, squad, issues);
+  for (const [consumable, amount] of Object.entries(squad.carried ?? {}).sort(([a], [b]) => a.localeCompare(b))) {
+    if (!data.consumables.some((c) => c.id === consumable)) issues.push(`${squad.id} : consommable inconnu « ${consumable} »`);
+    if (!Number.isInteger(amount) || amount < 0) issues.push(`${squad.id} : quantité invalide de « ${consumable} » (${amount})`);
+  }
   for (const mastery of squad.masteries) {
     if (!data.masteries.some((m) => m.id === mastery)) issues.push(`${squad.id} : maîtrise inconnue « ${mastery} »`);
   }
 }
 
-function checkPlannedTurns(data: GameData, setup: BattleSetup, squad: PlayerSquadSetup, issues: string[]): void {
+/** Une palissade debout est infranchissable ; la tour n'accueille que nos tireurs. */
+function checkFortifiedCell(data: GameData, forts: readonly FortificationState[], squad: PlayerSquadSetup, cell: Cell, where: string, issues: string[]): void {
+  const fort = forts.find((f) => f.structure > 0 && sameCell(f.cell, cell));
+  if (!fort) return;
+  const fortification = fortificationData(data, fort.fortification);
+  const at = `(${cell.col},${cell.row})`;
+  if (fortification.blocksMovement) issues.push(`${where} : ${at} est une ${fort.name.toLowerCase()}, infranchissable`);
+  const stats = profileOf(data, squad).stats;
+  const shooter = stats.rangedAttack > 0 && stats.range > 0;
+  if (fortification.occupants === 'ranged' && !shooter) issues.push(`${where} : ${at} est une ${fort.name.toLowerCase()}, réservée aux tireurs`);
+}
+
+function checkPlannedTurns(
+  data: GameData,
+  setup: BattleSetup,
+  forts: readonly FortificationState[],
+  squad: PlayerSquadSetup,
+  issues: string[],
+): void {
   const allowed = unlockedPlannedTurns(data, setup.unlocks ?? []);
   if (squad.order.plannedTurns.length > allowed) {
     issues.push(`${squad.id} : ${squad.order.plannedTurns.length} tours planifiés pour ${allowed} autorisé(s)`);
   }
-  const speed = computeSquadStats(data, squad.equipment, squad.masteries).stats.speed;
+  const speed = profileOf(data, squad).stats.speed;
   const firstTurn = squad.order.plannedTurns[0];
   if (!firstTurn) return;
   if (firstTurn.steps.length > speed) issues.push(`${squad.id} : ${firstTurn.steps.length} pas pour une vitesse de ${speed}`);
@@ -150,12 +215,12 @@ function checkPlannedTurns(data: GameData, setup: BattleSetup, squad: PlayerSqua
     if (!isOnField(data.battlefield, step)) issues.push(`${where} : (${step.col},${step.row}) est hors du terrain`);
     const ally = stillAllies.find((other) => sameCell(other.cell, step));
     if (ally) issues.push(`${where} : (${step.col},${step.row}) est la case de ${ally.id}, qui ne bouge pas`);
+    checkFortifiedCell(data, forts, squad, step, where, issues);
     previous = step;
   });
 }
 
-function checkPlayerSquads(data: GameData, setup: BattleSetup): string[] {
-  const issues: string[] = [];
+function checkPlayerSquads(data: GameData, setup: BattleSetup, forts: readonly FortificationState[], issues: string[]): void {
   const max = data.config.field.maxPlayerSquads;
   if (setup.squads.length > max) issues.push(`${setup.squads.length} escouades pour ${max} au plus`);
   setup.squads.forEach((squad, index) => {
@@ -165,11 +230,13 @@ function checkPlayerSquads(data: GameData, setup: BattleSetup): string[] {
     }
     const first = setup.squads.findIndex((s) => sameCell(s.cell, squad.cell));
     if (first !== index) issues.push(`${squad.id} : même case que ${setup.squads[first]?.id}`);
-    if (!data.postures.some((p) => p.id === squad.order.posture)) issues.push(`${squad.id} : posture inconnue « ${squad.order.posture} »`);
-    checkEquipment(data, squad, issues);
-    checkPlannedTurns(data, setup, squad, issues);
+    const posture = data.postures.find((p) => p.id === squad.order.posture);
+    if (!posture) issues.push(`${squad.id} : posture inconnue « ${squad.order.posture} »`);
+    else if (posture.enemyOnly) issues.push(`${squad.id} : la posture « ${posture.id} » est réservée aux ennemis`);
+    checkEquipment(data, setup, squad, issues);
+    checkFortifiedCell(data, forts, squad, squad.cell, squad.id, issues);
+    checkPlannedTurns(data, setup, forts, squad, issues);
   });
-  return issues;
 }
 
 function movementOf(data: GameData, postureId: Id): BattleSquad['movement'] {
@@ -179,7 +246,7 @@ function movementOf(data: GameData, postureId: Id): BattleSquad['movement'] {
 }
 
 function playerSquad(data: GameData, squad: PlayerSquadSetup, rank: number): BattleSquad {
-  const profile = computeSquadStats(data, squad.equipment, squad.masteries, squad.moraleModifiers);
+  const profile = profileOf(data, squad);
   return {
     id: squad.id,
     name: squad.name,
@@ -193,7 +260,12 @@ function playerSquad(data: GameData, squad: PlayerSquadSetup, rank: number): Bat
     movement: movementOf(data, squad.order.posture),
     plannedTurns: structuredClone(squad.order.plannedTurns),
     status: 'active',
+    carried: { ...squad.carried },
   };
+}
+
+function profileOf(data: GameData, squad: PlayerSquadSetup): SquadProfile {
+  return computeSquadStats(data, squad.equipment, squad.masteries, squad.moraleModifiers, squad.upgrades);
 }
 
 /**
@@ -233,6 +305,7 @@ export function enemySquad(data: GameData, arrival: PendingArrival, cell: Cell):
   return {
     id: arrival.id,
     name: arrival.name,
+    ...(enemy.feminine ? { feminine: true } : {}),
     side: 'enemy',
     rank: arrival.rank,
     cell: { ...cell },
@@ -245,12 +318,15 @@ export function enemySquad(data: GameData, arrival: PendingArrival, cell: Cell):
     movement: movementOf(data, enemy.posture),
     plannedTurns: [],
     status: 'active',
+    carried: {},
   };
 }
 
 /** Construit l'état initial, ou lève une BattleSetupError qui liste tous les problèmes. */
 export function createBattle(data: GameData, setup: BattleSetup): BattleState {
-  const issues = checkPlayerSquads(data, setup);
+  const issues: string[] = [];
+  const fortifications = buildFortifications(data, setup.fortifications ?? [], issues);
+  checkPlayerSquads(data, setup, fortifications, issues);
   if (issues.length > 0) throw new BattleSetupError(issues);
   return {
     waveId: setup.wave.id,
@@ -258,6 +334,7 @@ export function createBattle(data: GameData, setup: BattleSetup): BattleState {
     turn: 0,
     squads: setup.squads.map((squad, index) => playerSquad(data, squad, index)),
     pending: pendingArrivals(data, setup.wave, setup.squads.length),
+    fortifications,
     breaches: 0,
   };
 }

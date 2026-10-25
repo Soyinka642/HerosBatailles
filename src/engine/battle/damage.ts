@@ -17,6 +17,8 @@ export interface DamageInput {
   attack: number;
   bonuses: AttackBonus[];
   defense: number;
+  /** Bonus de défense des fortifications (tour occupée, palissade devant contre les tirs). */
+  defenseBonuses: { site: string; amount: number }[];
   /** Défense ignorée (Perce-armure X), avec le mot-clé qui la donne. */
   ignoreDefense: { keyword: string; amount: number }[];
   /** Palier de moral de l'attaquant, et son multiplicateur. */
@@ -28,7 +30,7 @@ export interface DamageInput {
 }
 
 export interface DamageBreakdown extends DamageInput {
-  /** Défense après Perce-armure, jamais sous 0. */
+  /** Défense avec les bonus des fortifications, après Perce-armure, jamais sous 0. */
   effectiveDefense: number;
   /** Attaque + bonus − défense (formule soustractive) ; peut être négatif. */
   net: number;
@@ -58,7 +60,8 @@ export function woundedFactor(wounded: number, soldiers: number, config: BattleC
  */
 export function computeDamage(input: DamageInput, config: BattleConfig): DamageBreakdown {
   const pierce = input.ignoreDefense.reduce((sum, p) => sum + p.amount, 0);
-  const effectiveDefense = Math.max(0, input.defense - pierce);
+  const fortified = input.defense + input.defenseBonuses.reduce((sum, b) => sum + b.amount, 0);
+  const effectiveDefense = Math.max(0, fortified - pierce);
   const attack = input.attack + input.bonuses.reduce((sum, b) => sum + b.amount, 0);
   const net =
     config.damage.formula === 'subtraction'

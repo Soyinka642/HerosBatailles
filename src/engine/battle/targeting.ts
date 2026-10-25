@@ -1,6 +1,7 @@
 // Choix des cibles et des cases, avec des départages explicites (déterminisme).
 
-import type { Battlefield, Cell } from '../data/types';
+import type { Battlefield, Cell, GameData } from '../data/types';
+import { effectiveRange } from './fortifications';
 import { type Direction, ahead, hexDistance, isOnField, neighbor, neighbors, sameCell } from './hex';
 import { type BattleSquad, type BattleState, activeEnemiesOf, isShooter } from './state';
 
@@ -25,11 +26,12 @@ export function isEngaged(state: BattleState, squad: BattleSquad): boolean {
   return adjacentEnemies(state, squad).length > 0;
 }
 
-/** Cible de tir par défaut : l'ennemi à portée le plus proche (départage nord, puis ouest). */
-export function rangedTarget(state: BattleState, squad: BattleSquad): BattleSquad | undefined {
+/** Cible de tir par défaut : l'ennemi à portée réelle le plus proche (départage nord, puis ouest). */
+export function rangedTarget(data: GameData, state: BattleState, squad: BattleSquad): BattleSquad | undefined {
   if (!isShooter(squad)) return undefined;
+  const range = effectiveRange(data, state, squad);
   return activeEnemiesOf(state, squad)
-    .filter((e) => hexDistance(squad.cell, e.cell) <= squad.stats.range)
+    .filter((e) => hexDistance(squad.cell, e.cell) <= range)
     .sort(closestFirst(squad.cell))[0];
 }
 
