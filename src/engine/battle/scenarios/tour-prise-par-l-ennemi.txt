@@ -2,10 +2,10 @@ Bataille « scenario » (vague).
 
 Fortifications :
 - La tour (2,2) : structure 30/30.
-- La palissade (4,0) : structure 24/24.
-- La palissade (4,1) : structure 24/24.
-- La palissade (4,3) : structure 24/24.
-- La palissade (4,4) : structure 24/24.
+- La palissade (4,0) : structure 36/36.
+- La palissade (4,1) : structure 36/36.
+- La palissade (4,3) : structure 36/36.
+- La palissade (4,4) : structure 36/36.
 
 Nos escouades, dans l’ordre de déploiement :
 - Archers en (2,2), Tenir : mêlée 2, tir 5 (portée 3), défense 1, vitesse 2, moral 20, 20 soldats.

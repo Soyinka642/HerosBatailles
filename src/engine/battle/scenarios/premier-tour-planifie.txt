@@ -13,8 +13,8 @@ Nos escouades, dans l’ordre de déploiement :
   Tour 1 planifié : (2,3).
 
 Ennemis annoncés, dans l’ordre d’arrivée :
-- Fantassins du portail n°1, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
-- Fantassins du portail n°2, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°1, tour 1, rangée 2 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°2, tour 1, rangée 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
 
 == Tour 1 ==
 Les Fantassins du portail n°1 sortent du portail en (11,2).

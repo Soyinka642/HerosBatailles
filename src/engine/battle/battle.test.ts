@@ -84,10 +84,18 @@ describe('fin de bataille', () => {
     expect(playTurn(data, state).state.outcome).toEqual({ kind: 'defeat', reason: 'allSquadsRouted' });
   });
 
-  it('les deux camps en déroute à la même phase : défaite', () => {
+  it('les deux camps en déroute à la même phase, sans arrivée restante : victoire', () => {
     const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 })], [{ enemy: FANTASSINS, cell: { col: 4, row: 2 } }], 0);
     findSquad(state, 'epeistes').morale = 1;
     findSquad(state, 'fantassins-du-portail#1').morale = 1;
+    expect(playTurn(data, state).state.outcome).toEqual({ kind: 'victory', reason: 'noEnemiesLeft' });
+  });
+
+  it('les deux camps en déroute à la même phase, avec une arrivée restante : défaite', () => {
+    const state = stateWith(data, [squad(data, 'epeistes', { col: 3, row: 2 })], [{ enemy: FANTASSINS, cell: { col: 4, row: 2 } }], 0);
+    findSquad(state, 'epeistes').morale = 1;
+    findSquad(state, 'fantassins-du-portail#1').morale = 1;
+    state.pending = [{ id: 'fantassins-du-portail#2', name: 'Fantassins du portail n°2', enemy: FANTASSINS, rank: 2, turn: 3 }];
     expect(playTurn(data, state).state.outcome).toEqual({ kind: 'defeat', reason: 'allSquadsRouted' });
   });
 

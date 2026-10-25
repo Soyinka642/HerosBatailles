@@ -5,7 +5,7 @@
     "kind": "barrier",
     "provisional": true,
     "blocksMovement": true,
-    "structure": 24,
+    "structure": 36,
     "effects": [
       {
         "trigger": "whileBehind",

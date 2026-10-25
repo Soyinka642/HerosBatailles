@@ -28,7 +28,7 @@ describe('fortifications au déploiement', () => {
     const state = createBattle(data, { wave: NO_ARRIVALS, squads: [], fortifications: [{ site: 'palissade-sud', structure: 10 }, { site: 'tour' }] });
     expect(state.fortifications.map((f) => [f.site, f.structure, f.maxStructure])).toEqual([
       ['tour', 30, 30],
-      ['palissade-sud', 10, 24],
+      ['palissade-sud', 10, 36],
     ]);
   });
 
@@ -71,8 +71,8 @@ describe('palissade', () => {
       },
     ]);
     const melee = meleePhase(data, state);
-    expect(melee).toMatchObject([{ type: 'fortificationHit', site: 'palissade-centre-nord', before: 24, after: 19, damage: { final: 5 } }]);
-    expect(structureOf(state, 'palissade-centre-nord')).toBe(19);
+    expect(melee).toMatchObject([{ type: 'fortificationHit', site: 'palissade-centre-nord', before: 36, after: 31, damage: { final: 5 } }]);
+    expect(structureOf(state, 'palissade-centre-nord')).toBe(31);
   });
 
   it('détruite, la case redevient libre', () => {
@@ -110,7 +110,7 @@ describe('palissade', () => {
     expect(defenseBonuses(data, state, archers, true)).toEqual([{ site: 'palissade-centre-nord', amount: 2 }]);
     expect(defenseBonuses(data, state, archers, false)).toEqual([]);
     const shot = ofType(firePhase(data, state), 'shot').find((e) => e.attacker === 'tireurs-du-portail#1');
-    // 4 − (1 + 2) = 1
+    // 3 − (1 + 2) = 0 → minimum 1
     expect(shot?.damage).toMatchObject({ effectiveDefense: 3, final: 1 });
   });
 });

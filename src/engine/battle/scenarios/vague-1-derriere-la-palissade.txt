@@ -2,10 +2,10 @@ Bataille « vague-1 » (vague).
 
 Fortifications :
 - La tour (2,2) : structure 30/30.
-- La palissade (4,0) : structure 24/24.
-- La palissade (4,1) : structure 24/24.
-- La palissade (4,3) : structure 24/24.
-- La palissade (4,4) : structure 24/24.
+- La palissade (4,0) : structure 36/36.
+- La palissade (4,1) : structure 36/36.
+- La palissade (4,3) : structure 36/36.
+- La palissade (4,4) : structure 36/36.
 
 Nos escouades, dans l’ordre de déploiement :
 - Épéistes en (3,2), Tenir : mêlée 6, tir 0, défense 2, vitesse 2, moral 20, 20 soldats.
@@ -16,8 +16,8 @@ Nos escouades, dans l’ordre de déploiement :
   Dans la tour (2,2) : portée 4, défense 3.
 
 Ennemis annoncés, dans l’ordre d’arrivée :
-- Fantassins du portail n°1, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
-- Fantassins du portail n°2, tour 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°1, tour 1, rangée 2 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
+- Fantassins du portail n°2, tour 1, rangée 1 : mêlée 5, tir 0, défense 2, vitesse 1, moral 16.
 
 == Tour 1 ==
 Les Fantassins du portail n°1 sortent du portail en (11,2).
@@ -105,7 +105,7 @@ Tir :
 Mêlée :
   Les Épéistes frappent les Fantassins du portail n°1 : 6 + 2 (Soutien des Piquiers) − 2 = 6 dégâts ; moral 1 → 0, blessés 9 → 10.
   Les Fantassins du portail n°1 frappent les Épéistes : 5 − 2 = 3 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 1,32 → 1 dégât ; moral 17 → 16.
-  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 dégâts ; structure 24 → 19.
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 dégâts ; structure 36 → 31.
   Les Fantassins du portail n°1 sont en déroute et quittent le terrain.
 Fin du tour :
   Épéistes en (4,2), moral 16/20
@@ -119,7 +119,7 @@ Mouvement :
 Tir :
   Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 16 → 13.
 Mêlée :
-  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 dégâts ; structure 19 → 14.
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 dégâts ; structure 31 → 26.
 Fin du tour :
   Épéistes en (4,2), moral 16/20
   Piquiers en (3,2), moral 20/20
@@ -132,7 +132,7 @@ Mouvement :
 Tir :
   Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 13 → 10 ; les Fantassins du portail n°2 sont ébranlés.
 Mêlée :
-  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,9 (ébranlés) = 4,5 → 5 dégâts ; structure 14 → 9.
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,9 (ébranlés) = 4,5 → 5 dégâts ; structure 26 → 21.
 Fin du tour :
   Épéistes en (4,2), moral 16/20
   Piquiers en (3,2), moral 20/20
@@ -145,7 +145,7 @@ Mouvement :
 Tir :
   Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 10 → 7, blessés 0 → 3.
 Mêlée :
-  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 3,83 → 4 dégâts ; structure 9 → 5.
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,9 (ébranlés) × 0,85 (3 blessés sur 20) = 3,83 → 4 dégâts ; structure 21 → 17.
 Fin du tour :
   Épéistes en (4,2), moral 16/20
   Piquiers en (3,2), moral 20/20
@@ -158,7 +158,7 @@ Mouvement :
 Tir :
   Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 7 → 4, blessés 3 → 6 ; les Fantassins du portail n°2 sont vacillants.
 Mêlée :
-  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 2,8 → 3 dégâts ; structure 5 → 2.
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,8 (vacillants) × 0,7 (6 blessés sur 20) = 2,8 → 3 dégâts ; structure 17 → 14.
 Fin du tour :
   Épéistes en (4,2), moral 16/20
   Piquiers en (3,2), moral 20/20
@@ -171,8 +171,7 @@ Mouvement :
 Tir :
   Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 4 → 1, blessés 6 → 9.
 Mêlée :
-  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 2,2 → 2 dégâts ; structure 2 → 0.
-  La palissade (4,1) est détruite : la case est libre.
+  Les Fantassins du portail n°2 frappent la palissade (4,1) : 5 − 0 = 5 × 0,8 (vacillants) × 0,55 (9 blessés sur 20) = 2,2 → 2 dégâts ; structure 14 → 12.
 Fin du tour :
   Épéistes en (4,2), moral 16/20
   Piquiers en (3,2), moral 20/20
@@ -181,9 +180,9 @@ Fin du tour :
 
 == Tour 13 ==
 Mouvement :
-  pas 1 : les Fantassins du portail n°2 (5,1) → (4,1).
+  pas 1 : les Fantassins du portail n°2 ne peuvent pas entrer en (4,1) : la palissade (4,1) barre le passage. Ils s'arrêtent pour ce tour.
 Tir :
-  Les Archers tirent sur les Fantassins du portail n°2 à 3 cases : 5 − 2 = 3 dégâts ; moral 1 → 0, blessés 9 → 10.
+  Les Archers tirent sur les Fantassins du portail n°2 à 4 cases : 5 − 2 = 3 dégâts ; moral 1 → 0, blessés 9 → 10.
   Les Fantassins du portail n°2 sont en déroute et quittent le terrain.
 Fin du tour :
   Épéistes en (4,2), moral 16/20

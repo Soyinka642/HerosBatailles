@@ -11,7 +11,7 @@
     "id": "tireurs-du-portail",
     "name": "Tireurs du portail",
     "provisional": true,
-    "stats": { "meleeAttack": 2, "rangedAttack": 4, "range": 3, "defense": 1, "speed": 2, "morale": 14, "soldiers": 20 },
+    "stats": { "meleeAttack": 2, "rangedAttack": 3, "range": 3, "defense": 1, "speed": 2, "morale": 14, "soldiers": 20 },
     "keywords": [],
     "posture": "assaut"
   },

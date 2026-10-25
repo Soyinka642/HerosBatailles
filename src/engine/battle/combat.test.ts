@@ -63,10 +63,10 @@ describe('tir', () => {
     const state = stateWith(data, [squad(data, 'archers', { col: 3, row: 2 })], [{ enemy: TIREURS, cell: { col: 6, row: 2 } }]);
     findSquad(state, 'archers').morale = 2;
     const events = firePhase(data, state);
-    // Archers vacillants : (5 − 1) × 0,8 = 3,2 → 3 ; tireurs : 4 − 1 = 3 (sur un moral de 2, l'excédent est perdu).
+    // Archers vacillants : (5 − 1) × 0,8 = 3,2 → 3 ; tireurs : 3 − 1 = 2 (le moral de 2 tombe à 0).
     expect(hits(events)).toEqual([
       ['archers', 'tireurs-du-portail#1', 3, 14, 11],
-      ['tireurs-du-portail#1', 'archers', 3, 2, 0],
+      ['tireurs-du-portail#1', 'archers', 2, 2, 0],
     ]);
     expect(events.at(-1)).toEqual({ type: 'rout', squad: 'archers' });
   });

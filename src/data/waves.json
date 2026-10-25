@@ -4,7 +4,10 @@
     "index": 1,
     "kind": "wave",
     "provisional": true,
-    "arrivals": [{ "turn": 1, "enemy": "fantassins-du-portail", "count": 2 }]
+    "arrivals": [
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 2 },
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 1 }
+    ]
   },
   {
     "id": "vague-2",
@@ -12,8 +15,9 @@
     "kind": "wave",
     "provisional": true,
     "arrivals": [
-      { "turn": 1, "enemy": "fantassins-du-portail", "count": 2 },
-      { "turn": 3, "enemy": "tireurs-du-portail", "count": 1 }
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 2 },
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 3 },
+      { "turn": 3, "enemy": "tireurs-du-portail", "count": 1, "row": 0 }
     ]
   },
   {
@@ -22,9 +26,10 @@
     "kind": "wave",
     "provisional": true,
     "arrivals": [
-      { "turn": 1, "enemy": "fantassins-du-portail", "count": 2 },
-      { "turn": 1, "enemy": "tireurs-du-portail", "count": 1 },
-      { "turn": 4, "enemy": "brutes-du-portail", "count": 1 }
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 2 },
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 4 },
+      { "turn": 1, "enemy": "tireurs-du-portail", "count": 1, "row": 0 },
+      { "turn": 4, "enemy": "brutes-du-portail", "count": 1, "row": 1 }
     ]
   },
   {
@@ -33,10 +38,12 @@
     "kind": "wave",
     "provisional": true,
     "arrivals": [
-      { "turn": 1, "enemy": "fantassins-du-portail", "count": 2 },
-      { "turn": 1, "enemy": "tireurs-du-portail", "count": 1 },
-      { "turn": 3, "enemy": "brutes-du-portail", "count": 1 },
-      { "turn": 5, "enemy": "fantassins-du-portail", "count": 2 }
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 2 },
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 1 },
+      { "turn": 1, "enemy": "tireurs-du-portail", "count": 1, "row": 4 },
+      { "turn": 3, "enemy": "brutes-du-portail", "count": 1, "row": 3 },
+      { "turn": 5, "enemy": "fantassins-du-portail", "count": 1, "row": 2 },
+      { "turn": 5, "enemy": "fantassins-du-portail", "count": 1, "row": 0 }
     ]
   },
   {
@@ -45,13 +52,17 @@
     "kind": "final",
     "provisional": true,
     "arrivals": [
-      { "turn": 1, "enemy": "fantassins-du-portail", "count": 3 },
-      { "turn": 1, "enemy": "tireurs-du-portail", "count": 1 },
-      { "turn": 3, "enemy": "brutes-du-portail", "count": 1 },
-      { "turn": 3, "enemy": "tireurs-du-portail", "count": 1 },
-      { "turn": 5, "enemy": "fantassins-du-portail", "count": 2 },
-      { "turn": 5, "enemy": "brutes-du-portail", "count": 1 },
-      { "turn": 7, "enemy": "fantassins-du-portail", "count": 2 }
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 2 },
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 1 },
+      { "turn": 1, "enemy": "fantassins-du-portail", "count": 1, "row": 3 },
+      { "turn": 1, "enemy": "tireurs-du-portail", "count": 1, "row": 0 },
+      { "turn": 3, "enemy": "brutes-du-portail", "count": 1, "row": 1 },
+      { "turn": 3, "enemy": "tireurs-du-portail", "count": 1, "row": 4 },
+      { "turn": 5, "enemy": "fantassins-du-portail", "count": 1, "row": 2 },
+      { "turn": 5, "enemy": "fantassins-du-portail", "count": 1, "row": 0 },
+      { "turn": 5, "enemy": "brutes-du-portail", "count": 1, "row": 3 },
+      { "turn": 7, "enemy": "fantassins-du-portail", "count": 1, "row": 2 },
+      { "turn": 7, "enemy": "fantassins-du-portail", "count": 1, "row": 4 }
     ]
   }
 ]

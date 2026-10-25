@@ -55,11 +55,13 @@ function arrivals(data: GameData, state: BattleState): BattleEvent[] {
   return events;
 }
 
-/** Fin de bataille après une phase : défaite si nous n'avons plus personne (même si l'ennemi non plus). */
+/** Fin de bataille après une phase : victoire s'il ne reste aucun ennemi, ni sur le terrain ni à venir ; sinon défaite si nous n'avons plus personne. */
 function phaseOutcome(state: BattleState): Outcome | undefined {
   const active = state.squads.filter((s) => s.status === 'active');
-  if (!active.some((s) => s.side === 'player')) return { kind: 'defeat', reason: 'allSquadsRouted' };
+  // Victoire d'abord : si les derniers ennemis partent à la même phase que nos dernières escouades,
+  // et qu'aucune arrivée ne reste, la bataille est gagnée.
   if (state.pending.length === 0 && !active.some((s) => s.side === 'enemy')) return { kind: 'victory', reason: 'noEnemiesLeft' };
+  if (!active.some((s) => s.side === 'player')) return { kind: 'defeat', reason: 'allSquadsRouted' };
   return undefined;
 }
 

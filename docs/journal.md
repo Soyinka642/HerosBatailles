@@ -347,3 +347,41 @@ Ce qui pèse le plus : les Tireurs du portail s'arrêtent à 3 cases des Épéis
 - Priorité de cible modifiable (déjà notée) : viser les tireurs ennemis d'abord changerait beaucoup les vagues 2 à 4.
 
 **Prochaine étape** : trancher les rangées d'apparition et les ajustements de chiffres proposés, puis lot 1.2d (tir de passage, flanc, recul, soldats tombés, encerclement, fuite des escouades en déroute).
+
+## 2026-10-25 — Lot 1.2c (suite) : ajustements appliqués, règle d'égalité
+
+### Ce qui a été fait
+
+- Ajustements acceptés par l'auteur et appliqués :
+  1. rangées d'apparition dans `waves.json`, une arrivée par rangée (`count: 1`) :
+     - V1 : fantassins 2, 1 ;
+     - V2 : fantassins 2, 3 ; tireurs 0 ;
+     - V3 : fantassins 2, 4 ; tireurs 0 ; brute 1 ;
+     - V4 : fantassins 2, 1 ; tireurs 4 ; brute 3 ; fantassins du tour 5 en 2, 0 ;
+     - finale : fantassins 2, 1, 3 ; tireurs 0 ; brute 1 ; tireurs 4 ; fantassins du tour 5 en 2, 0 ; brute 3 ; fantassins du tour 7 en 2, 4 ;
+  2. palissade : structure 24 → 36 ;
+  3. Tireurs du portail : tir 4 → 3 ;
+  4. vague 4 et finale calibrées sur quatre escouades : dans les scénarios, des Archers en renfort en (3,0), derrière la palissade nord.
+- Règle d'égalité changée (Q23) : si nos dernières escouades et les derniers ennemis partent en déroute à la même phase, et qu'aucune arrivée ne reste, c'est une victoire (avant : défaite).
+- `docs/conception.md` reprend les règles du lot 1.2c (Assaut, palissade, tour, Feu) et la nouvelle règle d'égalité.
+- Scénarios regénérés ; tests adaptés aux nouveaux chiffres. `typecheck`, `test` et `build` passent.
+
+### Bilan final (déploiement sensé, chiffres appliqués)
+
+| Bataille | Issue | Tours | Nos escouades à la fin | Volées (enflammées) | Pâte restante | Palissades N / CN / CS / S |
+| --- | --- | --- | --- | --- | --- | --- |
+| Vague 1 | victoire | 13 | Épéistes 16/20, Piquiers 20/20, Archers 20/20 | 9 (0) | — | 36 / 12 / 36 / 36 |
+| Vague 2 | victoire | 24 | Épéistes en déroute, Piquiers 13/20, Archers 20/20 | 13 (0) | — | 36 / 36 / 12 / 36 |
+| Vague 3 | victoire | 22 | Épéistes en déroute, Piquiers 13/20, Archers 20/20 | 18 (3) | 1 | 36 / 10 / 36 / 0 |
+| Vague 4 (4 escouades) | victoire | 20 | Épéistes et Piquiers en déroute, Archers 20/20, Archers en renfort 20/20 | 26 (2) | 2 | 27 / 16 / 0 / 29 |
+| Finale (4 escouades) | victoire (rituel) | 12 | Épéistes 3/20 (10 blessés), Piquiers 20/20, Archers 20/20, Archers en renfort 16/20 | 18 (0) | 4 | 29 / 15 / 6 / 36 |
+
+Aucune incursion ; la tour n'est jamais touchée. Les intentions de Q24 sont tenues : prise en main (V1), pression à distance (V2), la brute qui brise une palissade (V3), deux fronts et une palissade brisée (V4), victoire arrachée (finale).
+
+### Points à réexaminer
+
+- **Le recrutement devient quasi obligatoire avant la vague 4** : avec trois escouades, la vague 4 est perdue. À réexaminer au lot 1.5 (campement, civils, recrutement).
+- **Objectif de durée, à viser plus tard** : une bataille en 10 à 15 tours environ. Aujourd'hui, les vagues 2 à 4 durent 20 à 24 tours (fantassins lents, palissade solide, duels d'escouades affaiblies).
+- Les Épéistes de la brèche partent en déroute dans presque toutes les batailles : c'est le poste le plus exposé.
+
+**Prochaine étape** : fusion du lot 1.2c dans `main` (accord donné si le bilan correspond à l'annonce), puis lot 1.2d.
