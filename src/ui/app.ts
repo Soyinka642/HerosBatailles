@@ -10,6 +10,7 @@ import { fieldSize } from './battle/layout';
 import { PALETTE } from './battle/palette';
 import { Player } from './battle/player';
 import { recordBattle } from './battle/record';
+import { spriteOf } from './battle/sprites';
 import { buildTimeline } from './battle/timeline';
 import { BattleView } from './battle/view';
 
@@ -59,11 +60,28 @@ export class App {
     const list = el('div', 'catalog');
     for (const entry of CATALOG) {
       const b = el('button', 'catalog-entry');
-      b.append(el('strong', undefined, entry.title), el('span', undefined, entry.description));
+      const text = el('div', 'catalog-text');
+      text.append(el('strong', undefined, entry.title), el('span', undefined, entry.description));
+      const figure = this.cardFigure(entry);
+      if (figure) b.append(figure);
+      b.append(text);
       b.addEventListener('click', () => void this.open(entry));
       list.append(b);
     }
     this.menu.append(list);
+  }
+
+  /** La figurine d'une carte : l'ennemi le plus nombreux de la bataille (à égalité, le premier arrivé). */
+  private cardFigure(entry: CatalogEntry): HTMLImageElement | undefined {
+    const counts = new Map<string, number>();
+    for (const arrival of entry.setup(this.data).wave.arrivals) counts.set(arrival.enemy, (counts.get(arrival.enemy) ?? 0) + arrival.count);
+    const main = [...counts].reduce<[string, number] | undefined>((best, c) => (best && best[1] >= c[1] ? best : c), undefined)?.[0];
+    const look = main ? spriteOf({ enemy: main }) : undefined;
+    if (!look) return undefined;
+    const img = el('img', look.dark ? 'catalog-figure dark' : 'catalog-figure');
+    img.src = `unites/${look.key}.webp`;
+    img.alt = '';
+    return img;
   }
 
   private buildBattle(): void {
@@ -85,7 +103,7 @@ export class App {
     const legend = el(
       'p',
       'legend muted',
-      'Ocre : nos escouades · bleu-violet : l’ennemi. Barre de moral : vert ferme, jaune ébranlée, orange vacillante ; jeton pâle avec une flèche : en fuite. ✚ : blessés · flamme : Feu (tours restants) · étiquette grise : soldats à terre (et tours tenus par l’ennemi).',
+      'Nos escouades regardent vers l’est ; l’ennemi, teinté de froid, vers l’ouest. Plaque : nom, barre de moral (vert ferme, jaune ébranlée, orange vacillante), moral, ✚ blessés, flamme : Feu (tours restants). Figurine pâle tournée vers son camp : en fuite. Étiquette grise : soldats à terre (et tours tenus par l’ennemi).',
     );
     const fieldScroll = el('div', 'field-scroll');
     fieldScroll.append(this.fieldBox);

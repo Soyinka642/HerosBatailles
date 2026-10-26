@@ -1,0 +1,12 @@
+{
+  "player": {
+    "weapons": { "epee": "Epeiste", "arc-court": "Archer", "pique": "Piquier" },
+    "armors": { "": "SansArmure", "cuir": "Cuir", "mailles": "Mailles", "plates": "Plates" },
+    "substitutes": { "ArcherPlates": "ArcherMailles" }
+  },
+  "enemies": {
+    "fantassins-du-portail": { "sprite": "EpeisteMailles" },
+    "tireurs-du-portail": { "sprite": "ArcherCuir" },
+    "brutes-du-portail": { "sprite": "EpeistePlates", "scale": 1.25, "dark": true }
+  }
+}
