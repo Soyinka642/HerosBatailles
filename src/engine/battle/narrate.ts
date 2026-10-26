@@ -23,7 +23,7 @@ function g(feminine: boolean, masculine: string, feminineForm: string): string {
   return feminine ? feminineForm : masculine;
 }
 
-interface Names {
+export interface Names {
   name(id: string): string;
   maxMorale(id: string): number;
   /** Nom d'un site de fortification : « la palissade (4,1) ». */
@@ -39,7 +39,8 @@ export function formatNumber(value: number): string {
   return String(Math.round(value * 100) / 100).replace('.', ',').replace('-', '−');
 }
 
-function namesOf(data: GameData, state: BattleState): Names {
+/** Les noms, accords et camps des escouades d'une bataille, pour raconter ses événements un à un. */
+export function namesOf(data: GameData, state: BattleState): Names {
   const squads: (BattleSquad | PendingArrival)[] = [...state.squads, ...state.pending];
   const find = (id: string) => squads.find((s) => s.id === id);
   return {
