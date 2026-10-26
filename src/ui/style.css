@@ -40,7 +40,7 @@ button:hover { border-color: var(--accent); }
   .journal { height: 45vh; }
   /* Le terrain garde une taille lisible ; on le fait défiler du doigt. */
   .field-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .field { min-width: 720px; }
+  .field { min-width: 880px; }
   .control { padding: 6px 8px; }
 }
 

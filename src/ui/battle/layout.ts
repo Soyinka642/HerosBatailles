@@ -5,11 +5,11 @@
 import type { Cell } from '../../engine/data/types';
 
 /** Rayon d'un hexagone (du centre à une pointe), en pixels à taille réelle. */
-export const HEX_SIZE = 36;
+export const HEX_SIZE = 44;
 export const HEX_WIDTH = Math.sqrt(3) * HEX_SIZE;
 export const ROW_STEP = 1.5 * HEX_SIZE;
-/** Marges autour du terrain (place pour les noms au-dessus des jetons de la première rangée). */
-export const MARGIN = { left: 16, top: 30, right: 16, bottom: 20 };
+/** Marges autour du terrain (place pour les têtes des figurines de la première rangée). */
+export const MARGIN = { left: 8, top: 40, right: 8, bottom: 12 };
 
 export interface Point {
   x: number;

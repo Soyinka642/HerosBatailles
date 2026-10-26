@@ -3,6 +3,23 @@
 
 export const PALETTE = {
   background: 0x0e0f14,
+  /** Terrain : herbe, terre battue, dalles du cœur du campement, lignes de la grille. */
+  grass: [0x4e6a3a, 0x61804a],
+  grassDark: 0x3d5530,
+  grassLight: 0x7a9a58,
+  earth: [0x6b5a3e, 0x7a6747],
+  earthDark: 0x564630,
+  stone: 0x8f8a7c,
+  flagstone: 0x857861,
+  flagstoneJoint: 0x5e5444,
+  hearth: 0xff9a3c,
+  grid: 0x14180f,
+  stake: [0x7a5230, 0x9a6a3c],
+  stakeDark: 0x3e2816,
+  towerJoint: 0x5c5a55,
+  towerLight: 0xa8a59d,
+  rift: 0x8f7bff,
+  riftCore: 0xe8e4ff,
   hex: 0x262a33,
   hexLine: 0x3a3f4b,
   deployment: 0x30363f,

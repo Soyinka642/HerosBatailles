@@ -262,6 +262,7 @@ function playerSquad(data: GameData, squad: PlayerSquadSetup, rank: number): Bat
     status: 'active',
     dead: 0,
     carried: { ...squad.carried },
+    equipment: { ...squad.equipment },
   };
 }
 
@@ -321,6 +322,7 @@ export function enemySquad(data: GameData, arrival: PendingArrival, cell: Cell):
     status: 'active',
     dead: 0,
     carried: {},
+    enemy: enemy.id,
   };
 }
 

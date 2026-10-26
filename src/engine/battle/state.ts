@@ -58,6 +58,9 @@ export interface BattleSquad {
   burning?: Burning;
   /** Soldats morts dans cette bataille (des tombés que l'ennemi a gardés). */
   dead: number;
+  /** Pour l'affichage seulement (aucune règle) : l'équipement porté (nous), le type d'ennemi (eux). */
+  equipment?: Record<Id, Id>;
+  enemy?: Id;
   /** Fortification qui a barré son chemin pendant le mouvement de ce tour (site), remise à zéro à chaque tour. */
   obstacle?: Id;
 }

@@ -23,6 +23,9 @@ export interface SquadView {
   fleeing: boolean;
   /** Tours de brûlure restants (0 : ne brûle pas). */
   burning: number;
+  /** Pour choisir le sprite : l'équipement (nous), le type d'ennemi (eux). */
+  equipment?: Record<string, string>;
+  enemy?: string;
 }
 
 export interface FortView {
@@ -53,6 +56,8 @@ function squadView(s: BattleSquad): SquadView {
     onField: s.status === 'active' || s.status === 'fleeing',
     fleeing: s.status === 'fleeing',
     burning: s.burning?.turnsLeft ?? 0,
+    ...(s.equipment ? { equipment: { ...s.equipment } } : {}),
+    ...(s.enemy ? { enemy: s.enemy } : {}),
   };
 }
 
