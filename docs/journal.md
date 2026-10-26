@@ -492,3 +492,19 @@ Tir de passage, flanc, recul, encerclement : leurs paramètres restent dans `con
 - Deux escouades portent le même nom (« Archers ») dans la débandade : l'écran de préparation (1.4) devra donner des noms distincts.
 
 **Prochaine étape** : vérifier la version en ligne après la fusion, puis lot 1.4 (écran de préparation).
+
+## Lot 1.3b — Habillage léger de la bataille (en cours)
+
+### Fait jusqu'ici
+
+- Originaux des sprites déplacés dans `art/unites/` (versionnés, non publiés) ; versions web WebP de 200 px de haut dans `assets/unites/` (172 ko au total), produites par `tools/prepare-sprites.py` (Pillow et NumPy, hors du projet npm). Le script nettoie les restes du détourage sur tous les sprites : pixels presque transparents, liseré blanc du fond d'origine, petits trous enfermés dans la silhouette (reflets des plates), halo loin de la silhouette, îlots isolés.
+- Étape B : image fixe de la vague 1 au tour 6 (terrain dessiné par le code, palissade en pieux, tour de pierre, faille du portail, figurines, plaques).
+- Le moteur garde l'équipement de nos escouades et le type de chaque ennemi, pour l'affichage seulement (aucune règle).
+
+### Décisions prises
+
+- Montages ArcherPlates et mains nues essayés avec Pillow, puis refusés : on garde S1 A (l'archer en plates est affiché en mailles) et S2 B (jeton provisoire pour une escouade à mains nues). Le script de montage est retiré (principe 9).
+
+### Questions apparues
+
+- **Deux sprites restent à dessiner** : ArcherPlates et une escouade à mains nues.
