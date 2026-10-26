@@ -493,18 +493,33 @@ Tir de passage, flanc, recul, encerclement : leurs paramètres restent dans `con
 
 **Prochaine étape** : vérifier la version en ligne après la fusion, puis lot 1.4 (écran de préparation).
 
-## Lot 1.3b — Habillage léger de la bataille (en cours)
+## Lot 1.3b — Habillage léger de la bataille
 
-### Fait jusqu'ici
+### Fait
 
-- Originaux des sprites déplacés dans `art/unites/` (versionnés, non publiés) ; versions web WebP de 200 px de haut dans `assets/unites/` (172 ko au total), produites par `tools/prepare-sprites.py` (Pillow et NumPy, hors du projet npm). Le script nettoie les restes du détourage sur tous les sprites : pixels presque transparents, liseré blanc du fond d'origine, petits trous enfermés dans la silhouette (reflets des plates), halo loin de la silhouette, îlots isolés.
-- Étape B : image fixe de la vague 1 au tour 6 (terrain dessiné par le code, palissade en pieux, tour de pierre, faille du portail, figurines, plaques).
-- Le moteur garde l'équipement de nos escouades et le type de chaque ennemi, pour l'affichage seulement (aucune règle).
+- **Sprites** : originaux déplacés dans `art/unites/` (versionnés, non publiés) ; versions web WebP de 200 px de haut dans `assets/unites/` (172 ko au total), produites par `tools/prepare-sprites.py` (Pillow et NumPy, hors du projet npm). Le script nettoie les restes du détourage sur tous les sprites : pixels presque transparents, liseré blanc du fond d'origine, petits trous enfermés dans la silhouette (reflets des plates), halo loin de la silhouette, îlots isolés. `CLAUDE.md` décrit `art/` et `tools/`.
+- **Correspondance** arme + armure → sprite, et type d'ennemi → sprite, dans `src/ui/sprites.json` (lue par `battle/sprites.ts`). L'archer en plates prend le sprite en mailles (S1 A) ; une escouade sans arme garde un jeton provisoire (S2 B). Fantassins : épéiste en mailles ; tireurs : archer en cuir ; brutes : épéiste en plates, ×1,25 et plus sombres (S3, S4 C).
+- **Moteur** : `BattleSquad` garde l'équipement de nos escouades et le type de chaque ennemi, pour l'affichage seulement (aucune règle). Journaux des scénarios inchangés.
+- **Terrain** (`battle/terrain.ts`) dessiné par le code : herbe, terre battue (zone de déploiement, abord du portail), dalles du cœur du campement avec le foyer, touffes et cailloux tirés d'un hasard déterministe (`battle/hash.ts`, jamais `Math.random`), grille discrète. Hexagones de 44 px (V1 B).
+- **Fortifications** (`battle/forts.ts`) : palissade en deux rangs de pieux, qui en perd et en penche selon les dégâts (choix déterministes) ; débris de pieux une fois détruite ; tour de pierre en cylindre vu de trois quarts, créneaux de devant dessinés devant les figurines postées dessus, surélevées ; flammes animées sur une fortification en feu.
+- **Portail** (`battle/portal.ts`) : faille lumineuse verticale qui pulse, éclats qui montent en tournant (V3 B).
+- **Figurines** (`battle/token.ts`) : sprite tourné vers l'est, ennemis retournés vers l'ouest, teintés de froid avec une lueur fine (V2 C), ombre ovale (V7 A), lueur orange au sol sous une escouade en feu, figurine pâle tournée vers son camp en fuite (V6 A). Profondeur par position (rangée puis colonne), recalculée à chaque image (V5 A).
+- **Plaques** (V4 A) : à ses pieds, au-dessus de toutes les figurines : nom court, barre de moral colorée selon le palier, moral (« fuite » en fuite), blessés, flamme et tours de Feu.
+- **Animations** : les tirs partent de la poitrine (du haut de la tour pour les archers postés), la figurine touchée a un bref éclair rouge, l'attaquant se fend vers sa cible.
+- **Menu** (V8 A) : cartes sombres façon parchemin, titres en Georgia, figurine de l'ennemi le plus solide de la bataille.
+- **Téléphone** : le terrain garde 880 px de large (720 auparavant) et défile du doigt, pour que les plaques restent lisibles.
+- **Tests** : 289 (hasard d'apparence, correspondance des sprites et présence des fichiers). `typecheck`, `test` et `build` passent. Aucune dépendance ajoutée.
 
 ### Décisions prises
 
-- Montages ArcherPlates et mains nues essayés avec Pillow, puis refusés : on garde S1 A (l'archer en plates est affiché en mailles) et S2 B (jeton provisoire pour une escouade à mains nues). Le script de montage est retiré (principe 9).
+- S1 A, S2 B, S3, S4 C, terrain, V1 B, V2 C, V3 B, V4 A à V8 A, rangement A (voir l'étape A du lot). Style de l'image fixe (vague 1, tour 6) accepté tel quel.
+- Montages ArcherPlates et mains nues essayés avec Pillow, puis refusés ; le script de montage est retiré (principe 9).
 
 ### Questions apparues
 
 - **Deux sprites restent à dessiner** : ArcherPlates et une escouade à mains nues.
+- La figurine monte sur la tour d'un coup en fin de déplacement (pas de montée animée).
+- Les plaques de deux voisines se touchent ; à revoir si la densité augmente.
+- Sans WebGL (rendu Canvas), la lueur froide des ennemis disparaît ; la teinte reste.
+
+**Prochaine étape** : fusion dans `main` (avec ton accord), vérification en ligne, puis lot 1.4 (écran de préparation).

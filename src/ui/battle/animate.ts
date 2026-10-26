@@ -38,14 +38,14 @@ function float(scene: BattleScene, at: Point, text: string, color: string, durat
 function tracer(scene: BattleScene, from: Point, to: Point, fire: boolean, duration: number): void {
   const g = scene.add.graphics().setDepth(9);
   g.lineStyle(fire ? 3 : 2, fire ? PALETTE.fire : 0xf2e8c8, 0.9);
-  g.lineBetween(from.x, from.y - 4, to.x, to.y - 4);
+  g.lineBetween(from.x, from.y, to.x, to.y);
   scene.fxLayer!.add(g);
   scene.tweens.add({ targets: g, alpha: 0, delay: duration * 0.3, duration: duration * 0.5, onComplete: () => g.destroy() });
 }
 
+/** La poitrine de la figurine : point de départ et d'arrivée des tirs, base des chiffres. */
 function tokenAt(scene: BattleScene, id: string): Point | undefined {
-  const t = scene.token(id);
-  return t ? { x: t.x, y: t.y } : undefined;
+  return scene.token(id)?.chest();
 }
 
 function animateEvent(scene: BattleScene, data: GameData, e: BattleEvent, d: number): Promise<void> | undefined {
@@ -84,6 +84,7 @@ function animateEvent(scene: BattleScene, data: GameData, e: BattleEvent, d: num
       if (!from || !to) return undefined;
       tracer(scene, from, to, e.fire?.used === true, d);
       float(scene, to, `−${e.damage.final}`, PALETTE.damage, d);
+      scene.token(e.target)?.flash(d);
       return undefined;
     }
     case 'ignite': {
@@ -93,11 +94,13 @@ function animateEvent(scene: BattleScene, data: GameData, e: BattleEvent, d: num
     }
     case 'strike': {
       const attacker = scene.token(e.attacker);
-      const to = tokenAt(scene, e.target);
-      if (!attacker || !to) return undefined;
-      float(scene, to, `−${e.damage.final}`, PALETTE.damage, d);
-      const x = attacker.x + (to.x - attacker.x) * 0.3;
-      const y = attacker.y + (to.y - attacker.y) * 0.3;
+      const target = scene.token(e.target);
+      if (!attacker || !target) return undefined;
+      float(scene, target.chest(), `−${e.damage.final}`, PALETTE.damage, d);
+      target.flash(d);
+      // L'attaquant se fend vers sa cible (de pied à pied), puis revient.
+      const x = attacker.x + (target.x - attacker.x) * 0.3;
+      const y = attacker.y + (target.y - attacker.y) * 0.3;
       return tween(scene, { targets: attacker, x, y, duration: d * 0.25, yoyo: true, ease: 'Quad.easeOut' });
     }
     case 'fortificationHit': {

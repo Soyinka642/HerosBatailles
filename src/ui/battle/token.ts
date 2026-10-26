@@ -76,13 +76,14 @@ class Plate extends Phaser.GameObjects.Container {
     this.woundedText = scene.add.text(PLATE_WIDTH / 2 - 3, 10, '', { fontFamily: 'sans-serif', fontSize: '9px', fontStyle: 'bold', color: '#ff8a8a' }).setOrigin(1, 0);
     this.bar = scene.add.graphics();
     this.moraleText = scene.add.text(-PLATE_WIDTH / 2 + 6 + BAR_WIDTH, 15.5, '', { fontFamily: 'sans-serif', fontSize: '9px', color: PALETTE.text }).setOrigin(0, 0.5);
-    this.flameText = scene.add.text(3, -5, '', { fontFamily: 'sans-serif', fontSize: '9px', fontStyle: 'bold', color: PALETTE.fireText }).setShadow(1, 1, '#000', 2);
+    this.flameText = scene.add.text(4, -10, '', { fontFamily: 'sans-serif', fontSize: '9px', fontStyle: 'bold', color: PALETTE.fireText }).setShadow(1, 1, '#000', 2);
     const flameShape = scene.add.graphics();
     flameShape.fillStyle(PALETTE.fire, 1);
-    flameShape.fillTriangle(-5, 0, 5, 0, 0, -13);
+    flameShape.fillTriangle(-4, 0, 4, 0, 0, -10);
     flameShape.fillStyle(0xffd060, 1);
-    flameShape.fillTriangle(-2.5, 0, 2.5, 0, 0, -7);
-    this.flame = scene.add.container(-PLATE_WIDTH / 2 - 8, 18, [flameShape, this.flameText]);
+    flameShape.fillTriangle(-2, 0, 2, 0, 0, -5);
+    // Le Feu, au bout de la ligne du nom : la flamme et les tours restants.
+    this.flame = scene.add.container(PLATE_WIDTH / 2 - 14, 11, [flameShape, this.flameText]);
     this.add([back, name, this.woundedText, this.bar, this.moraleText, this.flame]);
     this.setDepth(PLATE_DEPTH);
   }
@@ -140,8 +141,23 @@ export class Token extends Phaser.GameObjects.Container {
     this.figure.y = -raise;
   }
 
-  get isRaised(): boolean {
-    return this.raise > 0;
+  /** La poitrine de la figurine, d'où partent et où arrivent les tirs. */
+  chest(): { x: number; y: number } {
+    return { x: this.x, y: this.y + FEET - FIGURE_HEIGHT * 0.55 - this.raise };
+  }
+
+  /** Un bref éclair rouge sur la figurine touchée. */
+  flash(duration: number): void {
+    for (const child of this.figure.list) {
+      if (!(child instanceof Phaser.GameObjects.Image)) continue;
+      const tint = child.tintTopLeft;
+      child.setTintFill(0xff5050);
+      this.scene.time.delayedCall(Math.min(120, duration * 0.2), () => {
+        if (!child.active) return;
+        child.clearTint();
+        if (this.view.side === 'enemy') child.setTint(tint);
+      });
+    }
   }
 
   /** Redessine d'après la copie affichée (moral, palier, blessés, Feu, fuite). */

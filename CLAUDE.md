@@ -33,8 +33,12 @@ paquets : npm. Pas d'ESLint ni de Prettier pour l'instant.
 - `src/engine/` : moteur de jeu en TypeScript pur, aucun import de Phaser.
 - `src/ui/` : scènes Phaser, qui affichent l'état et transmettent les choix.
 - `src/data/` : contenu en JSON.
-- `assets/` : sprites et autres fichiers statiques, servis comme dossier
-  public de Vite (`publicDir: 'assets'`).
+- `assets/` : fichiers statiques publiés avec le site, servis comme dossier
+  public de Vite (`publicDir: 'assets'`) ; les sprites y sont en versions web
+  WebP (`assets/unites/`).
+- `art/` : originaux des sprites (PNG), versionnés mais non publiés.
+- `tools/` : scripts hors du projet npm (Python, Pillow et NumPy) ;
+  `tools/prepare-sprites.py` produit les versions web à partir de `art/`.
 - `docs/` : conception et journal.
 - Les tests sont à côté du code (`*.test.ts`).
 
