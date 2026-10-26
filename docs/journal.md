@@ -506,7 +506,7 @@ Tir de passage, flanc, recul, encerclement : leurs paramètres restent dans `con
 - **Figurines** (`battle/token.ts`) : sprite tourné vers l'est, ennemis retournés vers l'ouest, teintés de froid avec une lueur fine (V2 C), ombre ovale (V7 A), lueur orange au sol sous une escouade en feu, figurine pâle tournée vers son camp en fuite (V6 A). Profondeur par position (rangée puis colonne), recalculée à chaque image (V5 A).
 - **Plaques** (V4 A) : à ses pieds, au-dessus de toutes les figurines : nom court, barre de moral colorée selon le palier, moral (« fuite » en fuite), blessés, flamme et tours de Feu.
 - **Animations** : les tirs partent de la poitrine (du haut de la tour pour les archers postés), la figurine touchée a un bref éclair rouge, l'attaquant se fend vers sa cible.
-- **Menu** (V8 A) : cartes sombres façon parchemin, titres en Georgia, figurine de l'ennemi le plus solide de la bataille.
+- **Menu** (V8 A) : cartes sombres façon parchemin, titres en Georgia, figurine de l’ennemi le plus nombreux de la bataille (à égalité, le premier arrivé).
 - **Téléphone** : le terrain garde 880 px de large (720 auparavant) et défile du doigt, pour que les plaques restent lisibles.
 - **Tests** : 289 (hasard d'apparence, correspondance des sprites et présence des fichiers). `typecheck`, `test` et `build` passent. Aucune dépendance ajoutée.
 

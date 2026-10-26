@@ -71,11 +71,12 @@ export class App {
     this.menu.append(list);
   }
 
-  /** La figurine d'une carte : l'ennemi le plus solide de la bataille (au moral le plus haut). */
+  /** La figurine d'une carte : l'ennemi le plus nombreux de la bataille (à égalité, le premier arrivé). */
   private cardFigure(entry: CatalogEntry): HTMLImageElement | undefined {
-    const ids = new Set(entry.setup(this.data).wave.arrivals.map((a) => a.enemy));
-    const strongest = this.data.enemies.filter((e) => ids.has(e.id)).sort((a, b) => b.stats.morale - a.stats.morale)[0];
-    const look = strongest ? spriteOf({ enemy: strongest.id }) : undefined;
+    const counts = new Map<string, number>();
+    for (const arrival of entry.setup(this.data).wave.arrivals) counts.set(arrival.enemy, (counts.get(arrival.enemy) ?? 0) + arrival.count);
+    const main = [...counts].reduce<[string, number] | undefined>((best, c) => (best && best[1] >= c[1] ? best : c), undefined)?.[0];
+    const look = main ? spriteOf({ enemy: main }) : undefined;
     if (!look) return undefined;
     const img = el('img', look.dark ? 'catalog-figure dark' : 'catalog-figure');
     img.src = `unites/${look.key}.webp`;
